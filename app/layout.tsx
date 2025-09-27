@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'The Movie Game',
   description: 'A two-player, turn-based movie trivia game',
+  icons: {
+    icon: '/favicon.svg',
+  },
 }
 
 export default function RootLayout({
