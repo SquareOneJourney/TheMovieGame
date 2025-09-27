@@ -135,10 +135,10 @@ export function GuessInput({ clue, onGuess, disabled = false, lastResult }: Gues
                     }
                   </p>
                   <p className="text-sm text-gray-300">
-                    You guessed: "{lastResult.guess}"
+                    You guessed: &quot;{lastResult.guess}&quot;
                     {lastResult.correctAnswer && (
                       <span className="block">
-                        The answer: "{lastResult.correctAnswer}"
+                        The answer: &quot;{lastResult.correctAnswer}&quot;
                       </span>
                     )}
                     {lastResult.similarity && lastResult.similarity >= 60 && !lastResult.correct && (

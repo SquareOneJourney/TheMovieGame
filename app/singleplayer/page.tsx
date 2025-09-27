@@ -292,7 +292,7 @@ export default function SinglePlayerPage() {
                     }
                   </p>
                   <p className="text-gray-300">
-                    You guessed: "{gameState.lastResult.guess}"
+                    You guessed: &quot;{gameState.lastResult.guess}&quot;
                     {gameState.lastResult.usedHint && gameState.lastResult.correct && (
                       <span className="block text-yellow-300 text-sm">
                         💡 Used hint - only 0.5 points earned!
@@ -300,7 +300,7 @@ export default function SinglePlayerPage() {
                     )}
                     {gameState.lastResult.correctAnswer && (
                       <span className="block">
-                        The answer: "{gameState.lastResult.correctAnswer}"
+                        The answer: &quot;{gameState.lastResult.correctAnswer}&quot;
                       </span>
                     )}
                     {gameState.lastResult.similarity && gameState.lastResult.similarity >= 60 && !gameState.lastResult.correct && (
@@ -365,7 +365,7 @@ export default function SinglePlayerPage() {
                   <Crown className="h-16 w-16 text-yellow-400 mx-auto" />
                 </div>
                 <h2 className="text-4xl font-bold text-yellow-400 mb-4">
-                  🎉 You're the King of Movie Town! 🎉
+                  🎉 You&apos;re the King of Movie Town! 🎉
                 </h2>
                 <p className="text-xl text-white mb-6">
                   You beat the AI bot {gameState.playerScore % 1 === 0 ? gameState.playerScore : gameState.playerScore.toFixed(1)} to {gameState.botScore}!

@@ -284,7 +284,7 @@ export default function GameRoom({ params }: GameRoomProps) {
                             Waiting for {currentPlayer?.name}
                           </h3>
                           <p className="text-gray-300">
-                            They're thinking of a movie and will give you two actors...
+                            They&apos;re thinking of a movie and will give you two actors...
                           </p>
                         </CardContent>
                       </Card>
@@ -321,7 +321,7 @@ export default function GameRoom({ params }: GameRoomProps) {
                             Waiting for {otherPlayer?.name}
                           </h3>
                           <p className="text-gray-300">
-                            They're trying to guess your movie from the actors you provided...
+                            They&apos;re trying to guess your movie from the actors you provided...
                           </p>
                         </CardContent>
                       </Card>

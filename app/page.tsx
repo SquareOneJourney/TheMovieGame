@@ -12,7 +12,7 @@ export default function Home() {
             The Movie Game
           </h1>
           <p className="text-2xl font-semibold text-gray-300 max-w-2xl mx-auto mb-8">
-            "If you ain't first, you're last."
+            &quot;If you ain&apos;t first, you&apos;re last.&quot;
           </p>
           
           <a 
