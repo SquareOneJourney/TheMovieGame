@@ -1,0 +1,23 @@
+[
+  { "actor1": "Brad Pitt", "actor2": "George Clooney", "movie": "Ocean's Twelve", "hintActor": "Catherine Zeta-Jones" },
+  { "actor1": "Leonardo DiCaprio", "actor2": "Kate Winslet", "movie": "Titanic", "hintActor": "Billy Zane" },
+  { "actor1": "Matt Damon", "actor2": "Robin Williams", "movie": "Good Will Hunting", "hintActor": "Ben Affleck" },
+  { "actor1": "Tom Hanks", "actor2": "Meg Ryan", "movie": "You've Got Mail", "hintActor": "Greg Kinnear" },
+  { "actor1": "Keanu Reeves", "actor2": "Laurence Fishburne", "movie": "The Matrix", "hintActor": "Carrie-Anne Moss" },
+  { "actor1": "Will Smith", "actor2": "Tommy Lee Jones", "movie": "Men in Black", "hintActor": "Linda Fiorentino" },
+  { "actor1": "Robert Downey Jr.", "actor2": "Chris Evans", "movie": "Avengers: Endgame", "hintActor": "Chris Hemsworth" },
+  { "actor1": "Ryan Gosling", "actor2": "Emma Stone", "movie": "La La Land", "hintActor": "John Legend" },
+  { "actor1": "Johnny Depp", "actor2": "Orlando Bloom", "movie": "Pirates of the Caribbean", "hintActor": "Keira Knightley" },
+  { "actor1": "Harrison Ford", "actor2": "Sean Connery", "movie": "Indiana Jones and the Last Crusade", "hintActor": "Alison Doody" },
+  { "actor1": "Meryl Streep", "actor2": "Anne Hathaway", "movie": "The Devil Wears Prada", "hintActor": "Emily Blunt" },
+  { "actor1": "Denzel Washington", "actor2": "Ethan Hawke", "movie": "Training Day", "hintActor": "Scott Glenn" },
+  { "actor1": "Sandra Bullock", "actor2": "Keanu Reeves", "movie": "Speed", "hintActor": "Dennis Hopper" },
+  { "actor1": "Julia Roberts", "actor2": "Richard Gere", "movie": "Pretty Woman", "hintActor": "Hector Elizondo" },
+  { "actor1": "Al Pacino", "actor2": "Robert De Niro", "movie": "Heat", "hintActor": "Val Kilmer" },
+  { "actor1": "Morgan Freeman", "actor2": "Tim Robbins", "movie": "The Shawshank Redemption", "hintActor": "Bob Gunton" },
+  { "actor1": "Jodie Foster", "actor2": "Anthony Hopkins", "movie": "The Silence of the Lambs", "hintActor": "Scott Glenn" },
+  { "actor1": "Tom Cruise", "actor2": "Nicole Kidman", "movie": "Eyes Wide Shut", "hintActor": "Sydney Pollack" },
+  { "actor1": "Brad Pitt", "actor2": "Edward Norton", "movie": "Fight Club", "hintActor": "Helena Bonham Carter" },
+  { "actor1": "Jennifer Lawrence", "actor2": "Josh Hutcherson", "movie": "The Hunger Games", "hintActor": "Liam Hemsworth" }
+]
+

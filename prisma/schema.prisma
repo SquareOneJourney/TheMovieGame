@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  games     Game[]   @relation("PlayerGames")
+  createdAt DateTime @default(now())
+}
+
+model Game {
+  id        String   @id @default(cuid())
+  players   User[]   @relation("PlayerGames")
+  rounds    Round[]
+  status    String   // "waiting", "in_progress", "finished"
+  createdAt DateTime @default(now())
+}
+
+model Round {
+  id        String   @id @default(cuid())
+  game      Game     @relation(fields: [gameId], references: [id])
+  gameId    String
+  clueGiver String   // User.id
+  guesser   String   // User.id
+  actor1    String
+  actor2    String
+  movie     String   // correct answer
+  guess     String?
+  outcome   String?  // "correct" or "wrong"
+  createdAt DateTime @default(now())
+}
+
+model Movie {
+  id        String   @id @default(cuid())
+  actor1    String
+  actor2    String
+  title     String
+  createdAt DateTime @default(now())
+}

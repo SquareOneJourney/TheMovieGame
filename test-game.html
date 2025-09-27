@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Game Test</title>
+</head>
+<body>
+    <h1>Movie Game Test</h1>
+    <p>Testing the game functionality...</p>
+    
+    <script>
+        // Test if we can fetch the movies.json
+        fetch('/data/movies.json')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Movies loaded:', data.length);
+                console.log('First movie:', data[0]);
+            })
+            .catch(error => {
+                console.error('Error loading movies:', error);
+            });
+    </script>
+</body>
+</html>
+
