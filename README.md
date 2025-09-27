@@ -182,3 +182,6 @@ Found a bug? Have a feature request? Please [open an issue](https://github.com/y
 ---
 
 **Happy Gaming! 🎬🎮**
+
+---
+*Last updated: $(date)*
