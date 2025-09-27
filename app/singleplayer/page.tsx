@@ -52,7 +52,14 @@ export default function SinglePlayerPage() {
   useEffect(() => {
     const loadMovies = async () => {
       try {
+        // Clear cache to ensure fresh data
+        movieService.clearCache()
+        console.log('🎬 Loading fresh movies from TMDB...')
+        
         const data = await movieService.getRandomMovies(50) // Load 50 movies for variety
+        console.log('🎬 Loaded movies:', data.length, 'movies')
+        console.log('🎬 Sample movie:', data[0])
+        
         setMovies(data)
         // Start with a random movie
         if (data.length > 0) {

@@ -26,7 +26,7 @@ interface GameState {
   currentClue?: {
     actor1: string
     actor2: string
-    movie: string
+    movie?: string
     poster?: string
     year?: string
   }
@@ -55,7 +55,7 @@ export default function GameRoom({ params }: GameRoomProps) {
     correctAnswer?: string
     similarity?: number
     confidence?: 'exact' | 'high' | 'medium' | 'low' | 'none'
-  } | null>(null)
+  } | undefined>(undefined)
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function GameRoom({ params }: GameRoomProps) {
   }, [gameId, session?.user?.name])
 
   // Check if current user is the clue giver
-  const isMyTurn = gameState.currentTurn && gameState.players.some(p => p.id === gameState.currentTurn)
+  const isMyTurn = Boolean(gameState.currentTurn && gameState.players.some(p => p.id === gameState.currentTurn))
   const currentPlayer = gameState.players.find(p => p.id === gameState.currentTurn)
   const otherPlayer = gameState.players.find(p => p.id !== gameState.currentTurn)
 

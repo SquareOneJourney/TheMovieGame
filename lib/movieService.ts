@@ -1,6 +1,8 @@
 import { GameMovie } from './tmdb';
 import moviesData from '../data/movies.json';
 
+export type { GameMovie };
+
 interface CachedMovies {
   movies: GameMovie[];
   timestamp: number;
@@ -15,6 +17,12 @@ class MovieService {
     // Check if we have valid cached data
     if (this.cache && this.isCacheValid()) {
       console.log('📦 Using cached TMDB data');
+      console.log('📦 Cache info:', { 
+        hasCache: !!this.cache, 
+        isExpired: !this.isCacheValid(), 
+        movieCount: this.cache.movies.length,
+        sampleMovie: this.cache.movies[0] 
+      });
       return this.shuffleArray(this.cache.movies).slice(0, count);
     }
 
@@ -22,7 +30,7 @@ class MovieService {
       console.log('🌐 Fetching from TMDB API via internal API...');
       // Try to fetch from our internal API route
       const response = await fetch('/api/movies');
-      const data = await response.json();
+      const data = await response.json() as { success: boolean; movies: GameMovie[]; total: number };
       
       if (data.success && data.movies && data.movies.length > 0) {
         console.log('✅ TMDB data loaded via API:', data.movies.length, 'movies');
@@ -78,8 +86,15 @@ class MovieService {
 
   // Method to force refresh cache (useful for admin or testing)
   async refreshCache(): Promise<void> {
+    console.log('🔄 Clearing cache and forcing fresh fetch...');
     this.cache = null;
     await this.getRandomMovies(20);
+  }
+
+  // Method to clear cache without fetching new data
+  clearCache(): void {
+    console.log('🗑️ Clearing cache...');
+    this.cache = null;
   }
 
   // Method to get cache status
