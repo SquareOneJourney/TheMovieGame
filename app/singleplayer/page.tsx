@@ -38,22 +38,23 @@ export default function SinglePlayerPage() {
   
   const [movies, setMovies] = useState<GameMovie[]>([])
   const [usedMovies, setUsedMovies] = useState<Set<number>>(new Set())
+  const [isLoading, setIsLoading] = useState(true)
 
   // Load movies from TMDB API with fallback to static data
   useEffect(() => {
     const loadMovies = async () => {
       try {
-        // Clear cache to ensure fresh data
-        movieService.clearCache()
-        console.log('🎬 Loading fresh movies from TMDB...')
+        console.log('🎬 Loading movies from TMDB...')
         
-        const data = await movieService.getRandomMovies(200) // Load 200 movies for maximum variety
+        // Load fewer movies for faster loading
+        const data = await movieService.getRandomMovies(50) // Reduced from 200 to 50
         console.log('🎬 Loaded movies:', data.length, 'movies')
         console.log('🎬 Sample movie:', data[0])
         console.log('🎬 Sample movie actor1Photo:', data[0]?.actor1Photo)
         console.log('🎬 Sample movie actor2Photo:', data[0]?.actor2Photo)
         
         setMovies(data)
+        setIsLoading(false)
         // Start with a random movie
         if (data.length > 0) {
           const randomIndex = Math.floor(Math.random() * data.length)
@@ -77,46 +78,44 @@ export default function SinglePlayerPage() {
     const matchResult = enhancedFuzzyMatch(guessText.trim(), gameState.currentMovie.movie)
     const isCorrect = matchResult.isMatch
     
-    setGameState(prev => ({
-      ...prev,
-      lastResult: {
-        correct: isCorrect,
-        guess: guessText.trim(),
-        correctAnswer: gameState.currentMovie!.movie,
-        similarity: matchResult.similarity,
-        confidence: matchResult.confidence,
-        usedHint: gameState.hintUsed
+    // Update state with result and scores
+    setGameState(prev => {
+      const pointsToAdd = isCorrect ? (prev.hintUsed ? 0.5 : 1) : 0
+      const botPointsToAdd = isCorrect ? 0 : 2
+      const newPlayerScore = prev.playerScore + pointsToAdd
+      const newBotScore = prev.botScore + botPointsToAdd
+      
+      return {
+        ...prev,
+        lastResult: {
+          correct: isCorrect,
+          guess: guessText.trim(),
+          correctAnswer: gameState.currentMovie!.movie,
+          similarity: matchResult.similarity,
+          confidence: matchResult.confidence,
+          usedHint: prev.hintUsed
+        },
+        playerScore: newPlayerScore,
+        botScore: newBotScore
       }
-    }))
+    })
 
-    // Update scores
-    if (isCorrect) {
-      const pointsToAdd = gameState.hintUsed ? 0.5 : 1
-      setGameState(prev => ({
-        ...prev,
-        playerScore: prev.playerScore + pointsToAdd
-      }))
-    } else {
-      setGameState(prev => ({
-        ...prev,
-        botScore: prev.botScore + 2
-      }))
-    }
-
-    // Check for winner
-    const newPlayerScore = isCorrect ? gameState.playerScore + (gameState.hintUsed ? 0.5 : 1) : gameState.playerScore
-    const newBotScore = isCorrect ? gameState.botScore : gameState.botScore + 2
-    
-    if (newPlayerScore >= 10 || newBotScore >= 10) {
-      setGameState(prev => ({
-        ...prev,
-        gameStatus: 'finished',
-        winner: newPlayerScore >= 10 ? 'player' : 'bot'
-      }))
-    } else {
-      // Get next movie
-      getNextMovie()
-    }
+    // Check for winner and move to next movie after delay
+    setTimeout(() => {
+      setGameState(prev => {
+        if (prev.playerScore >= 10 || prev.botScore >= 10) {
+          return {
+            ...prev,
+            gameStatus: 'finished',
+            winner: prev.playerScore >= 10 ? 'player' : 'bot'
+          }
+        } else {
+          // Get next movie after showing result
+          getNextMovie()
+          return prev
+        }
+      })
+    }, 2000) // Wait 2 seconds before moving to next movie
   }
 
   const handleHint = () => {
@@ -144,19 +143,22 @@ export default function SinglePlayerPage() {
       botScore: prev.botScore + 2
     }))
 
-    // Check for winner
-    const newBotScore = gameState.botScore + 2
-    
-    if (newBotScore >= 10) {
-      setGameState(prev => ({
-        ...prev,
-        gameStatus: 'finished',
-        winner: 'bot'
-      }))
-    } else {
-      // Get next movie
-      getNextMovie()
-    }
+    // Check for winner and move to next movie after delay
+    setTimeout(() => {
+      setGameState(prev => {
+        if (prev.botScore >= 10) {
+          return {
+            ...prev,
+            gameStatus: 'finished',
+            winner: 'bot'
+          }
+        } else {
+          // Get next movie after showing result
+          getNextMovie()
+          return prev
+        }
+      })
+    }, 2000) // Wait 2 seconds before moving to next movie
   }
 
   const getNextMovie = () => {
@@ -189,6 +191,19 @@ export default function SinglePlayerPage() {
       lastResult: null
     })
     setUsedMovies(new Set())
+  }
+
+  // Show loading screen while movies are loading
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
+          <h2 className="text-2xl font-bold text-white mb-2">Loading Movies...</h2>
+          <p className="text-gray-300">Fetching fresh movie data from TMDB</p>
+        </div>
+      </div>
+    )
   }
 
   return (
