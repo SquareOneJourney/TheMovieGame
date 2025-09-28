@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
       data: {
         gameId: game.id,
         clueGiver: session.user.id,
+        guesser: '', // Will be set when the other player joins
         actor1: actors.actor1,
         actor2: actors.actor2,
         movie: movie.title,

@@ -24,8 +24,8 @@ export async function GET(request: NextRequest) {
           { id: { not: session.user.id } }, // Exclude current user
           {
             OR: [
-              { name: { contains: query, mode: 'insensitive' } },
-              { email: { contains: query, mode: 'insensitive' } }
+              { name: { contains: query } },
+              { email: { contains: query } }
             ]
           }
         ]

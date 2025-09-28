@@ -60,7 +60,10 @@ export async function POST(
           data: {
             gameId: game.id,
             clueGiver: otherPlayer.id,
-            guesser: currentRound.clueGiver
+            guesser: currentRound.clueGiver,
+            actor1: '',
+            actor2: '',
+            movie: ''
           }
         })
       }

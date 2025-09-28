@@ -301,11 +301,11 @@ export default function StatsPanel() {
                       
                       <div className="text-sm text-gray-300">
                         <p>
-                          Clue giver: {round.game.players.find(p => p.id === round.clueGiver)?.name || 'Unknown'}
+                          Clue giver: {round.game.players.find((p: { id: string; name: string; email: string }) => p.id === round.clueGiver)?.name || 'Unknown'}
                         </p>
                         {round.guesser && (
                           <p>
-                            Guesser: {round.game.players.find(p => p.id === round.guesser)?.name || 'Unknown'}
+                            Guesser: {round.game.players.find((p: { id: string; name: string; email: string }) => p.id === round.guesser)?.name || 'Unknown'}
                           </p>
                         )}
                         {round.guess && (
