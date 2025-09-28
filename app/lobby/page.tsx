@@ -423,7 +423,6 @@ export default function LobbyPage() {
             </CardContent>
           </Card>
         </motion.div>
-        </div>
       </div>
     </div>
   )
