@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAuthSession } from '@/lib/auth'
+import { getAuthSession } from '@/lib/api-auth'
 import { prisma } from '@/lib/prisma'
 
 // Accept or decline a game invite

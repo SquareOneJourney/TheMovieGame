@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAuthSession } from '@/lib/auth'
+import { getAuthSession } from '@/lib/api-auth'
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
