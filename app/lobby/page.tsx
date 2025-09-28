@@ -10,6 +10,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import FriendsPanel from '@/components/FriendsPanel'
+import StatsPanel from '@/components/StatsPanel'
+import Leaderboard from '@/components/Leaderboard'
 
 interface Game {
   id: string
@@ -268,14 +270,25 @@ export default function LobbyPage() {
           </Card>
         </motion.div>
 
-        {/* Friends Panel */}
+        {/* Stats and Friends Panels */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
+          className="mt-12 grid md:grid-cols-2 gap-8"
+        >
+          <StatsPanel />
+          <FriendsPanel />
+        </motion.div>
+
+        {/* Leaderboard */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
           className="mt-12"
         >
-          <FriendsPanel />
+          <Leaderboard />
         </motion.div>
 
         {/* How to Play */}
