@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Medal, Award, Crown, Star, TrendingUp } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
@@ -26,7 +26,7 @@ export default function Leaderboard() {
   const [timeframe, setTimeframe] = useState<'all' | 'week' | 'month'>('all')
 
   // Fetch leaderboard data
-  const fetchLeaderboard = async () => {
+  const fetchLeaderboard = useCallback(async () => {
     setLoading(true)
     try {
       const response = await fetch(`/api/leaderboard?timeframe=${timeframe}`)
@@ -40,11 +40,11 @@ export default function Leaderboard() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [timeframe])
 
   useEffect(() => {
     fetchLeaderboard()
-  }, [timeframe])
+  }, [timeframe, fetchLeaderboard])
 
   const getRankIcon = (rank: number) => {
     switch (rank) {

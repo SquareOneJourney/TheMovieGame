@@ -241,7 +241,7 @@ export default function StatsPanel() {
                           <p>Latest: {game.rounds[0].actor1} & {game.rounds[0].actor2}</p>
                           {game.rounds[0].guess && (
                             <p className="text-xs">
-                              Guess: "{game.rounds[0].guess}" 
+                              Guess: &quot;{game.rounds[0].guess}&quot; 
                               {game.rounds[0].outcome && (
                                 <span className={`ml-2 ${
                                   game.rounds[0].outcome === 'correct' ? 'text-green-400' : 'text-red-400'
@@ -310,7 +310,7 @@ export default function StatsPanel() {
                         )}
                         {round.guess && (
                           <p>
-                            Guess: "{round.guess}" 
+                            Guess: &quot;{round.guess}&quot; 
                             {round.outcome && (
                               <span className={`ml-2 ${
                                 round.outcome === 'correct' ? 'text-green-400' : 'text-red-400'
