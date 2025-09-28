@@ -1,9 +1,9 @@
-import NextAuth from 'next-auth'
+import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { createClient } from '@supabase/supabase-js'
 import { prisma } from '@/lib/prisma'
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -84,7 +84,7 @@ export const authOptions = {
     })
   ],
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   jwt: {
