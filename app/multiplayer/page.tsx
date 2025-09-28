@@ -7,6 +7,9 @@ import Link from 'next/link'
 import { tmdbService, TMDBMovie, TMDBCastMember } from '@/lib/tmdb'
 import ProtectedRoute from '@/components/ProtectedRoute'
 
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic'
+
 interface SelectedActors {
   actor1: TMDBCastMember | null
   actor2: TMDBCastMember | null

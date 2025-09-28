@@ -8,6 +8,9 @@ import { enhancedFuzzyMatch } from '@/lib/fuzzyMatch'
 import { GuessInput } from '@/components/GuessInput'
 import Link from 'next/link'
 
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic'
+
 interface GameState {
   currentMovie: GameMovie | null
   playerScore: number

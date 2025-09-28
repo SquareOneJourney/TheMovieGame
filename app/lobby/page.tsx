@@ -13,6 +13,9 @@ import FriendsPanel from '@/components/FriendsPanel'
 import StatsPanel from '@/components/StatsPanel'
 import Leaderboard from '@/components/Leaderboard'
 
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic'
+
 interface Game {
   id: string
   status: string
