@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
-import { prisma } from '@/lib/prisma'
+import { memoryDB } from '@/lib/memory-db'
 
 const handler = NextAuth({
   providers: [
@@ -16,11 +16,7 @@ const handler = NextAuth({
           return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email
-          }
-        })
+        const user = await memoryDB.findUserByEmail(credentials.email)
 
         if (!user) {
           return null
