@@ -13,6 +13,16 @@ model User {
   email     String   @unique
   games     Game[]   @relation("PlayerGames")
   createdAt DateTime @default(now())
+  
+  // Friend system
+  sentFriendRequests     FriendRequest[] @relation("SentFriendRequests")
+  receivedFriendRequests FriendRequest[] @relation("ReceivedFriendRequests")
+  friendships1           Friendship[]    @relation("User1")
+  friendships2           Friendship[]    @relation("User2")
+  
+  // Game invites
+  sentInvites     GameInvite[] @relation("Sender")
+  receivedInvites GameInvite[] @relation("Recipient")
 }
 
 model Game {
@@ -21,6 +31,9 @@ model Game {
   rounds    Round[]
   status    String   // "waiting", "in_progress", "finished"
   createdAt DateTime @default(now())
+  
+  // Game invites
+  invites   GameInvite[]
 }
 
 model Round {
@@ -44,4 +57,44 @@ model Movie {
   actor2    String
   title     String
   createdAt DateTime @default(now())
+}
+
+model FriendRequest {
+  id        String   @id @default(cuid())
+  senderId  String
+  receiverId String
+  status    String   // "pending", "accepted", "declined"
+  createdAt DateTime @default(now())
+  
+  sender   User @relation("SentFriendRequests", fields: [senderId], references: [id])
+  receiver User @relation("ReceivedFriendRequests", fields: [receiverId], references: [id])
+  
+  @@unique([senderId, receiverId])
+}
+
+model Friendship {
+  id        String   @id @default(cuid())
+  user1Id   String
+  user2Id   String
+  createdAt DateTime @default(now())
+  
+  user1 User @relation("User1", fields: [user1Id], references: [id])
+  user2 User @relation("User2", fields: [user2Id], references: [id])
+  
+  @@unique([user1Id, user2Id])
+}
+
+model GameInvite {
+  id        String   @id @default(cuid())
+  senderId  String
+  receiverId String
+  gameId    String
+  status    String   // "pending", "accepted", "declined"
+  createdAt DateTime @default(now())
+  
+  sender   User  @relation("Sender", fields: [senderId], references: [id])
+  receiver User  @relation("Recipient", fields: [receiverId], references: [id])
+  game     Game  @relation(fields: [gameId], references: [id])
+  
+  @@unique([senderId, receiverId, gameId])
 }

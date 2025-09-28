@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import FriendsPanel from '@/components/FriendsPanel'
 
 interface Game {
   id: string
@@ -265,6 +266,16 @@ export default function LobbyPage() {
               )}
             </CardContent>
           </Card>
+        </motion.div>
+
+        {/* Friends Panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="mt-12"
+        >
+          <FriendsPanel />
         </motion.div>
 
         {/* How to Play */}
