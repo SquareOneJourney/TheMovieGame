@@ -146,16 +146,8 @@ class TMDBService {
             .slice(0, 2);
           
           if (mainActors.length >= 2) {
-            // Check if both main actors are well-known (skip if not)
-            const [actor1Known, actor2Known] = await Promise.all([
-              this.isActorWellKnown(mainActors[0]),
-              this.isActorWellKnown(mainActors[1])
-            ]);
-            
-            if (!actor1Known || !actor2Known) {
-              console.log(`⚠️ Skipped ${movie.title}: Actors not well-known enough`);
-              continue;
-            }
+            // Skip actor popularity checks for faster loading
+            // The TMDB filtering already ensures mainstream movies
             
             // Get a third actor for hints (from main cast only)
             const hintActor = cast

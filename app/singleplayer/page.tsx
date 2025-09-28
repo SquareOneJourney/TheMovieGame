@@ -56,18 +56,23 @@ export default function SinglePlayerPage() {
         console.log('🎬 Sample movie actor1Photo:', data[0]?.actor1Photo)
         console.log('🎬 Sample movie actor2Photo:', data[0]?.actor2Photo)
         
-        setMovies(data)
-        setIsLoading(false)
-        // Start with a random movie
-        if (data.length > 0) {
+        if (data && data.length > 0) {
+          setMovies(data)
+          setIsLoading(false)
+          // Start with a random movie
           const randomIndex = Math.floor(Math.random() * data.length)
           setGameState(prev => ({ ...prev, currentMovie: data[randomIndex] }))
           setUsedMovies(new Set([randomIndex]))
+          console.log('✅ Movies loaded successfully, game started')
+        } else {
+          console.error('❌ No movies returned from API')
+          setIsLoading(false)
         }
       } catch (error) {
-        console.error('Error loading movies:', error)
+        console.error('❌ Error loading movies:', error)
         // The movieService now has fallback to static data, so this shouldn't happen
         console.log('Using fallback movies data...')
+        setIsLoading(false)
       }
     }
     
@@ -165,18 +170,30 @@ export default function SinglePlayerPage() {
   }
 
   const getNextMovie = () => {
+    console.log('🎬 getNextMovie called - movies.length:', movies.length, 'usedMovies.size:', usedMovies.size)
+    
+    if (movies.length === 0) {
+      console.error('❌ No movies available for next movie')
+      return
+    }
+    
     const availableMovies = movies.filter((_, index) => !usedMovies.has(index))
+    console.log('🎬 Available movies:', availableMovies.length)
     
     if (availableMovies.length === 0) {
       // Reset used movies if all have been used
+      console.log('🔄 Resetting used movies - all movies used')
       setUsedMovies(new Set())
       const randomIndex = Math.floor(Math.random() * movies.length)
-      setGameState(prev => ({ ...prev, currentMovie: movies[randomIndex], hintUsed: false }))
+      const selectedMovie = movies[randomIndex]
+      console.log('🎬 Selected movie (reset):', selectedMovie?.movie)
+      setGameState(prev => ({ ...prev, currentMovie: selectedMovie, hintUsed: false }))
       setUsedMovies(new Set([randomIndex]))
     } else {
       const randomIndex = Math.floor(Math.random() * availableMovies.length)
       const selectedMovie = availableMovies[randomIndex]
       const originalIndex = movies.findIndex(m => m === selectedMovie)
+      console.log('🎬 Selected movie:', selectedMovie?.movie, 'originalIndex:', originalIndex)
       
       setGameState(prev => ({ ...prev, currentMovie: selectedMovie, hintUsed: false }))
       setUsedMovies(prev => new Set([...prev, originalIndex]))

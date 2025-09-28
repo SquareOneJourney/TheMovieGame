@@ -140,8 +140,8 @@ export async function GET() {
 
     // Process real TMDB movies with cast data
     const detailedMovies = [];
-    const maxMovies = Math.min(200, shuffledMovies.length); // Check up to 200 movies for better selection
-    const targetCount = 100; // Target 100 movies for much more variety
+    const maxMovies = Math.min(100, shuffledMovies.length); // Check up to 100 movies for faster loading
+    const targetCount = 50; // Target 50 movies for faster loading
 
     for (let i = 0; i < maxMovies && detailedMovies.length < targetCount; i++) {
       const movie = shuffledMovies[i];
