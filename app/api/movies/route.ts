@@ -27,8 +27,8 @@ export async function GET() {
     console.log('✅ TMDB Authentication successful');
 
     // Get movies from multiple sources for maximum variety and popularity
-    const allMovies = [];
-    const existingIds = new Set();
+    const allMovies: any[] = [];
+    const existingIds = new Set<number>();
     
     // Define popular genres for better movie selection
     const popularGenres = [
@@ -121,11 +121,15 @@ export async function GET() {
         }
       }
     }
-    
+
     // Shuffle the movies for better randomization
     const shuffledMovies = allMovies.sort(() => Math.random() - 0.5);
-    
-    console.log('✅ TMDB Movies fetched:', shuffledMovies.length, 'movies (discover + popular sources with genre/year filtering)');
+
+    console.log(
+      '✅ TMDB Movies fetched:',
+      shuffledMovies.length,
+      'movies (discover + popular sources with genre/year filtering)'
+    );
 
     // Process real TMDB movies with cast data
     const detailedMovies = [];
