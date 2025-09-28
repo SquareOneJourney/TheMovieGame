@@ -29,24 +29,34 @@ class SocketManager {
     }
   }
 
-  // Give a clue (two actors)
-  giveClue(actor1: string, actor2: string) {
+  // Give a clue (two actors) with enhanced movie data
+  giveClue(actor1: string, actor2: string, movie?: string, poster?: string, year?: string, actor1Photo?: string, actor2Photo?: string, hintActorPhoto?: string, hintActor?: string) {
     if (this.socket && this.gameId) {
       this.socket.emit('give_clue', { 
         gameId: this.gameId, 
         actor1, 
-        actor2 
+        actor2,
+        movie,
+        poster,
+        year,
+        actor1Photo,
+        actor2Photo,
+        hintActorPhoto,
+        hintActor
       })
     }
   }
 
-  // Guess the movie
-  guessMovie(guess: string, correctMovie: string) {
+  // Guess the movie with enhanced data
+  guessMovie(guess: string, correctMovie: string, similarity?: number, confidence?: 'exact' | 'high' | 'medium' | 'low' | 'none', usedHint?: boolean) {
     if (this.socket && this.gameId) {
       this.socket.emit('guess_movie', { 
         gameId: this.gameId, 
         guess, 
-        correctMovie 
+        correctMovie,
+        similarity,
+        confidence,
+        usedHint
       })
     }
   }
@@ -73,6 +83,25 @@ class SocketManager {
   onPlayerLeft(callback: (playerId: string) => void) {
     if (this.socket) {
       this.socket.on('player_left', callback)
+    }
+  }
+
+  onHintUsed(callback: (data: { hintUsed: boolean }) => void) {
+    if (this.socket) {
+      this.socket.on('hint_used', callback)
+    }
+  }
+
+  // New methods for enhanced features
+  useHint() {
+    if (this.socket && this.gameId) {
+      this.socket.emit('use_hint', { gameId: this.gameId })
+    }
+  }
+
+  resetGame() {
+    if (this.socket && this.gameId) {
+      this.socket.emit('reset_game', { gameId: this.gameId })
     }
   }
 

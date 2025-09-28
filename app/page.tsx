@@ -15,12 +15,20 @@ export default function Home() {
             &quot;If you ain&apos;t first, you&apos;re last.&quot;
           </p>
           
-          <a 
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
             href="/singleplayer"
             className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold text-xl px-8 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-200"
           >
             Play Against AI
           </a>
+          <a
+            href="/lobby"
+            className="inline-block bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold text-xl px-8 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-200"
+          >
+            Multiplayer
+          </a>
+        </div>
         </div>
 
         {/* Game Rules */}

@@ -11,9 +11,9 @@ interface CachedMovies {
 
 class MovieService {
   private cache: CachedMovies | null = null;
-  private readonly CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+  private readonly CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours for more variety
 
-  async getRandomMovies(count: number = 20): Promise<GameMovie[]> {
+  async getRandomMovies(count: number = 50): Promise<GameMovie[]> {
     // Check if we have valid cached data
     if (this.cache && this.isCacheValid()) {
       console.log('📦 Using cached TMDB data');

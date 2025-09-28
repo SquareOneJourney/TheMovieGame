@@ -2,8 +2,29 @@ import { Server } from "socket.io";
 
 interface GameState {
   players: { id: string; name: string; score: number }[];
-  currentClue?: { actor1: string; actor2: string };
+  currentClue?: {
+    actor1: string;
+    actor2: string;
+    movie?: string;
+    poster?: string;
+    year?: string;
+    actor1Photo?: string;
+    actor2Photo?: string;
+    hintActorPhoto?: string;
+    hintActor?: string;
+  };
   currentTurn: string; // socket.id of clue giver
+  gameStatus: 'waiting' | 'playing' | 'finished';
+  winner: string | null; // socket.id of winner
+  hintUsed: boolean;
+  lastResult?: {
+    correct: boolean;
+    guess: string;
+    correctAnswer?: string;
+    similarity?: number;
+    confidence?: 'exact' | 'high' | 'medium' | 'low' | 'none';
+    usedHint?: boolean;
+  };
 }
 
 const games: Record<string, GameState> = {};
@@ -18,7 +39,13 @@ export default function initSocket(server: any) {
 
     socket.on("join_game", ({ gameId, name }) => {
       if (!games[gameId]) {
-        games[gameId] = { players: [], currentTurn: socket.id };
+        games[gameId] = { 
+          players: [], 
+          currentTurn: socket.id,
+          gameStatus: 'waiting',
+          winner: null,
+          hintUsed: false
+        };
       }
 
       // Check if player already exists in this game
@@ -27,28 +54,56 @@ export default function initSocket(server: any) {
         games[gameId].players.push({ id: socket.id, name, score: 0 });
       }
 
+      // Update game status when second player joins
+      if (games[gameId].players.length === 2 && games[gameId].gameStatus === 'waiting') {
+        games[gameId].gameStatus = 'playing';
+      }
+
       socket.join(gameId);
       io.to(gameId).emit("game_update", games[gameId]);
     });
 
-    socket.on("give_clue", ({ gameId, actor1, actor2 }) => {
+    socket.on("give_clue", ({ gameId, actor1, actor2, movie, poster, year, actor1Photo, actor2Photo, hintActorPhoto, hintActor }) => {
       const game = games[gameId];
       if (!game) return;
       
-      game.currentClue = { actor1, actor2 };
+      game.currentClue = { 
+        actor1, 
+        actor2, 
+        movie, 
+        poster, 
+        year, 
+        actor1Photo, 
+        actor2Photo, 
+        hintActorPhoto, 
+        hintActor 
+      };
+      game.hintUsed = false; // Reset hint status for new clue
       io.to(gameId).emit("clue_given", game.currentClue);
     });
 
-    socket.on("guess_movie", ({ gameId, guess, correctMovie }) => {
+    socket.on("guess_movie", ({ gameId, guess, correctMovie, similarity, confidence, usedHint }) => {
       const game = games[gameId];
       if (!game) return;
 
       const clueGiver = game.currentTurn;
       const guesser = game.players.find((p) => p.id !== clueGiver);
+      const isCorrect = guess.toLowerCase() === correctMovie.toLowerCase();
 
-      if (guesser && guess.toLowerCase() === correctMovie.toLowerCase()) {
-        // Correct guess - guesser gets 1 point and becomes clue giver
-        guesser.score += 1;
+      // Store result for display
+      game.lastResult = {
+        correct: isCorrect,
+        guess,
+        correctAnswer: correctMovie,
+        similarity,
+        confidence,
+        usedHint
+      };
+
+      if (guesser && isCorrect) {
+        // Correct guess - guesser gets points (0.5 if hint used, 1 if not)
+        const pointsToAdd = usedHint ? 0.5 : 1;
+        guesser.score += pointsToAdd;
         game.currentTurn = guesser.id; // switch turn
       } else {
         // Wrong guess - clue giver gets 2 points and keeps turn
@@ -56,8 +111,44 @@ export default function initSocket(server: any) {
         if (giver) giver.score += 2;
       }
 
+      // Check for winner
+      const maxScore = Math.max(...game.players.map(p => p.score));
+      if (maxScore >= 10) {
+        game.gameStatus = 'finished';
+        game.winner = game.players.find(p => p.score >= 10)?.id || null;
+      }
+
       // Clear the current clue for next round
       game.currentClue = undefined;
+      game.hintUsed = false;
+      io.to(gameId).emit("game_update", game);
+    });
+
+    // New socket events for enhanced features
+    socket.on("use_hint", ({ gameId }) => {
+      const game = games[gameId];
+      if (!game) return;
+      
+      game.hintUsed = true;
+      io.to(gameId).emit("hint_used", { hintUsed: true });
+    });
+
+    socket.on("reset_game", ({ gameId }) => {
+      const game = games[gameId];
+      if (!game) return;
+      
+      // Reset game state but keep players
+      game.currentClue = undefined;
+      game.gameStatus = 'playing';
+      game.winner = null;
+      game.hintUsed = false;
+      game.lastResult = undefined;
+      
+      // Reset scores
+      game.players.forEach(player => {
+        player.score = 0;
+      });
+      
       io.to(gameId).emit("game_update", game);
     });
 

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Search, CheckCircle, XCircle, AlertCircle } from 'lucide-react'
 import { enhancedFuzzyMatch } from '@/lib/fuzzyMatch'
+import { ActorPhoto } from '@/components/ActorPhoto'
 
 interface GuessInputProps {
   clue: {
@@ -15,9 +16,16 @@ interface GuessInputProps {
     movie?: string
     poster?: string
     year?: string
+    actor1Photo?: string
+    actor2Photo?: string
+    hintActorPhoto?: string
+    hintActor?: string
   }
   onGuess: (guess: string) => void
+  onNoIdea?: () => void
+  onHint?: () => void
   disabled?: boolean
+  hintUsed?: boolean
   lastResult?: {
     correct: boolean
     guess: string
@@ -27,7 +35,7 @@ interface GuessInputProps {
   }
 }
 
-export function GuessInput({ clue, onGuess, disabled = false, lastResult }: GuessInputProps) {
+export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, hintUsed = false, lastResult }: GuessInputProps) {
   const [guess, setGuess] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -45,6 +53,38 @@ export function GuessInput({ clue, onGuess, disabled = false, lastResult }: Gues
       setGuess('')
     } catch (error) {
       console.error('Error submitting guess:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleNoIdea = async () => {
+    if (disabled || isSubmitting || !onNoIdea) {
+      return
+    }
+
+    setIsSubmitting(true)
+    
+    try {
+      await onNoIdea()
+    } catch (error) {
+      console.error('Error submitting no idea:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleHint = async () => {
+    if (disabled || isSubmitting || !onHint) {
+      return
+    }
+
+    setIsSubmitting(true)
+    
+    try {
+      await onHint()
+    } catch (error) {
+      console.error('Error using hint:', error)
     } finally {
       setIsSubmitting(false)
     }
@@ -79,11 +119,40 @@ export function GuessInput({ clue, onGuess, disabled = false, lastResult }: Gues
               </div>
             )}
             
-            <div className="text-lg text-white">
-              <span className="font-bold text-blue-300">{clue.actor1}</span>
-              <span className="mx-2 text-gray-400">&</span>
-              <span className="font-bold text-blue-300">{clue.actor2}</span>
+            <div className="flex items-center justify-center space-x-6 text-lg text-white">
+              <div className="flex items-center space-x-3">
+                <ActorPhoto 
+                  src={clue.actor1Photo} 
+                  name={clue.actor1} 
+                  size="lg"
+                />
+                <span className="font-bold text-blue-300">{clue.actor1}</span>
+              </div>
+              <span className="text-gray-400">&</span>
+              <div className="flex items-center space-x-3">
+                <ActorPhoto 
+                  src={clue.actor2Photo} 
+                  name={clue.actor2} 
+                  size="lg"
+                />
+                <span className="font-bold text-blue-300">{clue.actor2}</span>
+              </div>
             </div>
+            
+            {/* Hint Actor Display */}
+            {hintUsed && clue.hintActor && (
+              <div className="flex items-center justify-center space-x-3 mt-4">
+                <span className="text-sm text-gray-400">Hint:</span>
+                <div className="flex items-center space-x-2">
+                  <ActorPhoto 
+                    src={clue.hintActorPhoto} 
+                    name={clue.hintActor} 
+                    size="md"
+                  />
+                  <span className="font-bold text-yellow-300">{clue.hintActor}</span>
+                </div>
+              </div>
+            )}
             
             {clue.year && (
               <p className="text-sm text-gray-400">Released in {clue.year}</p>
@@ -131,7 +200,7 @@ export function GuessInput({ clue, onGuess, disabled = false, lastResult }: Gues
                       ? 'Correct!' 
                       : lastResult.similarity && lastResult.similarity >= 60
                         ? 'Close!'
-                        : 'Wrong!'
+                        : 'Houston, we have a problem!'
                     }
                   </p>
                   <p className="text-sm text-gray-300">
@@ -181,33 +250,94 @@ export function GuessInput({ clue, onGuess, disabled = false, lastResult }: Gues
               />
             </div>
 
-            <motion.div
-              whileHover={isFormValid ? { scale: 1.02 } : {}}
-              whileTap={isFormValid ? { scale: 0.98 } : {}}
-            >
-              <Button
-                type="submit"
-                disabled={!isFormValid}
-                className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            <div className="flex space-x-3">
+              <motion.div
+                whileHover={isFormValid ? { scale: 1.02 } : {}}
+                whileTap={isFormValid ? { scale: 0.98 } : {}}
+                className="flex-1"
               >
-                {isSubmitting ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Submitting...</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <Search className="h-4 w-4" />
-                    <span>Submit Guess</span>
-                  </div>
-                )}
-              </Button>
-            </motion.div>
+                <Button
+                  type="submit"
+                  disabled={!isFormValid}
+                  className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Submitting...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <Search className="h-4 w-4" />
+                      <span>Submit Guess</span>
+                    </div>
+                  )}
+                </Button>
+              </motion.div>
+
+              <motion.div
+                whileHover={!disabled && !isSubmitting ? { scale: 1.02 } : {}}
+                whileTap={!disabled && !isSubmitting ? { scale: 0.98 } : {}}
+              >
+                <Button
+                  type="button"
+                  onClick={handleNoIdea}
+                  disabled={disabled || isSubmitting || !onNoIdea}
+                  className="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Submitting...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <XCircle className="h-4 w-4" />
+                      <span>No Idea</span>
+                    </div>
+                  )}
+                </Button>
+              </motion.div>
+
+              <motion.div
+                whileHover={!disabled && !isSubmitting && !hintUsed ? { scale: 1.02 } : {}}
+                whileTap={!disabled && !isSubmitting && !hintUsed ? { scale: 0.98 } : {}}
+              >
+                <Button
+                  type="button"
+                  onClick={handleHint}
+                  disabled={disabled || isSubmitting || !onHint || hintUsed}
+                  className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  title={hintUsed ? "Hint already used" : "Get a hint (costs half a point if correct)"}
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Submitting...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <span>💡</span>
+                      <span>Hint</span>
+                    </div>
+                  )}
+                </Button>
+              </motion.div>
+            </div>
+
+            {/* Hint Warning */}
+            {hintUsed && (
+              <div className="text-center">
+                <p className="text-yellow-300 text-sm">
+                  ⚠️ Hint used! Correct answer will only give 0.5 points
+                </p>
+              </div>
+            )}
 
             {/* Instructions */}
             <div className="text-center">
               <p className="text-sm text-gray-400">
-                Type the full movie title as accurately as possible
+                Type the full movie title as accurately as possible, or click "No Idea" if you don't know
               </p>
             </div>
           </form>

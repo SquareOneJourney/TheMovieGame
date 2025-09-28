@@ -5,19 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Crown, Bot, User, Trophy, Home } from 'lucide-react'
 import { movieService, GameMovie } from '@/lib/movieService'
 import { enhancedFuzzyMatch } from '@/lib/fuzzyMatch'
+import { GuessInput } from '@/components/GuessInput'
 import Link from 'next/link'
 
-interface Movie {
-  actor1: string
-  actor2: string
-  movie: string
-  poster?: string
-  year?: string
-  hintActor?: string
-}
-
 interface GameState {
-  currentMovie: Movie | null
+  currentMovie: GameMovie | null
   playerScore: number
   botScore: number
   gameStatus: 'playing' | 'finished'
@@ -44,8 +36,7 @@ export default function SinglePlayerPage() {
     lastResult: null
   })
   
-  const [guess, setGuess] = useState('')
-  const [movies, setMovies] = useState<Movie[]>([])
+  const [movies, setMovies] = useState<GameMovie[]>([])
   const [usedMovies, setUsedMovies] = useState<Set<number>>(new Set())
 
   // Load movies from TMDB API with fallback to static data
@@ -56,9 +47,11 @@ export default function SinglePlayerPage() {
         movieService.clearCache()
         console.log('🎬 Loading fresh movies from TMDB...')
         
-        const data = await movieService.getRandomMovies(50) // Load 50 movies for variety
+        const data = await movieService.getRandomMovies(200) // Load 200 movies for maximum variety
         console.log('🎬 Loaded movies:', data.length, 'movies')
         console.log('🎬 Sample movie:', data[0])
+        console.log('🎬 Sample movie actor1Photo:', data[0]?.actor1Photo)
+        console.log('🎬 Sample movie actor2Photo:', data[0]?.actor2Photo)
         
         setMovies(data)
         // Start with a random movie
@@ -77,18 +70,18 @@ export default function SinglePlayerPage() {
     loadMovies()
   }, [])
 
-  const handleGuess = () => {
-    if (!gameState.currentMovie || !guess.trim()) return
+  const handleGuess = (guessText: string) => {
+    if (!gameState.currentMovie || !guessText.trim()) return
 
     // Use fuzzy matching instead of exact string comparison
-    const matchResult = enhancedFuzzyMatch(guess.trim(), gameState.currentMovie.movie)
+    const matchResult = enhancedFuzzyMatch(guessText.trim(), gameState.currentMovie.movie)
     const isCorrect = matchResult.isMatch
     
     setGameState(prev => ({
       ...prev,
       lastResult: {
         correct: isCorrect,
-        guess: guess.trim(),
+        guess: guessText.trim(),
         correctAnswer: gameState.currentMovie!.movie,
         similarity: matchResult.similarity,
         confidence: matchResult.confidence,
@@ -124,8 +117,6 @@ export default function SinglePlayerPage() {
       // Get next movie
       getNextMovie()
     }
-
-    setGuess('')
   }
 
   const handleHint = () => {
@@ -135,6 +126,37 @@ export default function SinglePlayerPage() {
       ...prev,
       hintUsed: true
     }))
+  }
+
+  const handleNoIdea = () => {
+    if (!gameState.currentMovie) return
+
+    // Mark as incorrect guess and give points to bot
+    setGameState(prev => ({
+      ...prev,
+      lastResult: {
+        correct: false,
+        guess: "No Idea",
+        correctAnswer: gameState.currentMovie!.movie,
+        similarity: 0,
+        confidence: 'none'
+      },
+      botScore: prev.botScore + 2
+    }))
+
+    // Check for winner
+    const newBotScore = gameState.botScore + 2
+    
+    if (newBotScore >= 10) {
+      setGameState(prev => ({
+        ...prev,
+        gameStatus: 'finished',
+        winner: 'bot'
+      }))
+    } else {
+      // Get next movie
+      getNextMovie()
+    }
   }
 
   const getNextMovie = () => {
@@ -167,7 +189,6 @@ export default function SinglePlayerPage() {
       lastResult: null
     })
     setUsedMovies(new Set())
-    setGuess('')
   }
 
   return (
@@ -227,137 +248,34 @@ export default function SinglePlayerPage() {
           <div className="space-y-6">
             {/* Current Clue */}
             {gameState.currentMovie && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 text-center"
-              >
-                <h2 className="text-2xl font-bold text-white mb-4">🎬 Movie Clue 🎬</h2>
-                
-                {/* Movie Poster */}
-                {gameState.currentMovie.poster && (
-                  <div className="mb-4">
-                    <img 
-                      src={gameState.currentMovie.poster} 
-                      alt="Movie poster"
-                      className="w-32 h-48 object-cover rounded-lg mx-auto shadow-lg"
-                    />
-                  </div>
-                )}
-                
-                <div className="text-xl text-white">
-                  <span className="font-bold text-blue-300">{gameState.currentMovie.actor1}</span>
-                  <span className="mx-4 text-gray-400">&</span>
-                  <span className="font-bold text-blue-300">{gameState.currentMovie.actor2}</span>
-                  
-                  {/* Hint Actor */}
-                  {gameState.hintUsed && (
-                    <div className="mt-2">
-                      <span className="text-sm text-gray-400">Hint: </span>
-                      <span className="font-bold text-yellow-300">
-                        {gameState.currentMovie.hintActor || "No additional actor available"}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                
-                {gameState.currentMovie.year && (
-                  <p className="text-gray-400 text-sm mt-1">Released in {gameState.currentMovie.year}</p>
-                )}
-                
-                <p className="text-gray-300 mt-2">What movie are these actors from?</p>
-              </motion.div>
+              <GuessInput
+                clue={{
+                  actor1: gameState.currentMovie.actor1,
+                  actor2: gameState.currentMovie.actor2,
+                  movie: gameState.currentMovie.movie,
+                  poster: gameState.currentMovie.poster,
+                  year: gameState.currentMovie.year,
+                  actor1Photo: gameState.currentMovie.actor1Photo,
+                  actor2Photo: gameState.currentMovie.actor2Photo,
+                  hintActorPhoto: gameState.currentMovie.hintActorPhoto,
+                  hintActor: gameState.currentMovie.hintActor
+                }}
+                onGuess={handleGuess}
+                onNoIdea={handleNoIdea}
+                onHint={handleHint}
+                disabled={false}
+                hintUsed={gameState.hintUsed}
+                lastResult={gameState.lastResult ? {
+                  correct: gameState.lastResult.correct,
+                  guess: gameState.lastResult.guess,
+                  correctAnswer: gameState.lastResult.correctAnswer,
+                  similarity: gameState.lastResult.similarity,
+                  confidence: gameState.lastResult.confidence
+                } : undefined}
+              />
             )}
 
-            {/* Last Result */}
-            <AnimatePresence>
-              {gameState.lastResult && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className={`${
-                    gameState.lastResult.correct 
-                      ? 'bg-green-500/20 border-green-400' 
-                      : gameState.lastResult.similarity && gameState.lastResult.similarity >= 60
-                        ? 'bg-yellow-500/20 border-yellow-400'
-                        : 'bg-red-500/20 border-red-400'
-                  } border rounded-lg p-4 text-center`}
-                >
-                  <p className={`font-bold ${
-                    gameState.lastResult.correct 
-                      ? 'text-green-400' 
-                      : gameState.lastResult.similarity && gameState.lastResult.similarity >= 60
-                        ? 'text-yellow-400'
-                        : 'text-red-400'
-                  }`}>
-                    {gameState.lastResult.correct 
-                      ? 'Correct!' 
-                      : gameState.lastResult.similarity && gameState.lastResult.similarity >= 60
-                        ? 'Close!'
-                        : 'Wrong!'
-                    }
-                  </p>
-                  <p className="text-gray-300">
-                    You guessed: &quot;{gameState.lastResult.guess}&quot;
-                    {gameState.lastResult.usedHint && gameState.lastResult.correct && (
-                      <span className="block text-yellow-300 text-sm">
-                        💡 Used hint - only 0.5 points earned!
-                      </span>
-                    )}
-                    {gameState.lastResult.correctAnswer && (
-                      <span className="block">
-                        The answer: &quot;{gameState.lastResult.correctAnswer}&quot;
-                      </span>
-                    )}
-                    {gameState.lastResult.similarity && gameState.lastResult.similarity >= 60 && !gameState.lastResult.correct && (
-                      <span className="block text-yellow-300 text-sm mt-1">
-                        {gameState.lastResult.similarity.toFixed(0)}% match - try again with a slight variation!
-                      </span>
-                    )}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
 
-            {/* Guess Input */}
-            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6">
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  value={guess}
-                  onChange={(e) => setGuess(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleGuess()}
-                  placeholder="Enter the movie title..."
-                  className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                />
-                
-                <div className="flex space-x-3">
-                  <button
-                    onClick={handleGuess}
-                    disabled={!guess.trim()}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition-colors"
-                  >
-                    Submit Guess
-                  </button>
-                  
-                  <button
-                    onClick={handleHint}
-                    disabled={gameState.hintUsed}
-                    className="bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition-colors"
-                    title={gameState.hintUsed ? "Hint already used" : "Get a hint (costs half a point if correct)"}
-                  >
-                    💡 Hint
-                  </button>
-                </div>
-                
-                {gameState.hintUsed && (
-                  <p className="text-yellow-300 text-sm text-center">
-                    ⚠️ Hint used! Correct answer will only give 0.5 points
-                  </p>
-                )}
-              </div>
-            </div>
           </div>
         ) : (
           /* Game Over */

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Scoreboard } from '@/components/Scoreboard'
@@ -29,8 +28,23 @@ interface GameState {
     movie?: string
     poster?: string
     year?: string
+    actor1Photo?: string
+    actor2Photo?: string
+    hintActorPhoto?: string
+    hintActor?: string
   }
   currentTurn: string
+  gameStatus: 'waiting' | 'playing' | 'finished'
+  winner: string | null
+  hintUsed: boolean
+  lastResult?: {
+    correct: boolean
+    guess: string
+    correctAnswer?: string
+    similarity?: number
+    confidence?: 'exact' | 'high' | 'medium' | 'low' | 'none'
+    usedHint?: boolean
+  }
 }
 
 interface GameRoomProps {
@@ -40,40 +54,32 @@ interface GameRoomProps {
 }
 
 export default function GameRoom({ params }: GameRoomProps) {
-  const { data: session, status } = useSession()
   const router = useRouter()
   const gameId = params.id
 
   const [gameState, setGameState] = useState<GameState>({
     players: [],
-    currentTurn: ''
+    currentTurn: '',
+    gameStatus: 'waiting',
+    winner: null,
+    hintUsed: false
   })
   const [isConnected, setIsConnected] = useState(false)
-  const [lastResult, setLastResult] = useState<{
-    correct: boolean
-    guess: string
-    correctAnswer?: string
-    similarity?: number
-    confidence?: 'exact' | 'high' | 'medium' | 'low' | 'none'
-  } | undefined>(undefined)
+  const [playerName, setPlayerName] = useState('')
+  const [showNameInput, setShowNameInput] = useState(true)
 
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (status === 'loading') return
-    if (!session) {
-      router.push('/')
-      return
+  // Handle player name submission
+  const handleNameSubmit = () => {
+    if (playerName.trim()) {
+      setShowNameInput(false)
+      // Connect to socket
+      socketManager.connect(gameId, playerName.trim())
     }
-  }, [session, status, router])
+  }
 
   // Initialize socket connection
   useEffect(() => {
-    if (!session?.user?.name) return
-
-    const playerName = session.user.name
-
-    // Connect to socket
-    socketManager.connect(gameId, playerName)
+    if (!playerName || showNameInput) return
 
     // Set up event listeners
     socketManager.onGameUpdate((newGameState) => {
@@ -90,7 +96,7 @@ export default function GameRoom({ params }: GameRoomProps) {
       socketManager.removeAllListeners()
       socketManager.disconnect()
     }
-  }, [gameId, session?.user?.name])
+  }, [gameId, playerName, showNameInput])
 
   // Check if current user is the clue giver
   const isMyTurn = Boolean(gameState.currentTurn && gameState.players.some(p => p.id === gameState.currentTurn))
@@ -99,24 +105,74 @@ export default function GameRoom({ params }: GameRoomProps) {
 
   const handleGiveClue = async (actor1: string, actor2: string) => {
     try {
-      // Get a random movie for this clue
-      const randomMovie = await movieService.getSingleRandomMovie()
+      // Check if we have a stored submission for this game
+      const submissionData = sessionStorage.getItem(`gameSubmission_${gameId}`)
       
-      // Update game state with the movie info
-      setGameState(prev => ({
-        ...prev,
-        currentClue: {
-          actor1,
-          actor2,
-          movie: randomMovie.movie,
-          poster: randomMovie.poster,
-          year: randomMovie.year
-        }
-      }))
-      
-      socketManager.giveClue(actor1, actor2)
+      if (submissionData) {
+        const submission = JSON.parse(submissionData)
+        const movie = submission.movie
+        const actors = submission.actors
+        
+        // Use the submitted movie and actors
+        setGameState(prev => ({
+          ...prev,
+          currentClue: {
+            actor1,
+            actor2,
+            movie: movie.title,
+            poster: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
+            year: movie.release_date ? new Date(movie.release_date).getFullYear().toString() : undefined,
+            actor1Photo: actors.actor1?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.actor1.profile_path}` : undefined,
+            actor2Photo: actors.actor2?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.actor2.profile_path}` : undefined,
+            hintActorPhoto: actors.hintActor?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.hintActor.profile_path}` : undefined,
+            hintActor: actors.hintActor?.name
+          }
+        }))
+        
+        socketManager.giveClue(
+          actor1, 
+          actor2, 
+          movie.title,
+          movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
+          movie.release_date ? new Date(movie.release_date).getFullYear().toString() : undefined,
+          actors.actor1?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.actor1.profile_path}` : undefined,
+          actors.actor2?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.actor2.profile_path}` : undefined,
+          actors.hintActor?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.hintActor.profile_path}` : undefined,
+          actors.hintActor?.name
+        )
+      } else {
+        // Fallback to random movie if no submission found
+        const randomMovie = await movieService.getSingleRandomMovie()
+        
+        setGameState(prev => ({
+          ...prev,
+          currentClue: {
+            actor1,
+            actor2,
+            movie: randomMovie.movie,
+            poster: randomMovie.poster,
+            year: randomMovie.year,
+            actor1Photo: randomMovie.actor1Photo,
+            actor2Photo: randomMovie.actor2Photo,
+            hintActorPhoto: randomMovie.hintActorPhoto,
+            hintActor: randomMovie.hintActor
+          }
+        }))
+        
+        socketManager.giveClue(
+          actor1, 
+          actor2, 
+          randomMovie.movie, 
+          randomMovie.poster, 
+          randomMovie.year,
+          randomMovie.actor1Photo,
+          randomMovie.actor2Photo,
+          randomMovie.hintActorPhoto,
+          randomMovie.hintActor
+        )
+      }
     } catch (error) {
-      console.error('Error getting random movie:', error)
+      console.error('Error getting movie data:', error)
       // Fallback to a default movie
       setGameState(prev => ({
         ...prev,
@@ -136,16 +192,27 @@ export default function GameRoom({ params }: GameRoomProps) {
     // Use fuzzy matching instead of exact string comparison
     const matchResult = enhancedFuzzyMatch(guess, correctMovie)
     const isCorrect = matchResult.isMatch
-    
-    setLastResult({
-      correct: isCorrect,
-      guess,
-      correctAnswer: correctMovie,
-      similarity: matchResult.similarity,
-      confidence: matchResult.confidence
-    })
 
-    socketManager.guessMovie(guess, correctMovie)
+    socketManager.guessMovie(
+      guess, 
+      correctMovie, 
+      matchResult.similarity, 
+      matchResult.confidence, 
+      gameState.hintUsed
+    )
+  }
+
+  const handleNoIdea = async () => {
+    const correctMovie = gameState.currentClue?.movie || "The Matrix"
+    
+    socketManager.guessMovie("No Idea", correctMovie, 0, 'none', gameState.hintUsed)
+  }
+
+  const handleHint = async () => {
+    if (!gameState.currentClue || gameState.hintUsed) return
+    
+    socketManager.useHint()
+    setGameState(prev => ({ ...prev, hintUsed: true }))
   }
 
   const handleLeaveGame = () => {
@@ -153,19 +220,41 @@ export default function GameRoom({ params }: GameRoomProps) {
     router.push('/')
   }
 
-  if (status === 'loading') {
+  const handleResetGame = () => {
+    socketManager.resetGame()
+  }
+
+  // Show name input if not connected
+  if (showNameInput) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-white">Loading game...</p>
+        <div className="max-w-md w-full mx-4">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardContent className="p-8 text-center">
+              <h2 className="text-2xl font-bold text-white mb-6">Join Game</h2>
+              <p className="text-gray-300 mb-6">Enter your name to join the game</p>
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
+                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+                <Button
+                  onClick={handleNameSubmit}
+                  disabled={!playerName.trim()}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Join Game
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     )
-  }
-
-  if (!session) {
-    return null
   }
 
   return (
@@ -202,6 +291,9 @@ export default function GameRoom({ params }: GameRoomProps) {
           <div className="flex items-center space-x-2 text-white">
             <Users className="h-5 w-5" />
             <span>{gameState.players.length}/2</span>
+            <span className="text-sm text-gray-300">
+              ({gameState.gameStatus === 'waiting' ? 'Waiting' : gameState.gameStatus === 'playing' ? 'Playing' : 'Finished'})
+            </span>
           </div>
         </div>
 
@@ -234,7 +326,7 @@ export default function GameRoom({ params }: GameRoomProps) {
           {/* Right Column - Game Actions */}
           <div className="space-y-6">
             {/* Game Status */}
-            {gameState.players.length < 2 && (
+            {gameState.gameStatus === 'waiting' && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -252,8 +344,44 @@ export default function GameRoom({ params }: GameRoomProps) {
               </motion.div>
             )}
 
+            {/* Game Over Screen */}
+            {gameState.gameStatus === 'finished' && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center"
+              >
+                <Card className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-400">
+                  <CardContent className="p-8">
+                    <Crown className="h-16 w-16 text-yellow-400 mx-auto mb-4" />
+                    <h2 className="text-3xl font-bold text-white mb-4">
+                      🎉 Game Over! 🎉
+                    </h2>
+                    <p className="text-xl text-white mb-6">
+                      {gameState.players.find(p => p.id === gameState.winner)?.name} won!
+                    </p>
+                    <div className="flex space-x-4 justify-center">
+                      <Button
+                        onClick={handleResetGame}
+                        className="bg-green-600 hover:bg-green-700 text-white"
+                      >
+                        Play Again
+                      </Button>
+                      <Button
+                        onClick={handleLeaveGame}
+                        variant="outline"
+                        className="border-white text-white hover:bg-white/20"
+                      >
+                        Leave Game
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
             {/* Game Actions */}
-            {gameState.players.length === 2 && (
+            {gameState.players.length === 2 && gameState.gameStatus === 'playing' && (
               <AnimatePresence mode="wait">
                 {!gameState.currentClue ? (
                   // Clue Input
@@ -303,8 +431,11 @@ export default function GameRoom({ params }: GameRoomProps) {
                       <GuessInput 
                         clue={gameState.currentClue}
                         onGuess={handleGuess}
+                        onNoIdea={handleNoIdea}
+                        onHint={handleHint}
                         disabled={isMyTurn}
-                        lastResult={lastResult}
+                        hintUsed={gameState.hintUsed}
+                        lastResult={gameState.lastResult}
                       />
                     </motion.div>
                   ) : (

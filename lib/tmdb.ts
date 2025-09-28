@@ -1,4 +1,4 @@
-const TMDB_BEARER_TOKEN = process.env.NEXT_PUBLIC_TMDB_BEARER_TOKEN;
+const TMDB_BEARER_TOKEN = process.env.NEXT_PUBLIC_TMDB_BEARER_TOKEN || "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMjU2NzhhNjcyNWY4YTE5YWY3ODgxOTBlNzlmN2U1NyIsIm5iZiI6MTc1ODk1NzE5MS41OTM5OTk5LCJzdWIiOiI2OGQ3OGU4N2ViMjE0ZjUxMzRlMWJjOTciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.EIEPw0yQpcgxYToSTXxyUuLlR4d5i6Sbw37s98Coaas";
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // Debug environment variables
@@ -26,7 +26,11 @@ export interface TMDBCastMember {
 }
 
 export interface TMDBMovieWithCast extends TMDBMovie {
-  cast: TMDBCastMember[];
+  cast?: TMDBCastMember[];
+  credits?: {
+    cast: TMDBCastMember[];
+    crew: any[];
+  };
 }
 
 export interface GameMovie {
@@ -36,6 +40,9 @@ export interface GameMovie {
   poster?: string;
   year?: string;
   hintActor?: string; // Third actor for hints
+  actor1Photo?: string; // Actor 1 profile image URL
+  actor2Photo?: string; // Actor 2 profile image URL
+  hintActorPhoto?: string; // Hint actor profile image URL
 }
 
 class TMDBService {
@@ -44,7 +51,7 @@ class TMDBService {
     console.log('🔑 TMDB_BEARER_TOKEN length:', TMDB_BEARER_TOKEN?.length || 0);
     
     if (!TMDB_BEARER_TOKEN) {
-      throw new Error('TMDB_BEARER_TOKEN is not configured');
+      throw new Error('NEXT_PUBLIC_TMDB_BEARER_TOKEN is not configured');
     }
 
     const url = `${TMDB_BASE_URL}${endpoint}`;
@@ -78,6 +85,10 @@ class TMDBService {
 
   async getMovieDetails(movieId: number): Promise<TMDBMovieWithCast> {
     return this.fetchFromTMDB(`/movie/${movieId}?append_to_response=credits`);
+  }
+
+  async searchMovies(query: string, page: number = 1): Promise<{ results: TMDBMovie[] }> {
+    return this.fetchFromTMDB(`/search/movie?query=${encodeURIComponent(query)}&page=${page}`);
   }
 
   async getRandomMovies(count: number = 20): Promise<TMDBMovie[]> {
@@ -114,7 +125,7 @@ class TMDBService {
             // Get a third actor for hints (from the next few cast members)
             const hintActor = cast
               .filter(actor => actor.order >= 2 && actor.order < 8) // Cast members 2-7
-              .slice(0, 1)[0]?.name;
+              .slice(0, 1)[0];
 
             gameMovies.push({
               actor1: mainActors[0].name,
@@ -122,7 +133,10 @@ class TMDBService {
               movie: movie.title,
               poster: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
               year: movie.release_date ? new Date(movie.release_date).getFullYear().toString() : undefined,
-              hintActor: hintActor
+              hintActor: hintActor?.name,
+              actor1Photo: mainActors[0].profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[0].profile_path}` : undefined,
+              actor2Photo: mainActors[1].profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[1].profile_path}` : undefined,
+              hintActorPhoto: hintActor?.profile_path ? `https://image.tmdb.org/t/p/w185${hintActor.profile_path}` : undefined
             });
           }
         } catch (error) {
