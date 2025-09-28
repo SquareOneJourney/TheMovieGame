@@ -8,6 +8,7 @@
  * - Removing punctuation and special characters
  * - Normalizing spaces
  * - Removing common articles (a, an, the)
+ * - Removing subtitles and part numbers
  */
 export function normalizeString(str: string): string {
   return str
@@ -18,6 +19,55 @@ export function normalizeString(str: string): string {
     .replace(/\b(a|an|the)\b/g, '') // Remove articles
     .replace(/\s+/g, ' ') // Normalize spaces again
     .trim()
+}
+
+/**
+ * Creates multiple variations of a movie title for better matching
+ * Handles subtitles, part numbers, colons, and common variations
+ */
+export function createMovieVariations(title: string): string[] {
+  const variations = new Set<string>()
+  
+  // Add original normalized version
+  variations.add(normalizeString(title))
+  
+  // Remove subtitles (everything after colon or dash)
+  const withoutSubtitle = title.split(/[:-]/)[0].trim()
+  if (withoutSubtitle !== title) {
+    variations.add(normalizeString(withoutSubtitle))
+  }
+  
+  // Remove part numbers and roman numerals
+  const withoutParts = title
+    .replace(/\s+(part\s+[ivx\d]+|chapter\s+[ivx\d]+|vol\.?\s*[ivx\d]+)\s*$/i, '')
+    .replace(/\s+(i{1,3}|iv|v|vi{0,3}|ix|x)\s*$/i, '')
+    .trim()
+  
+  if (withoutParts !== title) {
+    variations.add(normalizeString(withoutParts))
+  }
+  
+  // Remove "The" prefix variations
+  const withoutThe = title.replace(/^the\s+/i, '').trim()
+  if (withoutThe !== title) {
+    variations.add(normalizeString(withoutThe))
+  }
+  
+  // Create abbreviation variations for long titles
+  const words = title.split(/\s+/)
+  if (words.length > 3) {
+    // First 2-3 words
+    const shortVersion = words.slice(0, 2).join(' ')
+    variations.add(normalizeString(shortVersion))
+    
+    // First 3 words if more than 2
+    if (words.length > 2) {
+      const mediumVersion = words.slice(0, 3).join(' ')
+      variations.add(normalizeString(mediumVersion))
+    }
+  }
+  
+  return Array.from(variations)
 }
 
 /**
@@ -127,7 +177,7 @@ const COMMON_VARIATIONS: Record<string, string[]> = {
 }
 
 /**
- * Enhanced fuzzy matching that also checks common variations
+ * Enhanced fuzzy matching that checks multiple title variations
  */
 export function enhancedFuzzyMatch(guess: string, correctAnswer: string, threshold: number = 75): {
   isMatch: boolean
@@ -137,16 +187,28 @@ export function enhancedFuzzyMatch(guess: string, correctAnswer: string, thresho
   confidence: 'exact' | 'high' | 'medium' | 'low' | 'none'
   matchedVariation?: string
 } {
-  const normalizedCorrect = normalizeString(correctAnswer)
+  const normalizedGuess = normalizeString(guess)
   
   // First try direct fuzzy matching
   let result = fuzzyMatchMovie(guess, correctAnswer, threshold)
   
-  // If no match, check common variations
+  // If no match, try all variations of the correct answer
   if (!result.isMatch) {
-    const variations = COMMON_VARIATIONS[normalizedCorrect] || []
+    const variations = createMovieVariations(correctAnswer)
     
     for (const variation of variations) {
+      const variationResult = fuzzyMatchMovie(guess, variation, threshold)
+      if (variationResult.isMatch) {
+        return {
+          ...variationResult,
+          matchedVariation: variation
+        }
+      }
+    }
+    
+    // Also check against common variations
+    const commonVariations = COMMON_VARIATIONS[normalizeString(correctAnswer)] || []
+    for (const variation of commonVariations) {
       const variationResult = fuzzyMatchMovie(guess, variation, threshold)
       if (variationResult.isMatch) {
         return {
@@ -172,6 +234,13 @@ export function testFuzzyMatching() {
     { guess: 'avengers end game', correct: 'Avengers: Endgame', expected: true },
     { guess: 'pirates caribbean', correct: 'Pirates of the Caribbean', expected: true },
     { guess: 'shawshank', correct: 'The Shawshank Redemption', expected: true },
+    { guess: 'mission impossible', correct: 'Mission: Impossible - Dead Reckoning Part One', expected: true },
+    { guess: 'mission impossible dead reckoning', correct: 'Mission: Impossible - Dead Reckoning Part One', expected: true },
+    { guess: 'mission impossible dead reckoning part two', correct: 'Mission: Impossible - Dead Reckoning Part One', expected: true },
+    { guess: 'fast x', correct: 'Fast X', expected: true },
+    { guess: 'fast and furious', correct: 'Fast X', expected: true },
+    { guess: 'harry potter', correct: 'Harry Potter and the Chamber of Secrets', expected: true },
+    { guess: 'harry potter chamber', correct: 'Harry Potter and the Chamber of Secrets', expected: true },
     { guess: 'completely wrong', correct: 'The Matrix', expected: false },
     { guess: 'matrx', correct: 'The Matrix', expected: true }, // typo
     { guess: 'the matrx', correct: 'The Matrix', expected: true }, // typo with article

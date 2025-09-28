@@ -30,31 +30,36 @@ export async function GET() {
     const allMovies: any[] = [];
     const existingIds = new Set<number>();
     
-    // Define popular genres for better movie selection
-    const popularGenres = [
-      '28,12', // Action + Adventure
-      '35,18', // Comedy + Drama  
-      '878,53', // Sci-Fi + Thriller
-      '16,10751', // Animation + Family
-      '80,9648', // Crime + Mystery
-      '27,14', // Horror + Fantasy
-      '10749,36', // Romance + History
-      '99,10402' // Documentary + Music
+    // Define mainstream genres only (exclude niche genres, animation, and horror)
+    const mainstreamGenres = [
+      '28', // Action
+      '12', // Adventure  
+      '35', // Comedy
+      '18', // Drama
+      '878', // Sci-Fi
+      '53', // Thriller
+      '10751', // Family
+      '80', // Crime
+      '9648', // Mystery
+      '14', // Fantasy
+      '10749', // Romance
+      '36' // History
     ];
     
-    // Define year ranges for different eras
+    // Define year ranges prioritizing recent decades for mainstream recognition
     const yearRanges = [
-      { gte: '2020', lte: '2025', name: 'Recent' },
-      { gte: '2010', lte: '2019', name: '2010s' },
-      { gte: '2000', lte: '2009', name: '2000s' },
-      { gte: '1990', lte: '1999', name: '1990s' },
-      { gte: '1980', lte: '1989', name: '1980s' }
+      { gte: '2020', lte: '2025', name: 'Recent', weight: 3 },
+      { gte: '2010', lte: '2019', name: '2010s', weight: 3 },
+      { gte: '2000', lte: '2009', name: '2000s', weight: 2 },
+      { gte: '1990', lte: '1999', name: '1990s', weight: 2 },
+      { gte: '1980', lte: '1989', name: '1980s', weight: 1 }
     ];
     
-    // Fetch movies from discover endpoint with different genre and year combinations
-    for (const genre of popularGenres) {
+    // Fetch movies from discover endpoint with strict mainstream filtering
+    for (const genre of mainstreamGenres) {
       for (const yearRange of yearRanges) {
-        for (let page = 1; page <= 3; page++) { // 3 pages per combination
+        const pagesToFetch = Math.min(3, yearRange.weight); // More pages for recent decades
+        for (let page = 1; page <= pagesToFetch; page++) {
           try {
             const discoverUrl = `${TMDB_BASE_URL}/discover/movie?` + new URLSearchParams({
               'sort_by': 'popularity.desc',
@@ -62,7 +67,10 @@ export async function GET() {
               'primary_release_date.gte': yearRange.gte,
               'primary_release_date.lte': yearRange.lte,
               'vote_average.gte': '6.0', // Only movies with decent ratings
-              'vote_count.gte': '100', // Only movies with enough votes (not obscure)
+              'vote_count.gte': '400', // Lowered threshold for mainstream recognition
+              'with_original_language': 'en', // English language only
+              'with_runtime.gte': '60', // At least 1 hour
+              'certification_country': 'US', // US ratings for consistency
               'page': page.toString()
             });
             
@@ -89,12 +97,11 @@ export async function GET() {
       }
     }
     
-    // Also fetch some additional popular movies from different sources
+    // Also fetch some additional popular movies from different sources with filtering
     const additionalSources = [
       { url: '/movie/popular', pages: 5, name: 'Popular' },
       { url: '/movie/top_rated', pages: 3, name: 'Top Rated' },
-      { url: '/movie/now_playing', pages: 2, name: 'Now Playing' },
-      { url: '/movie/upcoming', pages: 2, name: 'Upcoming' }
+      { url: '/movie/now_playing', pages: 2, name: 'Now Playing' }
     ];
     
     for (const source of additionalSources) {
@@ -157,15 +164,21 @@ export async function GET() {
             continue;
           }
           
-          // Get first two main actors (be very lenient with the filter)
+          // Additional mainstream movie checks
+          if (details.vote_count < 400) {
+            console.log(`⚠️ Skipped ${details.title}: Not enough votes (${details.vote_count})`);
+            continue;
+          }
+          
+          // Get only the top 2 main actors (very strict filtering)
           const mainActors = cast
-            .filter((actor: any) => actor.order < 20) // Very lenient - up to order 20
+            .filter((actor: any) => actor.order < 5) // Only top 5 cast members
             .slice(0, 2);
           
           if (mainActors.length >= 2) {
-            // Get a third actor for hints
+            // Get a third actor for hints (from main cast only)
             const hintActor = cast
-              .filter((actor: any) => actor.order >= 2 && actor.order < 10)
+              .filter((actor: any) => actor.order >= 2 && actor.order < 5)
               .slice(0, 1)[0];
 
             detailedMovies.push({

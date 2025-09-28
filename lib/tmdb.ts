@@ -12,6 +12,8 @@ export interface TMDBMovie {
   overview: string;
   release_date: string;
   vote_average: number;
+  vote_count: number;
+  popularity: number;
   poster_path: string | null;
   backdrop_path: string | null;
   genre_ids: number[];
@@ -91,13 +93,35 @@ class TMDBService {
     return this.fetchFromTMDB(`/search/movie?query=${encodeURIComponent(query)}&page=${page}`);
   }
 
+  async getPersonDetails(personId: number): Promise<any> {
+    return this.fetchFromTMDB(`/person/${personId}`);
+  }
+
+  private async isActorWellKnown(actor: TMDBCastMember): Promise<boolean> {
+    try {
+      const personDetails = await this.getPersonDetails(actor.id);
+      // Check if actor has sufficient popularity and known credits
+      return personDetails.popularity >= 5.0 && 
+             personDetails.known_for && 
+             personDetails.known_for.length >= 2;
+    } catch (error) {
+      console.warn(`Failed to get details for actor ${actor.name}:`, error);
+      return false;
+    }
+  }
+
   async getRandomMovies(count: number = 20): Promise<TMDBMovie[]> {
     const movies: TMDBMovie[] = [];
     const maxPages = 5; // TMDB popular movies has many pages
     
     for (let page = 1; page <= maxPages && movies.length < count; page++) {
       const data = await this.getPopularMovies(page);
-      movies.push(...data.results);
+      // Filter for mainstream movies only
+      const mainstreamMovies = data.results.filter(movie => 
+        movie.vote_count >= 400 && 
+        movie.vote_average >= 6.0
+      );
+      movies.push(...mainstreamMovies);
     }
     
     // Shuffle and return the requested count
@@ -116,15 +140,26 @@ class TMDBService {
           const movieDetails = await this.getMovieDetails(movie.id);
           const cast = movieDetails.cast || [];
           
-          // Filter for actors (not crew) and get the first two main actors
+          // Filter for actors (not crew) and get only the top 2 main actors
           const mainActors = cast
-            .filter(actor => actor.order < 10) // First 10 cast members (main actors)
+            .filter(actor => actor.order < 5) // Only top 5 cast members (main actors)
             .slice(0, 2);
           
           if (mainActors.length >= 2) {
-            // Get a third actor for hints (from the next few cast members)
+            // Check if both main actors are well-known (skip if not)
+            const [actor1Known, actor2Known] = await Promise.all([
+              this.isActorWellKnown(mainActors[0]),
+              this.isActorWellKnown(mainActors[1])
+            ]);
+            
+            if (!actor1Known || !actor2Known) {
+              console.log(`⚠️ Skipped ${movie.title}: Actors not well-known enough`);
+              continue;
+            }
+            
+            // Get a third actor for hints (from main cast only)
             const hintActor = cast
-              .filter(actor => actor.order >= 2 && actor.order < 8) // Cast members 2-7
+              .filter(actor => actor.order >= 2 && actor.order < 5) // Cast members 2-4
               .slice(0, 1)[0];
 
             gameMovies.push({
