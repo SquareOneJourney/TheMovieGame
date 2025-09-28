@@ -130,7 +130,7 @@ export default function SimpleLoginForm({ onSwitchToRegister }: SimpleLoginFormP
                 onClick={onSwitchToRegister}
                 className="text-gray-300 hover:text-white text-sm underline"
               >
-                Don't have an account? Sign up
+                Don&apos;t have an account? Sign up
               </button>
             </div>
           </form>
