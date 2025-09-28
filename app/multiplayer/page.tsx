@@ -121,26 +121,40 @@ export default function MultiplayerSubmissionPage() {
   const validationMessage = getValidationMessage()
 
   // Handle form submission
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isSubmissionComplete || validationMessage) return
 
-    const submission: GameSubmission = {
-      movie: selectedMovie,
-      actors: selectedActors,
-      isComplete: true
-    }
+    try {
+      const response = await fetch('/api/games', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          movie: selectedMovie,
+          actors: {
+            actor1: selectedActors.actor1?.name,
+            actor2: selectedActors.actor2?.name,
+            hintActor: selectedActors.hintActor?.name
+          }
+        })
+      })
 
-    // Generate a unique game ID
-    const gameId = Math.random().toString(36).substring(2, 8).toUpperCase()
-    
-    // Store the submission data in sessionStorage for the game room
-    sessionStorage.setItem(`gameSubmission_${gameId}`, JSON.stringify(submission))
-    
-    // Show success message with game code
-    alert(`Game created! Your game code is: ${gameId}\n\nShare this code with your friend to let them join the game.`)
-    
-    // Redirect to the game room
-    window.location.href = `/game/${gameId}`
+      const data = await response.json()
+
+      if (data.success) {
+        // Show success message with game ID
+        alert(`Game created! Your game ID is: ${data.game.id}\n\nShare this ID with your friend to let them join the game.`)
+        
+        // Redirect to the game room
+        window.location.href = `/game/${data.game.id}`
+      } else {
+        alert(`Error creating game: ${data.error}`)
+      }
+    } catch (error) {
+      console.error('Error creating game:', error)
+      alert('Failed to create game. Please try again.')
+    }
   }
 
   // Reset form

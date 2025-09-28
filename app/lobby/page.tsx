@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Users, Plus, ArrowRight, Home, Copy, Check, LogOut, User } from 'lucide-react'
+import { Users, Plus, ArrowRight, Home, Copy, Check, LogOut, User, Clock, Play } from 'lucide-react'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
@@ -10,19 +10,57 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import ProtectedRoute from '@/components/ProtectedRoute'
 
+interface Game {
+  id: string
+  status: string
+  players: Array<{
+    id: string
+    name: string
+    email: string
+  }>
+  rounds: Array<{
+    id: string
+    actor1: string
+    actor2: string
+    movie: string
+    hintActor?: string
+  }>
+  createdAt: string
+}
+
 export default function LobbyPage() {
   const { data: session } = useSession()
   const [gameCode, setGameCode] = useState('')
   const [copied, setCopied] = useState(false)
+  const [activeGames, setActiveGames] = useState<Game[]>([])
+  const [loading, setLoading] = useState(true)
 
   const handleCreateGame = () => {
     // Redirect to multiplayer submission page
     window.location.href = '/multiplayer'
   }
 
-  const handleJoinGame = () => {
-    if (gameCode.trim()) {
-      window.location.href = `/game/${gameCode.trim().toUpperCase()}`
+  const handleJoinGame = async () => {
+    if (!gameCode.trim()) return
+
+    try {
+      const response = await fetch(`/api/games/${gameCode.trim()}/join`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        window.location.href = `/game/${gameCode.trim()}`
+      } else {
+        alert(`Error joining game: ${data.error}`)
+      }
+    } catch (error) {
+      console.error('Error joining game:', error)
+      alert('Failed to join game. Please try again.')
     }
   }
 
@@ -35,6 +73,26 @@ export default function LobbyPage() {
   const handleSignOut = () => {
     signOut({ callbackUrl: '/' })
   }
+
+  // Fetch active games on component mount
+  useEffect(() => {
+    const fetchActiveGames = async () => {
+      try {
+        const response = await fetch('/api/games?status=waiting')
+        const data = await response.json()
+        
+        if (data.success) {
+          setActiveGames(data.games)
+        }
+      } catch (error) {
+        console.error('Error fetching games:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchActiveGames()
+  }, [])
 
   return (
     <ProtectedRoute>
@@ -143,6 +201,71 @@ export default function LobbyPage() {
             </Card>
           </motion.div>
         </div>
+
+        {/* Active Games */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="mt-12"
+        >
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardContent className="p-8">
+              <h3 className="text-2xl font-bold text-white text-center mb-6">Active Games</h3>
+              
+              {loading ? (
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+                  <p className="text-gray-300 mt-2">Loading games...</p>
+                </div>
+              ) : activeGames.length === 0 ? (
+                <div className="text-center">
+                  <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-300">No active games waiting for players</p>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {activeGames.map((game) => (
+                    <div
+                      key={game.id}
+                      className="bg-white/5 border border-white/10 rounded-lg p-4 flex items-center justify-between"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                          <Users className="h-5 w-5 text-blue-400" />
+                        </div>
+                        <div>
+                          <p className="text-white font-medium">
+                            Game by {game.players[0]?.name || 'Unknown'}
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            {game.rounds[0]?.actor1} & {game.rounds[0]?.actor2}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-400">
+                          {game.players.length}/2 players
+                        </span>
+                        <Button
+                          onClick={() => {
+                            setGameCode(game.id)
+                            handleJoinGame()
+                          }}
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-700"
+                        >
+                          <Play className="h-4 w-4 mr-1" />
+                          Join
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* How to Play */}
         <motion.div
