@@ -373,9 +373,11 @@ export default function MultiplayerSubmissionPage() {
                     <p className="text-yellow-200 text-sm font-semibold mb-2">Hint Actor:</p>
                     <div className="flex items-center space-x-3">
                       {selectedActors.hintActor.profile_path && (
-                        <img
+                        <Image
                           src={`https://image.tmdb.org/t/p/w92${selectedActors.hintActor.profile_path}`}
                           alt={selectedActors.hintActor.name}
+                          width={40}
+                          height={40}
                           className="w-10 h-10 rounded-full object-cover"
                         />
                       )}
