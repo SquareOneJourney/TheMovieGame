@@ -10,7 +10,7 @@ import SimpleLoginForm from '@/components/SimpleLoginForm'
 import SimpleRegisterForm from '@/components/SimpleRegisterForm'
 import { getCurrentUser, signOut } from '@/lib/supabase-auth'
 
-export default function Home() {
+export default function SimplePage() {
   const router = useRouter()
   const [authMode, setAuthMode] = useState<'none' | 'login' | 'register'>('none')
   const [user, setUser] = useState<any>(null)

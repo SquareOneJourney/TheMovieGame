@@ -4,11 +4,10 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Plus, ArrowRight, Home, Copy, Check, LogOut, User, Clock, Play } from 'lucide-react'
 import Link from 'next/link'
-import { useSession, signOut } from 'next-auth/react'
+import { getCurrentUser, signOut } from '@/lib/supabase-auth'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import ProtectedRoute from '@/components/ProtectedRoute'
 import FriendsPanel from '@/components/FriendsPanel'
 import StatsPanel from '@/components/StatsPanel'
 import Leaderboard from '@/components/Leaderboard'
@@ -35,11 +34,46 @@ interface Game {
 }
 
 export default function LobbyPage() {
-  const { data: session } = useSession()
+  const [user, setUser] = useState<any>(null)
   const [gameCode, setGameCode] = useState('')
   const [copied, setCopied] = useState(false)
   const [activeGames, setActiveGames] = useState<Game[]>([])
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    checkUser()
+  }, [])
+
+  const checkUser = async () => {
+    try {
+      const { user, error } = await getCurrentUser()
+      if (error) {
+        console.error('Error getting user:', error)
+        // Redirect to home if not authenticated
+        window.location.href = '/'
+      } else {
+        setUser(user)
+      }
+    } catch (error) {
+      console.error('Error checking user:', error)
+      window.location.href = '/'
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSignOut = async () => {
+    try {
+      const { error } = await signOut()
+      if (error) {
+        console.error('Error signing out:', error)
+      } else {
+        window.location.href = '/'
+      }
+    } catch (error) {
+      console.error('Error signing out:', error)
+    }
+  }
 
   const handleCreateGame = () => {
     // Redirect to multiplayer submission page
@@ -76,9 +110,6 @@ export default function LobbyPage() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const handleSignOut = () => {
-    signOut({ callbackUrl: '/' })
-  }
 
   // Fetch active games on component mount
   useEffect(() => {
@@ -100,9 +131,36 @@ export default function LobbyPage() {
     fetchActiveGames()
   }, [])
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+        <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <CardContent className="p-8 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
+            <p className="text-white">Loading...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+        <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <CardContent className="p-8 text-center">
+            <p className="text-white">Please log in to access the lobby.</p>
+            <Link href="/" className="text-blue-400 hover:text-blue-300 underline">
+              Go to Login
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
         {/* Top Header */}
         <div className="w-full px-6 py-4">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -123,7 +181,7 @@ export default function LobbyPage() {
               <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
                 <User className="h-4 w-4 text-white" />
                 <span className="text-white font-medium text-sm">
-                  Welcome, {session?.user?.name || session?.user?.email}!
+                  Welcome, {user?.user_metadata?.name || user?.email}!
                 </span>
               </div>
               <Button
@@ -367,6 +425,6 @@ export default function LobbyPage() {
         </motion.div>
         </div>
       </div>
-    </ProtectedRoute>
+    </div>
   )
 }
