@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 // Send a game invite
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession()
@@ -14,7 +14,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const gameId = params.id
+    const { id: gameId } = await params
     const { receiverId } = await request.json()
 
     if (!receiverId) {

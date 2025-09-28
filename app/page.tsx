@@ -85,7 +85,7 @@ export default function Home() {
                     <Button
                       onClick={() => setShowRegister(true)}
                       variant="outline"
-                      className="w-full text-white border-white/20 hover:bg-white/10"
+                      className="w-full text-white border-white/30 hover:bg-white/20 hover:text-white bg-white/5"
                     >
                       Create Account
                     </Button>
