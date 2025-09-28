@@ -81,7 +81,7 @@ export default function SinglePlayerPage() {
     // Update state with result and scores
     setGameState(prev => {
       const pointsToAdd = isCorrect ? (prev.hintUsed ? 0.5 : 1) : 0
-      const botPointsToAdd = isCorrect ? 0 : 2
+      const botPointsToAdd = isCorrect ? 0 : 1
       const newPlayerScore = prev.playerScore + pointsToAdd
       const newBotScore = prev.botScore + botPointsToAdd
       
@@ -140,7 +140,7 @@ export default function SinglePlayerPage() {
         similarity: 0,
         confidence: 'none'
       },
-      botScore: prev.botScore + 2
+      botScore: prev.botScore + 1
     }))
 
     // Check for winner and move to next movie after delay
