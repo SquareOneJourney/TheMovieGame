@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -111,9 +112,11 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
             {/* Movie Poster */}
             {clue.poster && (
               <div className="flex justify-center">
-                <img 
+                <Image 
                   src={clue.poster} 
                   alt="Movie poster"
+                  width={96}
+                  height={144}
                   className="w-24 h-36 object-cover rounded-lg shadow-lg"
                 />
               </div>

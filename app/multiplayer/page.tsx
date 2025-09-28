@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Users, Film, Star, ArrowRight, Home, CheckCircle, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { tmdbService, TMDBMovie, TMDBCastMember } from '@/lib/tmdb'
 import ProtectedRoute from '@/components/ProtectedRoute'
 
@@ -37,34 +38,33 @@ export default function MultiplayerSubmissionPage() {
   const [error, setError] = useState<string | null>(null)
 
   // Debounced search function
-  const debouncedSearch = useCallback(
-    (() => {
-      let timeoutId: NodeJS.Timeout
-      return (query: string) => {
-        clearTimeout(timeoutId)
-        timeoutId = setTimeout(async () => {
-          if (!query.trim()) {
-            setSearchResults([])
-            return
-          }
-
-          setIsSearching(true)
-          setError(null)
-
-          try {
-            const searchData = await tmdbService.searchMovies(query)
-            setSearchResults(searchData.results)
-          } catch (err) {
-            setError('Failed to search movies. Please try again.')
-            console.error('Search error:', err)
-          } finally {
-            setIsSearching(false)
-          }
-        }, 300) // 300ms delay
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  
+  const debouncedSearch = useCallback((query: string) => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current)
+    }
+    
+    searchTimeoutRef.current = setTimeout(async () => {
+      if (!query.trim()) {
+        setSearchResults([])
+        return
       }
-    })(),
-    []
-  )
+
+      setIsSearching(true)
+      setError(null)
+
+      try {
+        const searchData = await tmdbService.searchMovies(query)
+        setSearchResults(searchData.results)
+      } catch (err) {
+        setError('Failed to search movies. Please try again.')
+        console.error('Search error:', err)
+      } finally {
+        setIsSearching(false)
+      }
+    }, 300) // 300ms delay
+  }, [])
 
   // Search for movies
   const handleSearch = (query: string) => {
@@ -275,9 +275,11 @@ export default function MultiplayerSubmissionPage() {
                         className="w-full text-left p-3 bg-white/10 hover:bg-white/20 rounded-lg transition-colors flex items-center space-x-3"
                       >
                         {movie.poster_path && (
-                          <img
+                          <Image
                             src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
                             alt={movie.title}
+                            width={48}
+                            height={64}
                             className="w-12 h-16 object-cover rounded"
                           />
                         )}
@@ -302,9 +304,11 @@ export default function MultiplayerSubmissionPage() {
                 <h3 className="text-xl font-bold text-white mb-4">Selected Movie</h3>
                 <div className="flex items-center space-x-4">
                   {selectedMovie.poster_path && (
-                    <img
+                    <Image
                       src={`https://image.tmdb.org/t/p/w185${selectedMovie.poster_path}`}
                       alt={selectedMovie.title}
+                      width={80}
+                      height={112}
                       className="w-20 h-28 object-cover rounded"
                     />
                   )}
@@ -332,9 +336,11 @@ export default function MultiplayerSubmissionPage() {
                   {selectedActors.actor1 && (
                     <div className="flex items-center space-x-3 p-3 bg-blue-500/20 rounded-lg">
                       {selectedActors.actor1.profile_path && (
-                        <img
+                        <Image
                           src={`https://image.tmdb.org/t/p/w92${selectedActors.actor1.profile_path}`}
                           alt={selectedActors.actor1.name}
+                          width={48}
+                          height={48}
                           className="w-12 h-12 rounded-full object-cover"
                         />
                       )}
@@ -347,9 +353,11 @@ export default function MultiplayerSubmissionPage() {
                   {selectedActors.actor2 && (
                     <div className="flex items-center space-x-3 p-3 bg-green-500/20 rounded-lg">
                       {selectedActors.actor2.profile_path && (
-                        <img
+                        <Image
                           src={`https://image.tmdb.org/t/p/w92${selectedActors.actor2.profile_path}`}
                           alt={selectedActors.actor2.name}
+                          width={48}
+                          height={48}
                           className="w-12 h-12 rounded-full object-cover"
                         />
                       )}
@@ -420,9 +428,11 @@ export default function MultiplayerSubmissionPage() {
                           >
                             <div className="flex items-center space-x-2">
                               {actor.profile_path && (
-                                <img
+                                <Image
                                   src={`https://image.tmdb.org/t/p/w45${actor.profile_path}`}
                                   alt={actor.name}
+                                  width={32}
+                                  height={32}
                                   className="w-8 h-8 rounded-full object-cover"
                                 />
                               )}
@@ -454,9 +464,11 @@ export default function MultiplayerSubmissionPage() {
                           >
                             <div className="flex items-center space-x-2">
                               {actor.profile_path && (
-                                <img
+                                <Image
                                   src={`https://image.tmdb.org/t/p/w45${actor.profile_path}`}
                                   alt={actor.name}
+                                  width={32}
+                                  height={32}
                                   className="w-8 h-8 rounded-full object-cover"
                                 />
                               )}
@@ -488,9 +500,11 @@ export default function MultiplayerSubmissionPage() {
                           >
                             <div className="flex items-center space-x-2">
                               {actor.profile_path && (
-                                <img
+                                <Image
                                   src={`https://image.tmdb.org/t/p/w45${actor.profile_path}`}
                                   alt={actor.name}
+                                  width={32}
+                                  height={32}
                                   className="w-8 h-8 rounded-full object-cover"
                                 />
                               )}

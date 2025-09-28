@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { User } from 'lucide-react'
 
@@ -91,11 +92,13 @@ export function ActorPhoto({ src, name, size = 'md', className = '' }: ActorPhot
       )}
 
       {/* Actual image */}
-      <img
+      <Image
         src={src}
         alt={name}
         onLoad={handleImageLoad}
         onError={handleImageError}
+        width={size === 'sm' ? 32 : size === 'md' ? 48 : 64}
+        height={size === 'sm' ? 32 : size === 'md' ? 48 : 64}
         className={`
           ${sizeClasses}
           rounded-full
