@@ -5,6 +5,12 @@ import moviesData from '../data/movies.json';
 let moviesDatabase: GameMovie[] = [];
 try {
   moviesDatabase = require('../data/movies-database.json');
+  console.log('📦 Loaded static database with', moviesDatabase.length, 'movies');
+  console.log('📦 First movie photos:', {
+    actor1Photo: moviesDatabase[0]?.actor1Photo,
+    actor2Photo: moviesDatabase[0]?.actor2Photo,
+    hintActorPhoto: moviesDatabase[0]?.hintActorPhoto
+  });
 } catch (error) {
   console.log('📦 Using fallback static movies data');
   moviesDatabase = moviesData;
@@ -27,6 +33,11 @@ class MovieService {
     console.log('📦 Database info:', { 
       movieCount: moviesDatabase.length,
       sampleMovie: moviesDatabase[0] 
+    });
+    console.log('📦 Sample movie photos:', {
+      actor1Photo: moviesDatabase[0]?.actor1Photo,
+      actor2Photo: moviesDatabase[0]?.actor2Photo,
+      hintActorPhoto: moviesDatabase[0]?.hintActorPhoto
     });
     
     // Return shuffled movies from the static database

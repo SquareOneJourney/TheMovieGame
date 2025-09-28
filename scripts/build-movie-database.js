@@ -186,22 +186,15 @@ async function buildDatabase() {
     // Process with cast data
     const gameMovies = await processMoviesWithCast(movies);
     
-    // Add some static fallback movies
-    const staticMovies = [
-      { "actor1": "Brad Pitt", "actor2": "George Clooney", "movie": "Ocean's Twelve", "hintActor": "Catherine Zeta-Jones" },
-      { "actor1": "Leonardo DiCaprio", "actor2": "Kate Winslet", "movie": "Titanic", "hintActor": "Billy Zane" },
-      { "actor1": "Matt Damon", "actor2": "Robin Williams", "movie": "Good Will Hunting", "hintActor": "Ben Affleck" },
-      { "actor1": "Tom Hanks", "actor2": "Meg Ryan", "movie": "You've Got Mail", "hintActor": "Greg Kinnear" },
-      { "actor1": "Keanu Reeves", "actor2": "Laurence Fishburne", "movie": "The Matrix", "hintActor": "Carrie-Anne Moss" },
-      { "actor1": "Will Smith", "actor2": "Tommy Lee Jones", "movie": "Men in Black", "hintActor": "Linda Fiorentino" },
-      { "actor1": "Robert De Niro", "actor2": "Al Pacino", "movie": "Heat", "hintActor": "Val Kilmer" },
-      { "actor1": "Tom Cruise", "actor2": "Jeremy Renner", "movie": "Mission: Impossible - Ghost Protocol", "hintActor": "Simon Pegg" },
-      { "actor1": "Chris Evans", "actor2": "Robert Downey Jr.", "movie": "Avengers: Endgame", "hintActor": "Mark Ruffalo" },
-      { "actor1": "Ryan Gosling", "actor2": "Emma Stone", "movie": "La La Land", "hintActor": "John Legend" }
-    ];
+    // Filter out movies without photos
+    const validGameMovies = gameMovies.filter(movie => 
+      movie.actor1Photo && movie.actor2Photo
+    );
     
-    // Combine TMDB and static movies
-    const allGameMovies = [...gameMovies, ...staticMovies];
+    console.log(`🎬 Filtered to ${validGameMovies.length} movies with photos`);
+    
+    // Use only TMDB movies with photos
+    const allGameMovies = validGameMovies;
     
     // Shuffle the array
     const shuffled = allGameMovies.sort(() => Math.random() - 0.5);
