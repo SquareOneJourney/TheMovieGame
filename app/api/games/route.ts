@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthSession } from '@/lib/api-auth'
-import { prisma } from '@/lib/prisma'
 
 // Create a new game
 export async function POST(request: NextRequest) {
@@ -52,39 +51,17 @@ export async function POST(request: NextRequest) {
       hintActor: actors.hintActor ? actors.hintActor.trim() : null
     }
 
-    // Create game in database
-    const game = await prisma.game.create({
-      data: {
-        status: 'waiting',
-        players: {
-          connect: { id: session.user.id }
-        }
-      },
-      include: {
-        players: true
-      }
-    })
+    // Generate a mock game ID
+    const gameId = `game_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
-    // Create the first round with the movie data
-    await prisma.round.create({
-      data: {
-        gameId: game.id,
-        clueGiver: session.user.id,
-        guesser: '', // Will be set when the other player joins
-        actor1: sanitizedActors.actor1,
-        actor2: sanitizedActors.actor2,
-        movie: sanitizedMovie.title,
-        hintActor: sanitizedActors.hintActor
-      }
-    })
-
+    // Return mock game data
     return NextResponse.json({
       success: true,
       game: {
-        id: game.id,
-        status: game.status,
-        players: game.players,
-        createdAt: game.createdAt
+        id: gameId,
+        status: 'waiting',
+        players: [{ id: session.user.id, name: session.user.name, email: session.user.email }],
+        createdAt: new Date().toISOString()
       }
     })
 
@@ -106,27 +83,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
 
-    const whereClause: any = {
-      players: {
-        some: { id: session.user.id }
-      }
-    }
-
-    if (status) {
-      whereClause.status = status
-    }
-
-    const games = await prisma.game.findMany({
-      where: whereClause,
-      include: {
-        players: true,
-        rounds: {
-          orderBy: { createdAt: 'desc' },
-          take: 1 // Get the latest round
-        }
-      },
-      orderBy: { createdAt: 'desc' }
-    })
+    // Return mock games data for now
+    const games: any[] = []
 
     return NextResponse.json({
       success: true,
