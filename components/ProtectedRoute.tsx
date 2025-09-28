@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { Loader2, LogIn } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { createClient } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
@@ -18,8 +18,6 @@ export default function ProtectedRoute({ children, fallback }: ProtectedRoutePro
   const router = useRouter()
 
   useEffect(() => {
-    const supabase = createClient()
-    
     // Get initial session
     const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
