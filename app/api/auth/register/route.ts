@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (error) {
+      console.error('Supabase registration error:', error)
       return NextResponse.json(
         { error: error.message },
         { status: 400 }

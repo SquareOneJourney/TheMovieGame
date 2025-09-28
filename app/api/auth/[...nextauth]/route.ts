@@ -27,7 +27,19 @@ const handler = NextAuth({
           password: credentials.password,
         })
 
-        if (error || !data.user) {
+        if (error) {
+          console.error('Supabase auth error:', error)
+          return null
+        }
+
+        if (!data.user) {
+          console.error('No user returned from Supabase')
+          return null
+        }
+
+        // Check if email is confirmed
+        if (data.user.email_confirmed_at === null) {
+          console.error('Email not confirmed')
           return null
         }
 
