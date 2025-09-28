@@ -121,7 +121,7 @@ export default function SimpleRegisterForm({ onSwitchToLogin }: SimpleRegisterFo
             <div>
               <Input
                 type="text"
-                placeholder="Full Name"
+                placeholder="Username"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required

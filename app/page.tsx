@@ -136,25 +136,29 @@ export default function Home() {
           
           {/* Authentication Forms */}
           {authMode === 'login' && (
-            <div className="mb-8 relative">
-              <button
-                onClick={() => setAuthMode('none')}
-                className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold z-10"
-              >
-                ×
-              </button>
-              <SimpleLoginForm onSwitchToRegister={() => setAuthMode('register')} />
+            <div className="mb-8 relative max-w-md mx-auto">
+              <div className="relative">
+                <button
+                  onClick={() => setAuthMode('none')}
+                  className="absolute top-4 right-4 bg-gray-600 hover:bg-gray-700 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold z-10 transition-colors"
+                >
+                  ×
+                </button>
+                <SimpleLoginForm onSwitchToRegister={() => setAuthMode('register')} />
+              </div>
             </div>
           )}
           {authMode === 'register' && (
-            <div className="mb-8 relative">
-              <button
-                onClick={() => setAuthMode('none')}
-                className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold z-10"
-              >
-                ×
-              </button>
-              <SimpleRegisterForm onSwitchToLogin={() => setAuthMode('login')} />
+            <div className="mb-8 relative max-w-md mx-auto">
+              <div className="relative">
+                <button
+                  onClick={() => setAuthMode('none')}
+                  className="absolute top-4 right-4 bg-gray-600 hover:bg-gray-700 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold z-10 transition-colors"
+                >
+                  ×
+                </button>
+                <SimpleRegisterForm onSwitchToLogin={() => setAuthMode('login')} />
+              </div>
             </div>
           )}
           
