@@ -11,10 +11,45 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { movie, actors } = await request.json()
+    const body = await request.json()
+    const { movie, actors } = body
     
+    // Validate required fields
     if (!movie || !actors?.actor1 || !actors?.actor2) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+      return NextResponse.json({ 
+        error: 'Missing required fields: movie, actors.actor1, and actors.actor2 are required' 
+      }, { status: 400 })
+    }
+
+    // Validate movie object
+    if (!movie.title || typeof movie.title !== 'string') {
+      return NextResponse.json({ 
+        error: 'Invalid movie: title is required and must be a string' 
+      }, { status: 400 })
+    }
+
+    // Validate actors
+    if (typeof actors.actor1 !== 'string' || actors.actor1.trim().length === 0) {
+      return NextResponse.json({ 
+        error: 'Invalid actor1: must be a non-empty string' 
+      }, { status: 400 })
+    }
+
+    if (typeof actors.actor2 !== 'string' || actors.actor2.trim().length === 0) {
+      return NextResponse.json({ 
+        error: 'Invalid actor2: must be a non-empty string' 
+      }, { status: 400 })
+    }
+
+    // Sanitize inputs
+    const sanitizedMovie = {
+      title: movie.title.trim()
+    }
+
+    const sanitizedActors = {
+      actor1: actors.actor1.trim(),
+      actor2: actors.actor2.trim(),
+      hintActor: actors.hintActor ? actors.hintActor.trim() : null
     }
 
     // Create game in database
@@ -36,10 +71,10 @@ export async function POST(request: NextRequest) {
         gameId: game.id,
         clueGiver: session.user.id,
         guesser: '', // Will be set when the other player joins
-        actor1: actors.actor1,
-        actor2: actors.actor2,
-        movie: movie.title,
-        hintActor: actors.hintActor || null
+        actor1: sanitizedActors.actor1,
+        actor2: sanitizedActors.actor2,
+        movie: sanitizedMovie.title,
+        hintActor: sanitizedActors.hintActor
       }
     })
 

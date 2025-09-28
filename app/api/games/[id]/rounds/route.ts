@@ -14,7 +14,23 @@ export async function POST(
     }
 
     const gameId = params.id
-    const { guess, isCorrect } = await request.json()
+    const body = await request.json()
+    const { guess, isCorrect } = body
+
+    // Validate inputs
+    if (typeof guess !== 'string' || guess.trim().length === 0) {
+      return NextResponse.json({ 
+        error: 'Invalid guess: must be a non-empty string' 
+      }, { status: 400 })
+    }
+
+    if (typeof isCorrect !== 'boolean') {
+      return NextResponse.json({ 
+        error: 'Invalid isCorrect: must be a boolean' 
+      }, { status: 400 })
+    }
+
+    const sanitizedGuess = guess.trim()
 
     // Get the current game and latest round
     const game = await prisma.game.findUnique({
@@ -45,7 +61,7 @@ export async function POST(
     const updatedRound = await prisma.round.update({
       where: { id: currentRound.id },
       data: {
-        guess,
+        guess: sanitizedGuess,
         outcome: isCorrect ? 'correct' : 'wrong'
       }
     })
@@ -56,14 +72,15 @@ export async function POST(
       const otherPlayer = game.players.find(p => p.id !== currentRound.clueGiver)
       
       if (otherPlayer) {
+        // Create a placeholder round that will be populated when the new clue giver submits their movie
         await prisma.round.create({
           data: {
             gameId: game.id,
             clueGiver: otherPlayer.id,
             guesser: currentRound.clueGiver,
-            actor1: '',
-            actor2: '',
-            movie: ''
+            actor1: 'TBD', // To Be Determined - will be filled when clue is given
+            actor2: 'TBD', // To Be Determined - will be filled when clue is given
+            movie: 'TBD'   // To Be Determined - will be filled when clue is given
           }
         })
       }

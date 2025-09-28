@@ -11,22 +11,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { receiverId } = await request.json()
+    const body = await request.json()
+    const { receiverId } = body
 
+    // Validate receiverId
     if (!receiverId) {
       return NextResponse.json({ error: 'Receiver ID is required' }, { status: 400 })
     }
 
-    if (receiverId === session.user.id) {
+    if (typeof receiverId !== 'string' || receiverId.trim().length === 0) {
+      return NextResponse.json({ error: 'Invalid receiver ID format' }, { status: 400 })
+    }
+
+    const sanitizedReceiverId = receiverId.trim()
+
+    if (sanitizedReceiverId === session.user.id) {
       return NextResponse.json({ error: 'Cannot send friend request to yourself' }, { status: 400 })
+    }
+
+    // Validate that the receiver exists
+    const receiver = await prisma.user.findUnique({
+      where: { id: sanitizedReceiverId }
+    })
+
+    if (!receiver) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
     // Check if users are already friends
     const existingFriendship = await prisma.friendship.findFirst({
       where: {
         OR: [
-          { user1Id: session.user.id, user2Id: receiverId },
-          { user1Id: receiverId, user2Id: session.user.id }
+          { user1Id: session.user.id, user2Id: sanitizedReceiverId },
+          { user1Id: sanitizedReceiverId, user2Id: session.user.id }
         ]
       }
     })
@@ -39,8 +56,8 @@ export async function POST(request: NextRequest) {
     const existingRequest = await prisma.friendRequest.findFirst({
       where: {
         OR: [
-          { senderId: session.user.id, receiverId },
-          { senderId: receiverId, receiverId: session.user.id }
+          { senderId: session.user.id, receiverId: sanitizedReceiverId },
+          { senderId: sanitizedReceiverId, receiverId: session.user.id }
         ],
         status: 'pending'
       }
@@ -54,7 +71,7 @@ export async function POST(request: NextRequest) {
     const friendRequest = await prisma.friendRequest.create({
       data: {
         senderId: session.user.id,
-        receiverId,
+        receiverId: sanitizedReceiverId,
         status: 'pending'
       },
       include: {

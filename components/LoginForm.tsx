@@ -24,6 +24,13 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
     setIsLoading(true)
     setError('')
 
+    // Basic validation
+    if (!email || !password) {
+      setError('Please fill in all fields')
+      setIsLoading(false)
+      return
+    }
+
     try {
       const result = await signIn('credentials', {
         email,
@@ -32,9 +39,20 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
       })
 
       if (result?.error) {
-        setError('Invalid email or password')
+        // Handle specific error messages
+        if (result.error.includes('email')) {
+          setError('Please check your email and confirm your account before signing in')
+        } else if (result.error.includes('password')) {
+          setError('Invalid email or password')
+        } else {
+          setError(result.error)
+        }
+      } else if (result?.ok) {
+        // Successful login - redirect will be handled by NextAuth
+        window.location.href = '/lobby'
       }
     } catch (error) {
+      console.error('Login error:', error)
       setError('Something went wrong. Please try again.')
     } finally {
       setIsLoading(false)

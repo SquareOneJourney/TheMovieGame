@@ -109,7 +109,7 @@ export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
             <div>
               <Input
                 type="text"
-                placeholder="Full Name"
+                placeholder="Username"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
