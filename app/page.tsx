@@ -1,13 +1,18 @@
 'use client'
 
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useState } from 'react'
+import { useSession, signOut } from 'next-auth/react'
 import { motion } from 'framer-motion'
-import { LogIn, LogOut, User, Play, Users } from 'lucide-react'
+import { LogOut, User, Play, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import LoginForm from '@/components/LoginForm'
+import RegisterForm from '@/components/RegisterForm'
 
 export default function Home() {
   const { data: session, status } = useSession()
+  const [showLogin, setShowLogin] = useState(false)
+  const [showRegister, setShowRegister] = useState(false)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
@@ -51,18 +56,40 @@ export default function Home() {
                 </CardContent>
               </Card>
             </div>
+          ) : showLogin ? (
+            <div className="mb-8">
+              <LoginForm onSwitchToRegister={() => {
+                setShowLogin(false)
+                setShowRegister(true)
+              }} />
+            </div>
+          ) : showRegister ? (
+            <div className="mb-8">
+              <RegisterForm onSwitchToLogin={() => {
+                setShowRegister(false)
+                setShowLogin(true)
+              }} />
+            </div>
           ) : (
             <div className="mb-8">
               <Card className="bg-white/10 backdrop-blur-sm border border-white/20 max-w-md mx-auto">
                 <CardContent className="p-6 text-center">
                   <p className="text-white mb-4">Sign in to play multiplayer games</p>
-                  <Button
-                    onClick={() => signIn('google')}
-                    className="w-full bg-white text-black hover:bg-gray-100"
-                  >
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign in with Google
-                  </Button>
+                  <div className="space-y-3">
+                    <Button
+                      onClick={() => setShowLogin(true)}
+                      className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white"
+                    >
+                      Sign In
+                    </Button>
+                    <Button
+                      onClick={() => setShowRegister(true)}
+                      variant="outline"
+                      className="w-full text-white border-white/20 hover:bg-white/10"
+                    >
+                      Create Account
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             </div>

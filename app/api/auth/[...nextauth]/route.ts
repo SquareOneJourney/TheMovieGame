@@ -1,16 +1,10 @@
 import NextAuth from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 
 const handler = NextAuth({
-  adapter: PrismaAdapter(prisma),
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
     CredentialsProvider({
       name: 'credentials',
       credentials: {
@@ -32,8 +26,13 @@ const handler = NextAuth({
           return null
         }
 
-        // In a real app, you'd hash passwords properly
-        // For demo purposes, we'll skip password verification
+        // Verify password
+        const isValidPassword = await bcrypt.compare(credentials.password, user.password)
+        
+        if (!isValidPassword) {
+          return null
+        }
+
         return {
           id: user.id,
           email: user.email,
