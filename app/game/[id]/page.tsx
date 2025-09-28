@@ -49,14 +49,19 @@ interface GameState {
 }
 
 interface GameRoomProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default function GameRoom({ params }: GameRoomProps) {
   const router = useRouter()
-  const gameId = params.id
+  const [gameId, setGameId] = useState<string>('')
+
+  // Resolve params on client side
+  useEffect(() => {
+    params.then(({ id }) => setGameId(id))
+  }, [params])
 
   const [gameState, setGameState] = useState<GameState>({
     players: [],
@@ -223,6 +228,22 @@ export default function GameRoom({ params }: GameRoomProps) {
 
   const handleResetGame = () => {
     socketManager.resetGame()
+  }
+
+  // Show loading while gameId is being resolved
+  if (!gameId) {
+    return (
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardContent className="p-8 text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
+              <p className="text-white">Loading game...</p>
+            </CardContent>
+          </Card>
+        </div>
+      </ProtectedRoute>
+    )
   }
 
   // Show name input if not connected
