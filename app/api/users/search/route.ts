@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Return mock search results for now
-    const usersWithStatus = []
+    const usersWithStatus: any[] = []
 
     return NextResponse.json({
       success: true,

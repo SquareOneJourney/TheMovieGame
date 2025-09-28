@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') // 'sent' or 'received'
 
     // Return mock invites data for now
-    const gameInvites = []
+    const gameInvites: any[] = []
 
     return NextResponse.json({
       success: true,

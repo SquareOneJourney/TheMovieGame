@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Return mock leaderboard data for now
-    const leaderboard = []
+    const leaderboard: any[] = []
 
     return NextResponse.json({
       success: true,
