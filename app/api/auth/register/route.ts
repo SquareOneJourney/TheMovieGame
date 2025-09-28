@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import bcrypt from 'bcryptjs'
-import { memoryDB } from '@/lib/memory-db'
+import { supabase } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,29 +20,38 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if user already exists
-    const existingUser = await memoryDB.findUserByEmail(email)
+    // Create user with Supabase Auth
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name: name
+        }
+      }
+    })
 
-    if (existingUser) {
+    if (error) {
       return NextResponse.json(
-        { error: 'User with this email already exists' },
+        { error: error.message },
         { status: 400 }
       )
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 12)
-
-    // Create user
-    const user = await memoryDB.createUser({
-      name,
-      email,
-      password: hashedPassword
-    })
+    if (!data.user) {
+      return NextResponse.json(
+        { error: 'Failed to create user' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({
       success: true,
-      user
+      user: {
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.user_metadata?.name || name
+      }
     })
 
   } catch (error) {

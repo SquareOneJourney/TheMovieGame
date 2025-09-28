@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import bcrypt from 'bcryptjs'
-import { memoryDB } from '@/lib/memory-db'
+import { supabase } from '@/lib/supabase'
 
 const handler = NextAuth({
   providers: [
@@ -16,23 +15,20 @@ const handler = NextAuth({
           return null
         }
 
-        const user = await memoryDB.findUserByEmail(credentials.email)
+        // Sign in with Supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: credentials.email,
+          password: credentials.password,
+        })
 
-        if (!user) {
-          return null
-        }
-
-        // Verify password
-        const isValidPassword = await bcrypt.compare(credentials.password, user.password)
-        
-        if (!isValidPassword) {
+        if (error || !data.user) {
           return null
         }
 
         return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.user_metadata?.name || data.user.email,
         }
       }
     })
