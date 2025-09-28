@@ -10,7 +10,8 @@
     "postinstall": "echo 'Post-install complete'",
     "setup-env": "node scripts/setup-env.js",
     "check-env": "node scripts/check-env.js",
-    "test-auth": "node scripts/test-auth.js"
+    "test-auth": "node scripts/test-auth.js",
+    "build-db": "node scripts/build-movie-database.js"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",

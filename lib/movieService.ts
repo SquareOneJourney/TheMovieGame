@@ -1,6 +1,15 @@
 import { GameMovie } from './tmdb';
 import moviesData from '../data/movies.json';
 
+// Try to load the built database, fallback to static data
+let moviesDatabase: GameMovie[] = [];
+try {
+  moviesDatabase = require('../data/movies-database.json');
+} catch (error) {
+  console.log('📦 Using fallback static movies data');
+  moviesDatabase = moviesData;
+}
+
 export type { GameMovie };
 
 interface CachedMovies {
@@ -14,55 +23,14 @@ class MovieService {
   private readonly CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours for more variety
 
   async getRandomMovies(count: number = 50): Promise<GameMovie[]> {
-    // Check if we have valid cached data
-    if (this.cache && this.isCacheValid()) {
-      console.log('📦 Using cached TMDB data');
-      console.log('📦 Cache info:', { 
-        hasCache: !!this.cache, 
-        isExpired: !this.isCacheValid(), 
-        movieCount: this.cache.movies.length,
-        sampleMovie: this.cache.movies[0] 
-      });
-      return this.shuffleArray(this.cache.movies).slice(0, count);
-    }
-
-    try {
-      console.log('🌐 Fetching from TMDB API via internal API...');
-      // Try to fetch from our internal API route
-      const response = await fetch('/api/movies');
-      const data = await response.json() as { success: boolean; movies: GameMovie[]; total: number };
-      
-      if (data.success && data.movies && data.movies.length > 0) {
-        console.log('✅ TMDB data loaded via API:', data.movies.length, 'movies');
-        console.log('✅ Sample TMDB movie:', data.movies[0]);
-        // Cache the TMDB results
-        this.cache = {
-          movies: data.movies,
-          timestamp: Date.now(),
-          expiresIn: this.CACHE_DURATION
-        };
-        
-        return this.shuffleArray(data.movies).slice(0, count);
-      }
-    } catch (error) {
-      console.error('❌ TMDB API failed:', error);
-      console.log('🔄 Falling back to static movies data...');
-      
-      // Fallback to static movies data
-      const staticMovies = this.shuffleArray(moviesData).slice(0, count);
-      console.log('✅ Using static movies data:', staticMovies.length, 'movies');
-      
-      // Cache the static results for a shorter duration (1 hour)
-      this.cache = {
-        movies: staticMovies,
-        timestamp: Date.now(),
-        expiresIn: 60 * 60 * 1000 // 1 hour
-      };
-      
-      return staticMovies;
-    }
-
-    throw new Error('No movies available from TMDB API');
+    console.log('📦 Using static movie database');
+    console.log('📦 Database info:', { 
+      movieCount: moviesDatabase.length,
+      sampleMovie: moviesDatabase[0] 
+    });
+    
+    // Return shuffled movies from the static database
+    return this.shuffleArray(moviesDatabase).slice(0, count);
   }
 
   async getSingleRandomMovie(): Promise<GameMovie> {
