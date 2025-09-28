@@ -13,6 +13,7 @@ import { movieService, GameMovie } from '@/lib/movieService'
 import { enhancedFuzzyMatch } from '@/lib/fuzzyMatch'
 import { ArrowLeft, Users, Crown, Zap, Home } from 'lucide-react'
 import Link from 'next/link'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 interface Player {
   id: string
@@ -227,7 +228,8 @@ export default function GameRoom({ params }: GameRoomProps) {
   // Show name input if not connected
   if (showNameInput) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
         <div className="max-w-md w-full mx-4">
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardContent className="p-8 text-center">
@@ -254,11 +256,13 @@ export default function GameRoom({ params }: GameRoomProps) {
           </Card>
         </div>
       </div>
+      </ProtectedRoute>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -465,5 +469,6 @@ export default function GameRoom({ params }: GameRoomProps) {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   )
 }

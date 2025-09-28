@@ -2,13 +2,16 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Users, Plus, ArrowRight, Home, Copy, Check } from 'lucide-react'
+import { Users, Plus, ArrowRight, Home, Copy, Check, LogOut, User } from 'lucide-react'
 import Link from 'next/link'
+import { useSession, signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 export default function LobbyPage() {
+  const { data: session } = useSession()
   const [gameCode, setGameCode] = useState('')
   const [copied, setCopied] = useState(false)
 
@@ -29,24 +32,45 @@ export default function LobbyPage() {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const handleSignOut = () => {
+    signOut({ callbackUrl: '/' })
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex justify-between items-center mb-6">
-            <Link 
-              href="/"
-              className="flex items-center space-x-2 text-white hover:text-blue-400 transition-colors"
-            >
-              <Home className="h-6 w-6" />
-              <span>Home</span>
-            </Link>
-            <div className="flex-1"></div>
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="flex justify-between items-center mb-6">
+              <Link 
+                href="/"
+                className="flex items-center space-x-2 text-white hover:text-blue-400 transition-colors"
+              >
+                <Home className="h-6 w-6" />
+                <span>Home</span>
+              </Link>
+              
+              {/* User Info */}
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 text-white">
+                  <User className="h-5 w-5" />
+                  <span className="text-sm">{session?.user?.name || session?.user?.email}</span>
+                </div>
+                <Button
+                  onClick={handleSignOut}
+                  variant="outline"
+                  size="sm"
+                  className="text-white border-white/20 hover:bg-white/10"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </div>
+            </div>
+            <h1 className="text-5xl font-bold text-white mb-4">Game Lobby</h1>
+            <p className="text-xl text-gray-300">Create a new game or join an existing one</p>
           </div>
-          <h1 className="text-5xl font-bold text-white mb-4">Game Lobby</h1>
-          <p className="text-xl text-gray-300">Create a new game or join an existing one</p>
-        </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Create Game */}
@@ -155,5 +179,6 @@ export default function LobbyPage() {
         </motion.div>
       </div>
     </div>
+    </ProtectedRoute>
   )
 }

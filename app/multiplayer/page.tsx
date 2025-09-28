@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Users, Film, Star, ArrowRight, Home, CheckCircle, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import { tmdbService, TMDBMovie, TMDBCastMember } from '@/lib/tmdb'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 interface SelectedActors {
   actor1: TMDBCastMember | null
@@ -157,7 +158,8 @@ export default function MultiplayerSubmissionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8">
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -525,5 +527,6 @@ export default function MultiplayerSubmissionPage() {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   )
 }

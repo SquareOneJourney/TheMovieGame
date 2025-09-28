@@ -1,4 +1,14 @@
+'use client'
+
+import { useSession, signIn, signOut } from 'next-auth/react'
+import { motion } from 'framer-motion'
+import { LogIn, LogOut, User, Play, Users } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+
 export default function Home() {
+  const { data: session, status } = useSession()
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
       <div className="container mx-auto px-4 py-16">
@@ -15,18 +25,68 @@ export default function Home() {
             &quot;If you ain&apos;t first, you&apos;re last.&quot;
           </p>
           
+          {/* Authentication Section */}
+          {status === 'loading' ? (
+            <div className="mb-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+            </div>
+          ) : session ? (
+            <div className="mb-8">
+              <Card className="bg-white/10 backdrop-blur-sm border border-white/20 max-w-md mx-auto">
+                <CardContent className="p-6 text-center">
+                  <div className="flex items-center justify-center space-x-2 mb-4">
+                    <User className="h-5 w-5 text-white" />
+                    <span className="text-white font-medium">
+                      Welcome, {session.user?.name || session.user?.email}!
+                    </span>
+                  </div>
+                  <Button
+                    onClick={() => signOut()}
+                    variant="outline"
+                    className="text-white border-white/20 hover:bg-white/10"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          ) : (
+            <div className="mb-8">
+              <Card className="bg-white/10 backdrop-blur-sm border border-white/20 max-w-md mx-auto">
+                <CardContent className="p-6 text-center">
+                  <p className="text-white mb-4">Sign in to play multiplayer games</p>
+                  <Button
+                    onClick={() => signIn('google')}
+                    className="w-full bg-white text-black hover:bg-gray-100"
+                  >
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign in with Google
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+          
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
             href="/singleplayer"
             className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold text-xl px-8 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-200"
           >
+            <Play className="inline h-6 w-6 mr-2" />
             Play Against AI
           </a>
           <a
-            href="/lobby"
-            className="inline-block bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold text-xl px-8 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-200"
+            href={session ? "/lobby" : "#"}
+            className={`inline-block font-bold text-xl px-8 py-4 rounded-full shadow-2xl transform transition-all duration-200 ${
+              session 
+                ? "bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white hover:scale-105" 
+                : "bg-gray-500 text-gray-300 cursor-not-allowed"
+            }`}
+            onClick={!session ? (e) => e.preventDefault() : undefined}
           >
-            Multiplayer
+            <Users className="inline h-6 w-6 mr-2" />
+            Multiplayer {!session && "(Login Required)"}
           </a>
         </div>
         </div>
