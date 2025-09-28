@@ -16,11 +16,72 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-      <div className="container mx-auto px-4 py-16">
-        {/* Header */}
+      {/* Top Header */}
+      <div className="w-full px-6 py-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            <img 
+              src="/TheMovieGame Logo.png" 
+              alt="The Movie Game" 
+              className="h-8 w-auto"
+            />
+            <span className="text-xl font-bold text-white">The Movie Game</span>
+          </div>
+          
+          {status === 'loading' ? (
+            <div className="flex items-center space-x-2">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+              <span className="text-white text-sm">Loading...</span>
+            </div>
+          ) : session ? (
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
+                <User className="h-4 w-4 text-white" />
+                <span className="text-white font-medium text-sm">
+                  Welcome, {session.user?.name || session.user?.email}!
+                </span>
+              </div>
+              <Button
+                onClick={() => signOut()}
+                variant="outline"
+                size="sm"
+                className="text-white border-white/20 hover:bg-white/10 bg-transparent hover:text-white rounded-full px-4 py-2"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center space-x-3">
+              <Button
+                onClick={() => setShowLogin(true)}
+                variant="outline"
+                size="sm"
+                className="text-white border-white/20 hover:bg-white/10 bg-transparent hover:text-white rounded-full px-4 py-2"
+              >
+                Sign In
+              </Button>
+              <Button
+                onClick={() => setShowRegister(true)}
+                size="sm"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full px-4 py-2"
+              >
+                Sign Up
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-8">
+        {/* Main Content */}
         <div className="text-center mb-16">
           <div className="inline-block mb-6">
-            <span className="text-6xl">🎬</span>
+            <img 
+              src="/TheMovieGame Logo.png" 
+              alt="The Movie Game" 
+              className="h-24 w-auto mx-auto"
+            />
           </div>
           
           <h1 className="text-6xl font-bold text-white mb-4">
@@ -30,68 +91,21 @@ export default function Home() {
             &quot;If you ain&apos;t first, you&apos;re last.&quot;
           </p>
           
-          {/* Authentication Section */}
-          {status === 'loading' ? (
-            <div className="mb-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
-            </div>
-          ) : session ? (
-            <div className="mb-8">
-              <Card className="bg-white/10 backdrop-blur-sm border border-white/20 max-w-md mx-auto">
-                <CardContent className="p-6 text-center">
-                  <div className="flex items-center justify-center space-x-2 mb-4">
-                    <User className="h-5 w-5 text-white" />
-                    <span className="text-white font-medium">
-                      Welcome, {session.user?.name || session.user?.email}!
-                    </span>
-                  </div>
-                  <Button
-                    onClick={() => signOut()}
-                    variant="outline"
-                    className="text-white border-white/20 hover:bg-white/10"
-                  >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Sign Out
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          ) : showLogin ? (
+          {/* Authentication Forms */}
+          {showLogin && (
             <div className="mb-8">
               <LoginForm onSwitchToRegister={() => {
                 setShowLogin(false)
                 setShowRegister(true)
               }} />
             </div>
-          ) : showRegister ? (
+          )}
+          {showRegister && (
             <div className="mb-8">
               <RegisterForm onSwitchToLogin={() => {
                 setShowRegister(false)
                 setShowLogin(true)
               }} />
-            </div>
-          ) : (
-            <div className="mb-8">
-              <Card className="bg-white/10 backdrop-blur-sm border border-white/20 max-w-md mx-auto">
-                <CardContent className="p-6 text-center">
-                  <p className="text-white mb-4">Sign in to play multiplayer games</p>
-                  <div className="space-y-3">
-                    <Button
-                      onClick={() => setShowLogin(true)}
-                      className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white"
-                    >
-                      Sign In
-                    </Button>
-                    <Button
-                      onClick={() => setShowRegister(true)}
-                      variant="outline"
-                      className="w-full text-white border-white/30 hover:bg-white/20 hover:text-white bg-white/5"
-                    >
-                      Create Account
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           )}
           
@@ -101,7 +115,7 @@ export default function Home() {
             className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold text-xl px-8 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-200"
           >
             <Play className="inline h-6 w-6 mr-2" />
-            Play Against AI
+            Single Player
           </a>
           <a
             href={session ? "/lobby" : "#"}
@@ -148,7 +162,7 @@ export default function Home() {
         {/* How to Play */}
         <div className="max-w-4xl mx-auto">
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-8">
-            <h2 className="text-2xl font-bold text-white text-center mb-6">How to Play</h2>
+            <h2 className="text-2xl font-bold text-white text-center mb-6">Multiplayer Game Rules</h2>
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">1</div>

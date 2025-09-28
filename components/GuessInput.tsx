@@ -200,7 +200,7 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
                         : 'text-red-400'
                   }`}>
                     {lastResult.correct 
-                      ? 'Correct!' 
+                      ? 'Elementary, my dear Watson!' 
                       : lastResult.similarity && lastResult.similarity >= 60
                         ? 'Close!'
                         : 'Houston, we have a problem!'

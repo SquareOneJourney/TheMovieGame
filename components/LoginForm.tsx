@@ -38,7 +38,10 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
         redirect: false,
       })
 
+      console.log('Login result:', result) // Debug log
+
       if (result?.error) {
+        console.error('Login error:', result.error) // Debug log
         // Handle specific error messages
         if (result.error.includes('email')) {
           setError('Please check your email and confirm your account before signing in')
@@ -48,8 +51,12 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
           setError(result.error)
         }
       } else if (result?.ok) {
+        console.log('Login successful, redirecting to lobby') // Debug log
         // Successful login - redirect will be handled by NextAuth
         window.location.href = '/lobby'
+      } else {
+        console.log('Unexpected result:', result) // Debug log
+        setError('Login failed. Please try again.')
       }
     } catch (error) {
       console.error('Login error:', error)

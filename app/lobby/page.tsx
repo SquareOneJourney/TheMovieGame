@@ -102,41 +102,51 @@ export default function LobbyPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <Link 
-                href="/"
-                className="flex items-center space-x-2 text-white hover:text-blue-400 transition-colors"
-              >
-                <Home className="h-6 w-6" />
-                <span>Home</span>
-              </Link>
-              
-              {/* User Info */}
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2 text-white">
-                  <User className="h-5 w-5" />
-                  <span className="text-sm">{session?.user?.name || session?.user?.email}</span>
-                </div>
-                <Button
-                  onClick={handleSignOut}
-                  variant="outline"
-                  size="sm"
-                  className="text-white border-white/20 hover:bg-white/10"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Sign Out
-                </Button>
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        {/* Top Header */}
+        <div className="w-full px-6 py-4">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <Link 
+              href="/"
+              className="flex items-center space-x-3 text-white hover:text-blue-400 transition-colors"
+            >
+              <img 
+                src="/TheMovieGame Logo.png" 
+                alt="The Movie Game" 
+                className="h-8 w-auto"
+              />
+              <span className="text-lg font-semibold">Home</span>
+            </Link>
+            
+            {/* User Info */}
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
+                <User className="h-4 w-4 text-white" />
+                <span className="text-white font-medium text-sm">
+                  Welcome, {session?.user?.name || session?.user?.email}!
+                </span>
               </div>
+              <Button
+                onClick={handleSignOut}
+                variant="outline"
+                size="sm"
+                className="text-white border-white/20 hover:bg-white/10 bg-transparent hover:text-white rounded-full px-4 py-2"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
             </div>
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          {/* Main Content */}
+          <div className="text-center mb-12">
             <h1 className="text-5xl font-bold text-white mb-4">Game Lobby</h1>
-            <p className="text-xl text-gray-300">Create a new game or join an existing one</p>
+            <p className="text-xl text-gray-300">Create a new game, join an existing one, or play solo</p>
           </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {/* Create Game */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -203,6 +213,34 @@ export default function LobbyPage() {
                     Join Game
                   </Button>
                 </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Single Player */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Card className="bg-white/10 backdrop-blur-sm border border-white/20 h-full">
+              <CardContent className="p-8 text-center">
+                <div className="mb-6">
+                  <div className="w-20 h-20 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Play className="h-10 w-10 text-yellow-400" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white mb-2">Single Player</h2>
+                  <p className="text-gray-300">
+                    Play against AI and test your movie knowledge
+                  </p>
+                </div>
+                
+                <Link href="/singleplayer">
+                  <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold py-3 px-6 rounded-lg transition-all duration-200">
+                    <Play className="h-5 w-5 mr-2" />
+                    Single Player
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </motion.div>
@@ -303,7 +341,7 @@ export default function LobbyPage() {
         >
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-white text-center mb-6">How to Play</h3>
+              <h3 className="text-2xl font-bold text-white text-center mb-6">Multiplayer Game Rules</h3>
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
                   <h4 className="text-lg font-semibold text-white mb-4">Creating a Game:</h4>
@@ -327,8 +365,8 @@ export default function LobbyPage() {
             </CardContent>
           </Card>
         </motion.div>
+        </div>
       </div>
-    </div>
     </ProtectedRoute>
   )
 }

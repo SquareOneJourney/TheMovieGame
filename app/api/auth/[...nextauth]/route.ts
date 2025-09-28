@@ -19,15 +19,25 @@ const handler = NextAuth({
         // Create Supabase client for server-side operations
         const supabase = createClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          {
+            auth: {
+              autoRefreshToken: false,
+              persistSession: false
+            }
+          }
         )
 
         try {
+          console.log('Attempting to sign in with Supabase:', { email: credentials.email })
+          
           // Sign in with Supabase
           const { data, error } = await supabase.auth.signInWithPassword({
             email: credentials.email,
             password: credentials.password,
           })
+
+          console.log('Supabase auth response:', { data, error })
 
           if (error) {
             console.error('Supabase auth error:', error)
@@ -39,8 +49,8 @@ const handler = NextAuth({
             throw new Error('Authentication failed')
           }
 
-          // Check if email is confirmed
-          if (data.user.email_confirmed_at === null) {
+          // Check if email is confirmed (only in production)
+          if (process.env.NODE_ENV === 'production' && data.user.email_confirmed_at === null) {
             throw new Error('Please check your email and confirm your account before signing in')
           }
 
