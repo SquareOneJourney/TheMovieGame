@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,6 +14,7 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -52,8 +54,8 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
         }
       } else if (result?.ok) {
         console.log('Login successful, redirecting to lobby') // Debug log
-        // Successful login - redirect will be handled by NextAuth
-        window.location.href = '/lobby'
+        // Successful login - use Next.js router for navigation
+        router.push('/lobby')
       } else {
         console.log('Unexpected result:', result) // Debug log
         setError('Login failed. Please try again.')

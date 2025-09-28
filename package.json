@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "setup-env": "node scripts/setup-env.js"
+    "setup-env": "node scripts/setup-env.js",
+    "check-env": "node scripts/check-env.js"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
