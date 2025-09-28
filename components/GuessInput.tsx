@@ -337,7 +337,7 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
             {/* Instructions */}
             <div className="text-center">
               <p className="text-sm text-gray-400">
-                Type the full movie title as accurately as possible, or click "No Idea" if you don't know
+                Type the full movie title as accurately as possible, or click &quot;No Idea&quot; if you don&apos;t know
               </p>
             </div>
           </form>

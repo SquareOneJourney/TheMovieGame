@@ -134,7 +134,7 @@ export default function LobbyPage() {
                 <div>
                   <h4 className="text-lg font-semibold text-white mb-4">Creating a Game:</h4>
                   <ol className="space-y-2 text-gray-300">
-                    <li>1. Click "Create Game" to set up your challenge</li>
+                    <li>1. Click &quot;Create Game&quot; to set up your challenge</li>
                     <li>2. Search for a movie and select two actors</li>
                     <li>3. Share the game code with your friend</li>
                     <li>4. Start playing when they join!</li>
@@ -144,7 +144,7 @@ export default function LobbyPage() {
                   <h4 className="text-lg font-semibold text-white mb-4">Joining a Game:</h4>
                   <ol className="space-y-2 text-gray-300">
                     <li>1. Get the game code from your friend</li>
-                    <li>2. Enter the code in "Join Game"</li>
+                    <li>2. Enter the code in &quot;Join Game&quot;</li>
                     <li>3. Wait for the game to start</li>
                     <li>4. Guess the movie from the actors!</li>
                   </ol>
