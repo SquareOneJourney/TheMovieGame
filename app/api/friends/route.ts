@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
+import { getAuthSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 // Get user's friends
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
+    const session = await getAuthSession()
     
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 // Remove a friend
 export async function DELETE(request: NextRequest) {
   try {
-    const session = await getServerSession()
+    const session = await getAuthSession()
     
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
+import { getAuthSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 // Send a friend request
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession()
+    const session = await getAuthSession()
     
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
 // Get friend requests (sent and received)
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
+    const session = await getAuthSession()
     
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
