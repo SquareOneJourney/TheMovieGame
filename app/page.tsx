@@ -11,8 +11,7 @@ import RegisterForm from '@/components/RegisterForm'
 
 export default function Home() {
   const { data: session, status } = useSession()
-  const [showLogin, setShowLogin] = useState(false)
-  const [showRegister, setShowRegister] = useState(false)
+  const [authMode, setAuthMode] = useState<'none' | 'login' | 'register'>('none')
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
@@ -54,7 +53,7 @@ export default function Home() {
           ) : (
             <div className="flex items-center space-x-3">
               <Button
-                onClick={() => setShowLogin(true)}
+                onClick={() => setAuthMode('login')}
                 variant="outline"
                 size="sm"
                 className="text-white border-white/20 hover:bg-white/10 bg-transparent hover:text-white rounded-full px-4 py-2"
@@ -62,7 +61,7 @@ export default function Home() {
                 Sign In
               </Button>
               <Button
-                onClick={() => setShowRegister(true)}
+                onClick={() => setAuthMode('register')}
                 size="sm"
                 className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full px-4 py-2"
               >
@@ -92,20 +91,26 @@ export default function Home() {
           </p>
           
           {/* Authentication Forms */}
-          {showLogin && (
-            <div className="mb-8">
-              <LoginForm onSwitchToRegister={() => {
-                setShowLogin(false)
-                setShowRegister(true)
-              }} />
+          {authMode === 'login' && (
+            <div className="mb-8 relative">
+              <button
+                onClick={() => setAuthMode('none')}
+                className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold z-10"
+              >
+                ×
+              </button>
+              <LoginForm onSwitchToRegister={() => setAuthMode('register')} />
             </div>
           )}
-          {showRegister && (
-            <div className="mb-8">
-              <RegisterForm onSwitchToLogin={() => {
-                setShowRegister(false)
-                setShowLogin(true)
-              }} />
+          {authMode === 'register' && (
+            <div className="mb-8 relative">
+              <button
+                onClick={() => setAuthMode('none')}
+                className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold z-10"
+              >
+                ×
+              </button>
+              <RegisterForm onSwitchToLogin={() => setAuthMode('login')} />
             </div>
           )}
           
