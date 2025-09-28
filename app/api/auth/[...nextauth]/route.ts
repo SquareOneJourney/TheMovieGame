@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 
 const handler = NextAuth({
   providers: [
@@ -14,6 +14,12 @@ const handler = NextAuth({
         if (!credentials?.email || !credentials?.password) {
           return null
         }
+
+        // Create Supabase client for server-side operations
+        const supabase = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        )
 
         // Sign in with Supabase
         const { data, error } = await supabase.auth.signInWithPassword({

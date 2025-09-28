@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,6 +19,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Create Supabase client for server-side operations
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
 
     // Create user with Supabase Auth
     const { data, error } = await supabase.auth.signUp({
