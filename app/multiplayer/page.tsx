@@ -39,6 +39,9 @@ export default function MultiplayerSubmissionPage() {
   const [showGameCodeModal, setShowGameCodeModal] = useState(false)
   const [gameCode, setGameCode] = useState('')
   const [copied, setCopied] = useState(false)
+  const [selectedFriends, setSelectedFriends] = useState<string[]>([])
+  const [friends, setFriends] = useState<any[]>([])
+  const [showFriendInvites, setShowFriendInvites] = useState(false)
 
   // Debounced search function
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -184,6 +187,51 @@ export default function MultiplayerSubmissionPage() {
   const handleStartGame = () => {
     window.location.href = `/game/${gameCode}`
   }
+
+  // Fetch friends list
+  const fetchFriends = async () => {
+    try {
+      const response = await fetch('/api/friends')
+      const data = await response.json()
+
+      if (data.success) {
+        setFriends(data.friends)
+      }
+    } catch (err) {
+      console.error('Failed to fetch friends:', err)
+    }
+  }
+
+  // Send game invites to selected friends
+  const sendGameInvites = async () => {
+    if (selectedFriends.length === 0) return
+
+    try {
+      const promises = selectedFriends.map(friendId =>
+        fetch('/api/games/invites', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ receiverId: friendId, gameId: gameCode })
+        })
+      )
+
+      const responses = await Promise.all(promises)
+      const results = await Promise.all(responses.map(r => r.json()))
+
+      const successCount = results.filter(r => r.success).length
+      alert(`Game invites sent to ${successCount} friends!`)
+      
+      setShowFriendInvites(false)
+      setSelectedFriends([])
+    } catch (err) {
+      alert('Failed to send some invites')
+    }
+  }
+
+  // Load friends when component mounts
+  useEffect(() => {
+    fetchFriends()
+  }, [])
 
   return (
     <ProtectedRoute>
@@ -613,11 +661,77 @@ export default function MultiplayerSubmissionPage() {
                 >
                   Close
                 </button>
+                {friends.length > 0 && (
+                  <button
+                    onClick={() => setShowFriendInvites(true)}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    Invite Friends
+                  </button>
+                )}
                 <button
                   onClick={handleStartGame}
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
                 >
                   Start Game
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Friend Invite Modal */}
+      {showFriendInvites && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-8 max-w-md w-full"
+          >
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-white mb-4">Invite Friends to Game</h2>
+              <p className="text-gray-300 mb-6">Select friends to invite to your game:</p>
+              
+              <div className="space-y-2 max-h-64 overflow-y-auto mb-6">
+                {friends.map((friend) => (
+                  <label key={friend.id} className="flex items-center space-x-3 p-3 bg-white/10 rounded-lg cursor-pointer hover:bg-white/20">
+                    <input
+                      type="checkbox"
+                      checked={selectedFriends.includes(friend.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedFriends(prev => [...prev, friend.id])
+                        } else {
+                          setSelectedFriends(prev => prev.filter(id => id !== friend.id))
+                        }
+                      }}
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <div className="flex-1 text-left">
+                      <p className="text-white font-semibold">{friend.name}</p>
+                      <p className="text-gray-300 text-sm">Score: {friend.score}</p>
+                    </div>
+                  </label>
+                ))}
+              </div>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => {
+                    setShowFriendInvites(false)
+                    setSelectedFriends([])
+                  }}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={sendGameInvites}
+                  disabled={selectedFriends.length === 0}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg transition-colors disabled:cursor-not-allowed"
+                >
+                  Send Invites ({selectedFriends.length})
                 </button>
               </div>
             </div>

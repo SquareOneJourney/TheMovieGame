@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import FriendsPanel from '@/components/FriendsPanel'
 import StatsPanel from '@/components/StatsPanel'
 import Leaderboard from '@/components/Leaderboard'
+import FriendManagement from '@/components/FriendManagement'
 
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = 'force-dynamic'
@@ -379,11 +380,28 @@ export default function LobbyPage() {
           </Card>
         </motion.div>
 
-        {/* Stats and Friends Panels */}
+        {/* Friend Management */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
+          className="mt-12"
+        >
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white text-center text-2xl">Friends & Invites</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <FriendManagement />
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Stats and Friends Panels */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
           className="mt-12 grid md:grid-cols-2 gap-8"
         >
           <StatsPanel />

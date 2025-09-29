@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthSession } from '@/lib/api-auth'
-
-// Force dynamic rendering
-export const dynamic = 'force-dynamic'
+import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,17 +12,39 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const query = searchParams.get('q')
-
-    if (!query || query.length < 2) {
-      return NextResponse.json({ error: 'Query must be at least 2 characters' }, { status: 400 })
+    
+    if (!query || query.trim().length < 2) {
+      return NextResponse.json({ 
+        error: 'Query must be at least 2 characters long' 
+      }, { status: 400 })
     }
 
-    // Return mock search results for now
-    const usersWithStatus: any[] = []
+    // Search for users by name or email (excluding current user)
+    const users = await prisma.user.findMany({
+      where: {
+        AND: [
+          { id: { not: session.user.id } }, // Exclude current user
+          {
+            OR: [
+              { name: { contains: query, mode: 'insensitive' } },
+              { email: { contains: query, mode: 'insensitive' } }
+            ]
+          }
+        ]
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        score: true,
+        createdAt: true
+      },
+      take: 10 // Limit results
+    })
 
     return NextResponse.json({
       success: true,
-      users: usersWithStatus
+      users
     })
 
   } catch (error) {
