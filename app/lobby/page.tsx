@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Users, Plus, ArrowRight, Home, Copy, Check, LogOut, User, Clock, Play } from 'lucide-react'
+import { Users, Plus, ArrowRight, Home, Copy, Check, LogOut, User, Clock, Play, Settings } from 'lucide-react'
 import Link from 'next/link'
 import { getCurrentUser, signOut } from '@/lib/supabase-auth'
 import { Button } from '@/components/ui/button'
@@ -184,6 +184,16 @@ export default function LobbyPage() {
                   Welcome, {user?.user_metadata?.name || user?.email}!
                 </span>
               </div>
+              
+              {/* Admin Panel Link */}
+              <Link
+                href="/admin"
+                className="inline-flex items-center text-white hover:text-gray-300 text-sm transition-colors duration-200 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 hover:bg-white/20"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Admin Panel
+              </Link>
+              
               <Button
                 onClick={handleSignOut}
                 variant="outline"

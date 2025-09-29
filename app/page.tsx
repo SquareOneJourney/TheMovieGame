@@ -184,9 +184,16 @@ export default function Home() {
           </a>
         </div>
         
-        {/* Admin Link - Only show for authenticated users */}
+        {/* Admin and Lobby Links - Only show for authenticated users */}
         {user && (
-          <div className="text-center mt-4">
+          <div className="text-center mt-4 space-x-6">
+            <a
+              href="/lobby"
+              className="inline-flex items-center text-gray-300 hover:text-white text-sm transition-colors duration-200"
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Game Lobby
+            </a>
             <a
               href="/admin"
               className="inline-flex items-center text-gray-300 hover:text-white text-sm transition-colors duration-200"
