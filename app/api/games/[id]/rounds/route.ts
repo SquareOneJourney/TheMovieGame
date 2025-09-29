@@ -15,24 +15,9 @@ export async function POST(
 
     const { id: gameId } = await params
     const body = await request.json()
-    const { guess, isCorrect } = body
+    const { action, guess, isCorrect, actor1, actor2, movie, poster, year, actor1Photo, actor2Photo, hintActorPhoto, hintActor } = body
 
-    // Validate inputs
-    if (typeof guess !== 'string' || guess.trim().length === 0) {
-      return NextResponse.json({ 
-        error: 'Invalid guess: must be a non-empty string' 
-      }, { status: 400 })
-    }
-
-    if (typeof isCorrect !== 'boolean') {
-      return NextResponse.json({ 
-        error: 'Invalid isCorrect: must be a boolean' 
-      }, { status: 400 })
-    }
-
-    const sanitizedGuess = guess.trim()
-
-    // Get the current game and latest round
+    // Get the current game
     const game = await prisma.game.findUnique({
       where: { id: gameId },
       include: {
@@ -52,7 +37,54 @@ export async function POST(
       return NextResponse.json({ error: 'Game needs 2 players' }, { status: 400 })
     }
 
+    // Handle different actions
+    if (action === 'give_clue') {
+      // Create a new round with the clue
+      const newRound = await prisma.round.create({
+        data: {
+          gameId: game.id,
+          clueGiver: session.user.id,
+          guesser: game.players.find(p => p.id !== session.user.id)?.id || '',
+          actor1: actor1 || '',
+          actor2: actor2 || '',
+          movie: movie || '',
+          poster: poster || '',
+          year: year || '',
+          actor1Photo: actor1Photo || '',
+          actor2Photo: actor2Photo || '',
+          hintActorPhoto: hintActorPhoto || '',
+          hintActor: hintActor || ''
+        }
+      })
+
+      // Update game current turn
+      await prisma.game.update({
+        where: { id: gameId },
+        data: { currentTurn: session.user.id }
+      })
+
+      return NextResponse.json({
+        success: true,
+        round: newRound
+      })
+    }
+
+    // Handle guess (existing logic)
+    if (typeof guess !== 'string' || guess.trim().length === 0) {
+      return NextResponse.json({ 
+        error: 'Invalid guess: must be a non-empty string' 
+      }, { status: 400 })
+    }
+
+    if (typeof isCorrect !== 'boolean') {
+      return NextResponse.json({ 
+        error: 'Invalid isCorrect: must be a boolean' 
+      }, { status: 400 })
+    }
+
+    const sanitizedGuess = guess.trim()
     const currentRound = game.rounds[0]
+    
     if (!currentRound) {
       return NextResponse.json({ error: 'No active round' }, { status: 400 })
     }
@@ -66,22 +98,29 @@ export async function POST(
       }
     })
 
-    // If correct, create a new round for the other player
+    // Update scores
     if (isCorrect) {
-      // Find the other player
-      const otherPlayer = game.players.find(p => p.id !== currentRound.clueGiver)
+      // Guesser gets points
+      const guesser = game.players.find(p => p.id !== currentRound.clueGiver)
+      if (guesser) {
+        await prisma.player.update({
+          where: { id: guesser.id },
+          data: { score: { increment: 1 } }
+        })
+      }
       
-      if (otherPlayer) {
-        // Create a placeholder round that will be populated when the new clue giver submits their movie
-        await prisma.round.create({
-          data: {
-            gameId: game.id,
-            clueGiver: otherPlayer.id,
-            guesser: currentRound.clueGiver,
-            actor1: 'TBD', // To Be Determined - will be filled when clue is given
-            actor2: 'TBD', // To Be Determined - will be filled when clue is given
-            movie: 'TBD'   // To Be Determined - will be filled when clue is given
-          }
+      // Switch turn to the guesser
+      await prisma.game.update({
+        where: { id: gameId },
+        data: { currentTurn: guesser?.id || game.currentTurn }
+      })
+    } else {
+      // Clue giver gets points and keeps turn
+      const clueGiver = game.players.find(p => p.id === currentRound.clueGiver)
+      if (clueGiver) {
+        await prisma.player.update({
+          where: { id: clueGiver.id },
+          data: { score: { increment: 2 } }
         })
       }
     }
