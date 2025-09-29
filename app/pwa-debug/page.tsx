@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { CheckCircle, XCircle, AlertCircle, Info } from 'lucide-react'
 
 export default function PWADebugPage() {
+  const [isClient, setIsClient] = useState(false)
   const [debugInfo, setDebugInfo] = useState({
     isHTTPS: false,
     hasManifest: false,
@@ -15,13 +16,15 @@ export default function PWADebugPage() {
   })
 
   useEffect(() => {
+    setIsClient(true)
+    
     const checkPWAStatus = async () => {
       const info = {
-        isHTTPS: location.protocol === 'https:',
+        isHTTPS: typeof window !== 'undefined' ? location.protocol === 'https:' : false,
         hasManifest: false,
         hasServiceWorker: false,
         isInstallable: false,
-        userAgent: navigator.userAgent,
+        userAgent: typeof window !== 'undefined' ? navigator.userAgent : '',
         beforeInstallPrompt: false,
         manifestData: null
       }
@@ -38,7 +41,7 @@ export default function PWADebugPage() {
       }
 
       // Check service worker
-      if ('serviceWorker' in navigator) {
+      if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
         try {
           const registration = await navigator.serviceWorker.getRegistration()
           info.hasServiceWorker = !!registration
@@ -48,7 +51,7 @@ export default function PWADebugPage() {
       }
 
       // Check if installable
-      info.isInstallable = 'BeforeInstallPromptEvent' in window
+      info.isInstallable = typeof window !== 'undefined' && 'BeforeInstallPromptEvent' in window
 
       setDebugInfo(info)
     }
@@ -61,10 +64,14 @@ export default function PWADebugPage() {
       setDebugInfo(prev => ({ ...prev, beforeInstallPrompt: true }))
     }
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    if (typeof window !== 'undefined') {
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    }
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      }
     }
   }, [])
 
@@ -87,6 +94,17 @@ export default function PWADebugPage() {
         </div>
       )
     }
+  }
+
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white text-xl">Loading PWA Debug Dashboard...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
