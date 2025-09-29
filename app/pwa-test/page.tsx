@@ -1,7 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { CheckCircle, XCircle, Download, Wifi, WifiOff } from 'lucide-react'
+
+// Global flag to prevent multiple calls across all instances
+let globalHasChecked = false
 
 export default function PWATestPage() {
   const [pwaFeatures, setPwaFeatures] = useState({
@@ -15,19 +18,17 @@ export default function PWATestPage() {
 
   const [isOnline, setIsOnline] = useState(true)
   const [installPrompt, setInstallPrompt] = useState<any>(null)
-  const hasCheckedRef = useRef(false)
 
   const checkPWAFeatures = async () => {
-    console.log('PWA Test: checkPWAFeatures called, hasChecked:', hasCheckedRef.current)
-    console.trace('PWA Test: Stack trace for checkPWAFeatures call')
+    console.log('PWA Test: checkPWAFeatures called, globalHasChecked:', globalHasChecked)
     
-    if (hasCheckedRef.current) {
-      console.log('PWA Test: Already checked, skipping...')
+    if (globalHasChecked) {
+      console.log('PWA Test: Already checked globally, skipping...')
       return
     }
     
     console.log('PWA Test: Checking PWA features...')
-    hasCheckedRef.current = true
+    globalHasChecked = true
     
     const features = {
       serviceWorker: false,
@@ -132,7 +133,7 @@ export default function PWATestPage() {
   }
 
   const handleRefresh = () => {
-    hasCheckedRef.current = false
+    globalHasChecked = false
     checkPWAFeatures()
   }
 
