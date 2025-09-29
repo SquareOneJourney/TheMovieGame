@@ -9,13 +9,31 @@ export default function PWAInstaller() {
   useEffect(() => {
     // Register service worker
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
+      console.log('PWA Installer: Registering service worker...')
+      navigator.serviceWorker.register('/sw-simple.js')
         .then((registration) => {
-          console.log('SW registered: ', registration)
+          console.log('PWA Installer: Service worker registered successfully:', registration)
+          // Force update the PWA features check
+          setTimeout(() => {
+            window.dispatchEvent(new Event('pwa-features-updated'))
+          }, 1000)
         })
         .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError)
+          console.error('PWA Installer: Service worker registration failed:', registrationError)
+          // Try fallback to the generated service worker
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('PWA Installer: Fallback service worker registered:', registration)
+              setTimeout(() => {
+                window.dispatchEvent(new Event('pwa-features-updated'))
+              }, 1000)
+            })
+            .catch((fallbackError) => {
+              console.error('PWA Installer: Both service workers failed:', fallbackError)
+            })
         })
+    } else {
+      console.log('PWA Installer: Service workers not supported')
     }
 
     // Listen for beforeinstallprompt event

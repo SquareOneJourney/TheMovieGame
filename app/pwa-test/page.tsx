@@ -9,13 +9,15 @@ export default function PWATestPage() {
     installable: false,
     offline: false,
     manifest: false,
-    cache: false
+    cache: false,
+    manifestData: null as any
   })
 
   const [isOnline, setIsOnline] = useState(true)
   const [installPrompt, setInstallPrompt] = useState<any>(null)
 
   const checkPWAFeatures = useCallback(async () => {
+    console.log('PWA Test: Checking PWA features...')
     const features = { ...pwaFeatures }
 
     // Check Service Worker
@@ -23,19 +25,31 @@ export default function PWATestPage() {
       try {
         const registration = await navigator.serviceWorker.getRegistration()
         features.serviceWorker = !!registration
+        console.log('PWA Test: Service worker status:', features.serviceWorker, registration)
       } catch (error) {
+        console.error('PWA Test: Service worker check failed:', error)
         features.serviceWorker = false
       }
+    } else {
+      console.log('PWA Test: Service workers not supported')
     }
 
     // Check if installable
     features.installable = !!installPrompt
+    console.log('PWA Test: Installable status:', features.installable, installPrompt)
 
     // Check manifest
     try {
       const response = await fetch('/manifest.json')
-      features.manifest = response.ok
+      if (response.ok) {
+        features.manifest = true
+        features.manifestData = await response.json()
+        console.log('PWA Test: Manifest loaded successfully')
+      } else {
+        console.error('PWA Test: Manifest fetch failed:', response.status)
+      }
     } catch (error) {
+      console.error('PWA Test: Manifest check failed:', error)
       features.manifest = false
     }
 
@@ -44,11 +58,16 @@ export default function PWATestPage() {
       try {
         const cacheNames = await caches.keys()
         features.cache = cacheNames.length > 0
+        console.log('PWA Test: Cache status:', features.cache, cacheNames)
       } catch (error) {
+        console.error('PWA Test: Cache check failed:', error)
         features.cache = false
       }
+    } else {
+      console.log('PWA Test: Cache API not supported')
     }
 
+    console.log('PWA Test: Final features status:', features)
     setPwaFeatures(features)
   }, [pwaFeatures, installPrompt])
 
@@ -68,10 +87,17 @@ export default function PWATestPage() {
     }
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
 
+    // Listen for PWA features updates
+    const handlePWAFeaturesUpdate = () => {
+      checkPWAFeatures()
+    }
+    window.addEventListener('pwa-features-updated', handlePWAFeaturesUpdate)
+
     return () => {
       window.removeEventListener('online', () => setIsOnline(true))
       window.removeEventListener('offline', () => setIsOnline(false))
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      window.removeEventListener('pwa-features-updated', handlePWAFeaturesUpdate)
     }
   }, [checkPWAFeatures])
 
