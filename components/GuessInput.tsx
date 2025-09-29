@@ -165,16 +165,12 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
           <Card className={`${
             lastResult.correct 
               ? 'bg-green-500/20 border-green-400' 
-              : lastResult.similarity && lastResult.similarity >= 60
-                ? 'bg-yellow-500/20 border-yellow-400'
-                : 'bg-red-500/20 border-red-400'
+              : 'bg-red-500/20 border-red-400'
           }`}>
             <CardContent className="p-4">
               <div className="flex items-center justify-center space-x-2">
                 {lastResult.correct ? (
                   <CheckCircle className="h-6 w-6 text-green-400" />
-                ) : lastResult.similarity && lastResult.similarity >= 60 ? (
-                  <AlertCircle className="h-6 w-6 text-yellow-400" />
                 ) : (
                   <XCircle className="h-6 w-6 text-red-400" />
                 )}
@@ -182,15 +178,11 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
                   <p className={`font-bold ${
                     lastResult.correct 
                       ? 'text-green-400' 
-                      : lastResult.similarity && lastResult.similarity >= 60
-                        ? 'text-yellow-400'
-                        : 'text-red-400'
+                      : 'text-red-400'
                   }`}>
                     {lastResult.correct 
                       ? 'Elementary, my dear Watson!' 
-                      : lastResult.similarity && lastResult.similarity >= 60
-                        ? 'Close!'
-                        : 'Houston, we have a problem!'
+                      : 'Houston, we have a problem!'
                     }
                   </p>
                   <p className="text-sm text-gray-300">
@@ -198,11 +190,6 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
                     {lastResult.correctAnswer && (
                       <span className="block">
                         The answer: &quot;{lastResult.correctAnswer}&quot;
-                      </span>
-                    )}
-                    {lastResult.similarity && lastResult.similarity >= 60 && !lastResult.correct && (
-                      <span className="block text-yellow-300 text-xs mt-1">
-                        {lastResult.similarity.toFixed(0)}% match - try again with a slight variation!
                       </span>
                     )}
                   </p>

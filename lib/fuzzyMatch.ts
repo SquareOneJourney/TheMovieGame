@@ -111,10 +111,10 @@ function calculateSimilarity(str1: string, str2: string): number {
  * Checks if two movie titles match using fuzzy logic
  * @param guess - The user's guess
  * @param correctAnswer - The correct movie title
- * @param threshold - Similarity threshold (0-100), default 75
+ * @param threshold - Similarity threshold (0-100), default 70
  * @returns Object with match result and details
  */
-export function fuzzyMatchMovie(guess: string, correctAnswer: string, threshold: number = 75): {
+export function fuzzyMatchMovie(guess: string, correctAnswer: string, threshold: number = 70): {
   isMatch: boolean
   similarity: number
   normalizedGuess: string
@@ -145,7 +145,7 @@ export function fuzzyMatchMovie(guess: string, correctAnswer: string, threshold:
   let confidence: 'exact' | 'high' | 'medium' | 'low' | 'none'
   if (similarity >= 95) confidence = 'exact'
   else if (similarity >= 85) confidence = 'high'
-  else if (similarity >= 75) confidence = 'medium'
+  else if (similarity >= 70) confidence = 'medium'
   else if (similarity >= 60) confidence = 'low'
   else confidence = 'none'
   
@@ -179,7 +179,7 @@ const COMMON_VARIATIONS: Record<string, string[]> = {
 /**
  * Enhanced fuzzy matching that checks multiple title variations
  */
-export function enhancedFuzzyMatch(guess: string, correctAnswer: string, threshold: number = 75): {
+export function enhancedFuzzyMatch(guess: string, correctAnswer: string, threshold: number = 70): {
   isMatch: boolean
   similarity: number
   normalizedGuess: string

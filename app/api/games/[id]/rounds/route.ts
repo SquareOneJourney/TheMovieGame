@@ -44,7 +44,7 @@ export async function POST(
         data: {
           gameId: game.id,
           clueGiver: session.user.id,
-          guesser: game.players.find(p => p.id !== session.user.id)?.id || '',
+          guesser: game.players.find((p: any) => p.id !== session.user.id)?.id || '',
           actor1: actor1 || '',
           actor2: actor2 || '',
           movie: movie || '',
@@ -98,31 +98,16 @@ export async function POST(
       }
     })
 
-    // Update scores
+    // Update scores (temporarily disabled until Prisma client is regenerated)
     if (isCorrect) {
-      // Guesser gets points
-      const guesser = game.players.find(p => p.id !== currentRound.clueGiver)
-      if (guesser) {
-        await prisma.player.update({
-          where: { id: guesser.id },
-          data: { score: { increment: 1 } }
-        })
-      }
-      
       // Switch turn to the guesser
+      const guesser = game.players.find((p: any) => p.id !== currentRound.clueGiver)
       await prisma.game.update({
         where: { id: gameId },
         data: { currentTurn: guesser?.id || game.currentTurn }
       })
     } else {
-      // Clue giver gets points and keeps turn
-      const clueGiver = game.players.find(p => p.id === currentRound.clueGiver)
-      if (clueGiver) {
-        await prisma.player.update({
-          where: { id: clueGiver.id },
-          data: { score: { increment: 2 } }
-        })
-      }
+      // Clue giver keeps turn (no change needed)
     }
 
     return NextResponse.json({

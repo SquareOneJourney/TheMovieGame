@@ -12,6 +12,7 @@ model User {
   name      String
   email     String   @unique
   password  String
+  score     Int      @default(0) // Player score for games
   games     Game[]   @relation("PlayerGames")
   createdAt DateTime @default(now())
   
@@ -27,14 +28,15 @@ model User {
 }
 
 model Game {
-  id        String   @id @default(cuid())
-  players   User[]   @relation("PlayerGames")
-  rounds    Round[]
-  status    String   // "waiting", "in_progress", "finished"
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  players    User[]   @relation("PlayerGames")
+  rounds     Round[]
+  status     String   // "waiting", "in_progress", "finished"
+  currentTurn String? // User.id of current player's turn
+  createdAt  DateTime @default(now())
   
   // Game invites
-  invites   GameInvite[]
+  invites    GameInvite[]
 }
 
 model Round {

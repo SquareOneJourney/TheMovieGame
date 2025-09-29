@@ -83,6 +83,30 @@ export default function GameRoom({ params }: GameRoomProps) {
     }
   }
 
+  // Fallback: Load game state from database
+  const loadGameFromDatabase = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/games/${gameId}`)
+      if (response.ok) {
+        const gameData = await response.json()
+        setGameState({
+          players: gameData.players || [],
+          currentTurn: gameData.currentTurn,
+          currentClue: gameData.currentClue,
+          gameStatus: gameData.gameStatus,
+          winner: gameData.winner,
+          hintUsed: false,
+          lastResult: gameData.lastResult
+        })
+        setIsConnected(true)
+      } else {
+        console.error('Failed to load game from database')
+      }
+    } catch (error) {
+      console.error('Error loading game from database:', error)
+    }
+  }, [gameId])
+
   // Initialize socket connection with fallback
   useEffect(() => {
     if (!playerName || showNameInput) return
@@ -96,7 +120,7 @@ export default function GameRoom({ params }: GameRoomProps) {
             currentTurn: newGameState.currentTurn,
             currentClue: newGameState.currentClue,
             gameStatus: newGameState.gameStatus,
-            players: newGameState.players.map(p => ({ name: p.name, score: p.score }))
+            players: newGameState.players.map((p: any) => ({ name: p.name, score: p.score }))
           })
           setGameState(newGameState)
           setIsConnected(true)
@@ -130,29 +154,6 @@ export default function GameRoom({ params }: GameRoomProps) {
     }
   }, [gameId, playerName, showNameInput, loadGameFromDatabase])
 
-  // Fallback: Load game state from database
-  const loadGameFromDatabase = useCallback(async () => {
-    try {
-      const response = await fetch(`/api/games/${gameId}`)
-      if (response.ok) {
-        const gameData = await response.json()
-        setGameState({
-          players: gameData.players || [],
-          currentTurn: gameData.currentTurn || '',
-          gameStatus: gameData.gameStatus || 'waiting',
-          winner: gameData.winner || null,
-          hintUsed: false,
-          currentClue: gameData.currentClue || null,
-          lastResult: gameData.lastResult || null
-        })
-        setIsConnected(true)
-        console.log("📊 Loaded game state from database:", gameData)
-      }
-    } catch (error) {
-      console.error("❌ Failed to load game from database:", error)
-    }
-  }, [gameId])
-
   // Polling mechanism for real-time updates when not using sockets
   useEffect(() => {
     if (!socketManager.isConnected() && gameState.players.length === 2 && gameState.gameStatus === 'playing') {
@@ -165,9 +166,9 @@ export default function GameRoom({ params }: GameRoomProps) {
   }, [gameState.players.length, gameState.gameStatus, loadGameFromDatabase])
 
   // Check if current user is the clue giver
-  const isMyTurn = Boolean(gameState.currentTurn && gameState.players.some(p => p.id === gameState.currentTurn))
-  const currentPlayer = gameState.players.find(p => p.id === gameState.currentTurn)
-  const otherPlayer = gameState.players.find(p => p.id !== gameState.currentTurn)
+  const isMyTurn = Boolean(gameState.currentTurn && gameState.players.some((p: any) => p.id === gameState.currentTurn))
+  const currentPlayer = gameState.players.find((p: any) => p.id === gameState.currentTurn)
+  const otherPlayer = gameState.players.find((p: any) => p.id !== gameState.currentTurn)
 
   const handleGiveClue = async (actor1: string, actor2: string) => {
     try {
@@ -559,7 +560,7 @@ export default function GameRoom({ params }: GameRoomProps) {
                       🎉 Game Over! 🎉
                     </h2>
                     <p className="text-xl text-white mb-6">
-                      {gameState.players.find(p => p.id === gameState.winner)?.name} won!
+                      {gameState.players.find((p: any) => p.id === gameState.winner)?.name} won!
                     </p>
                     <div className="flex space-x-4 justify-center">
                       <Button

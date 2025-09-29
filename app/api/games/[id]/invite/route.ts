@@ -31,13 +31,13 @@ export async function POST(
       return NextResponse.json({ error: 'Game not found' }, { status: 404 })
     }
 
-    const isPlayer = game.players.some(player => player.id === session.user.id)
+    const isPlayer = game.players.some((player: any) => player.id === session.user.id)
     if (!isPlayer) {
       return NextResponse.json({ error: 'Not a player in this game' }, { status: 403 })
     }
 
     // Check if receiver is already a player
-    const isAlreadyPlayer = game.players.some(player => player.id === receiverId)
+    const isAlreadyPlayer = game.players.some((player: any) => player.id === receiverId)
     if (isAlreadyPlayer) {
       return NextResponse.json({ error: 'User is already a player in this game' }, { status: 400 })
     }
