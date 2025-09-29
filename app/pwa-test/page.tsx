@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { CheckCircle, XCircle, Download, Wifi, WifiOff } from 'lucide-react'
 
 export default function PWATestPage() {
@@ -15,16 +15,19 @@ export default function PWATestPage() {
 
   const [isOnline, setIsOnline] = useState(true)
   const [installPrompt, setInstallPrompt] = useState<any>(null)
-  const [hasChecked, setHasChecked] = useState(false)
+  const hasCheckedRef = useRef(false)
 
   const checkPWAFeatures = async () => {
-    if (hasChecked) {
+    console.log('PWA Test: checkPWAFeatures called, hasChecked:', hasCheckedRef.current)
+    console.trace('PWA Test: Stack trace for checkPWAFeatures call')
+    
+    if (hasCheckedRef.current) {
       console.log('PWA Test: Already checked, skipping...')
       return
     }
     
     console.log('PWA Test: Checking PWA features...')
-    setHasChecked(true)
+    hasCheckedRef.current = true
     
     const features = {
       serviceWorker: false,
@@ -129,7 +132,7 @@ export default function PWATestPage() {
   }
 
   const handleRefresh = () => {
-    setHasChecked(false)
+    hasCheckedRef.current = false
     checkPWAFeatures()
   }
 
