@@ -65,7 +65,10 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ success: true, count: movies.length })
   } catch (error) {
     console.error('API: Error updating movies:', error)
-    return NextResponse.json({ error: 'Failed to update movies', details: error.message }, { status: 500 })
+    return NextResponse.json({ 
+      error: 'Failed to update movies', 
+      details: error instanceof Error ? error.message : String(error) 
+    }, { status: 500 })
   }
 }
 
