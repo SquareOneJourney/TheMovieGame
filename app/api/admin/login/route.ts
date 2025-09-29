@@ -12,21 +12,18 @@ const ADMIN_USERS = [
 
 export async function POST(request: NextRequest) {
   try {
-    // First check if user is authenticated and authorized
-    const { user, error } = await getCurrentUser()
-    
-    if (error || !user) {
-      return NextResponse.json({ error: 'Must be logged in to access admin panel' }, { status: 401 })
+    const { password, userEmail } = await request.json()
+
+    // Check if user email is provided and in admin list
+    if (!userEmail) {
+      return NextResponse.json({ error: 'User email required' }, { status: 400 })
     }
 
-    // Check if user is in admin list
-    const isAdmin = ADMIN_USERS.includes(user.email || '')
+    const isAdmin = ADMIN_USERS.includes(userEmail)
     
     if (!isAdmin) {
       return NextResponse.json({ error: 'Not authorized to access admin panel' }, { status: 403 })
     }
-
-    const { password } = await request.json()
 
     if (password === ADMIN_PASSWORD) {
       // Set admin session cookie (expires in 24 hours)

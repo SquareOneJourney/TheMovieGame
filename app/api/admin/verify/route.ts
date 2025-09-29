@@ -10,20 +10,6 @@ const ADMIN_USERS = [
 
 export async function GET(request: NextRequest) {
   try {
-    // Check if user is authenticated with Supabase
-    const { user, error } = await getCurrentUser()
-    
-    if (error || !user) {
-      return NextResponse.json({ authenticated: false }, { status: 401 })
-    }
-
-    // Check if user is in admin list
-    const isAdmin = ADMIN_USERS.includes(user.email || '')
-    
-    if (!isAdmin) {
-      return NextResponse.json({ authenticated: false, reason: 'Not authorized' }, { status: 403 })
-    }
-
     // Check admin session cookie
     const cookieStore = await cookies()
     const adminAuth = cookieStore.get('admin-auth')

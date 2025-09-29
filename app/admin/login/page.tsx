@@ -1,27 +1,55 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
+import { getCurrentUser } from '@/lib/supabase-auth'
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [user, setUser] = useState<any>(null)
   const router = useRouter()
+
+  useEffect(() => {
+    checkUser()
+  }, [])
+
+  const checkUser = async () => {
+    try {
+      const { user, error } = await getCurrentUser()
+      if (error || !user) {
+        router.push('/')
+        return
+      }
+      setUser(user)
+    } catch (error) {
+      router.push('/')
+    }
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
 
+    if (!user) {
+      setError('Must be logged in to access admin panel')
+      setIsLoading(false)
+      return
+    }
+
     try {
       const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ 
+          password,
+          userEmail: user.email 
+        })
       })
 
       if (response.ok) {
@@ -30,8 +58,8 @@ export default function AdminLogin() {
         const data = await response.json()
         if (response.status === 403) {
           setError('You are not authorized to access the admin panel')
-        } else if (response.status === 401) {
-          setError('Must be logged in to access admin panel')
+        } else if (response.status === 400) {
+          setError('User email required')
         } else {
           setError(data.error || 'Invalid password')
         }

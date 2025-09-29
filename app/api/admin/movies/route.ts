@@ -14,20 +14,6 @@ const ADMIN_USERS = [
 
 // Verify admin authentication
 async function verifyAdmin(request: NextRequest) {
-  // First check if user is authenticated and authorized
-  const { user, error } = await getCurrentUser()
-  
-  if (error || !user) {
-    return false
-  }
-
-  // Check if user is in admin list
-  const isAdmin = ADMIN_USERS.includes(user.email || '')
-  
-  if (!isAdmin) {
-    return false
-  }
-
   // Check admin session cookie
   const cookieStore = await cookies()
   const adminAuth = cookieStore.get('admin-auth')
