@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Scoreboard } from '@/components/Scoreboard'
@@ -128,10 +128,10 @@ export default function GameRoom({ params }: GameRoomProps) {
       socketManager.removeAllListeners()
       socketManager.disconnect()
     }
-  }, [gameId, playerName, showNameInput])
+  }, [gameId, playerName, showNameInput, loadGameFromDatabase])
 
   // Fallback: Load game state from database
-  const loadGameFromDatabase = async () => {
+  const loadGameFromDatabase = useCallback(async () => {
     try {
       const response = await fetch(`/api/games/${gameId}`)
       if (response.ok) {
@@ -151,7 +151,7 @@ export default function GameRoom({ params }: GameRoomProps) {
     } catch (error) {
       console.error("❌ Failed to load game from database:", error)
     }
-  }
+  }, [gameId])
 
   // Polling mechanism for real-time updates when not using sockets
   useEffect(() => {
@@ -162,7 +162,7 @@ export default function GameRoom({ params }: GameRoomProps) {
 
       return () => clearInterval(interval)
     }
-  }, [gameState.players.length, gameState.gameStatus])
+  }, [gameState.players.length, gameState.gameStatus, loadGameFromDatabase])
 
   // Check if current user is the clue giver
   const isMyTurn = Boolean(gameState.currentTurn && gameState.players.some(p => p.id === gameState.currentTurn))

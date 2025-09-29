@@ -38,18 +38,24 @@ model Game {
 }
 
 model Round {
-  id         String   @id @default(cuid())
-  game       Game     @relation(fields: [gameId], references: [id])
-  gameId     String
-  clueGiver  String   // User.id
-  guesser    String   // User.id
-  actor1     String
-  actor2     String
-  movie      String   // correct answer
-  hintActor  String?  // optional hint actor
-  guess      String?
-  outcome    String?  // "correct" or "wrong"
-  createdAt  DateTime @default(now())
+  id            String   @id @default(cuid())
+  game          Game     @relation(fields: [gameId], references: [id])
+  gameId        String
+  clueGiver     String   // User.id
+  guesser       String   // User.id
+  actor1        String
+  actor2        String
+  movie         String   // correct answer
+  poster        String?  // movie poster URL
+  year          String?  // movie year
+  actor1Photo   String?  // actor1 profile photo URL
+  actor2Photo   String?  // actor2 profile photo URL
+  hintActor     String?  // optional hint actor
+  hintActorPhoto String? // hint actor profile photo URL
+  guess         String?
+  outcome       String?  // "correct" or "wrong"
+  hintUsed      Boolean  @default(false)
+  createdAt     DateTime @default(now())
 }
 
 model Movie {
