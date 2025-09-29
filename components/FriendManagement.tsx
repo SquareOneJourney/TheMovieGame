@@ -282,31 +282,32 @@ export default function FriendManagement() {
   return (
     <div className="space-y-6">
       {/* Tabs */}
-      <div className="flex space-x-1 bg-white/10 rounded-lg p-1">
+      <div className="flex flex-wrap sm:flex-nowrap space-x-1 bg-white/10 rounded-lg p-1">
         {[
-          { id: 'search', label: 'Search', icon: Search },
-          { id: 'friends', label: 'Friends', icon: Users },
-          { id: 'requests', label: 'Requests', icon: UserPlus },
-          { id: 'invites', label: 'Game Invites', icon: Mail }
-        ].map(({ id, label, icon: Icon }) => (
+          { id: 'search', label: 'Search', icon: Search, shortLabel: 'Search' },
+          { id: 'friends', label: 'Friends', icon: Users, shortLabel: 'Friends' },
+          { id: 'requests', label: 'Requests', icon: UserPlus, shortLabel: 'Requests' },
+          { id: 'invites', label: 'Game Invites', icon: Mail, shortLabel: 'Invites' }
+        ].map(({ id, label, icon: Icon, shortLabel }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id as any)}
-            className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-md transition-colors ${
+            className={`flex-1 flex items-center justify-center space-x-1 sm:space-x-2 py-2 px-2 sm:px-4 rounded-md transition-colors text-xs sm:text-sm ${
               activeTab === id
                 ? 'bg-blue-600 text-white'
                 : 'text-gray-300 hover:text-white hover:bg-white/10'
             }`}
           >
-            <Icon className="h-4 w-4" />
-            <span>{label}</span>
+            <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">{label}</span>
+            <span className="sm:hidden">{shortLabel}</span>
             {id === 'requests' && friendRequests.length > 0 && (
-              <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1">
+              <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 ml-1">
                 {friendRequests.length}
               </span>
             )}
             {id === 'invites' && gameInvites.length > 0 && (
-              <span className="bg-green-500 text-white text-xs rounded-full px-2 py-1">
+              <span className="bg-green-500 text-white text-xs rounded-full px-1.5 py-0.5 ml-1">
                 {gameInvites.length}
               </span>
             )}

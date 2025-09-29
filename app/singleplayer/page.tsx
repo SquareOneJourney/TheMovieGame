@@ -291,7 +291,7 @@ export default function SinglePlayerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-4 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -305,38 +305,38 @@ export default function SinglePlayerPage() {
             </Link>
             <div className="flex-1"></div>
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2">Ready Player One</h1>
-          <p className="text-gray-300">Challenge Mr. Robot to a movie trivia duel!</p>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">Ready Player One</h1>
+          <p className="text-sm sm:text-base text-gray-300 px-4">Challenge Mr. Robot to a movie trivia duel!</p>
         </div>
 
         {/* Scoreboard */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {/* Player Score */}
           <motion.div
-            className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6"
+            className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4 sm:p-6"
             animate={{ scale: gameState.lastResult?.correct ? 1.05 : 1 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="flex items-center space-x-4">
-              <User className="h-8 w-8 text-blue-400" />
+            <div className="flex items-center space-x-3 sm:space-x-4">
+              <User className="h-6 w-6 sm:h-8 sm:w-8 text-blue-400" />
               <div>
-                <h3 className="text-xl font-bold text-white">You</h3>
-                <p className="text-3xl font-bold text-blue-400">{gameState.playerScore % 1 === 0 ? gameState.playerScore : gameState.playerScore.toFixed(1)}</p>
+                <h3 className="text-lg sm:text-xl font-bold text-white">You</h3>
+                <p className="text-2xl sm:text-3xl font-bold text-blue-400">{gameState.playerScore % 1 === 0 ? gameState.playerScore : gameState.playerScore.toFixed(1)}</p>
               </div>
             </div>
           </motion.div>
 
           {/* Bot Score */}
           <motion.div
-            className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6"
+            className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4 sm:p-6"
             animate={{ scale: gameState.lastResult?.correct === false ? 1.05 : 1 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="flex items-center space-x-4">
-              <Bot className="h-8 w-8 text-red-400" />
+            <div className="flex items-center space-x-3 sm:space-x-4">
+              <Bot className="h-6 w-6 sm:h-8 sm:w-8 text-red-400" />
               <div>
-                <h3 className="text-xl font-bold text-white">Mr. Robot</h3>
-                <p className="text-3xl font-bold text-red-400">{gameState.botScore}</p>
+                <h3 className="text-lg sm:text-xl font-bold text-white">Mr. Robot</h3>
+                <p className="text-2xl sm:text-3xl font-bold text-red-400">{gameState.botScore}</p>
               </div>
             </div>
           </motion.div>

@@ -235,7 +235,7 @@ export default function MultiplayerSubmissionPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-4 sm:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -249,32 +249,35 @@ export default function MultiplayerSubmissionPage() {
             </Link>
             <div className="flex-1"></div>
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2">Create Your Movie Challenge</h1>
-          <p className="text-gray-300">Select a movie and two actors for your opponent to guess!</p>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">Create Your Movie Challenge</h1>
+          <p className="text-sm sm:text-base text-gray-300 px-4">Select a movie and two actors for your opponent to guess!</p>
         </div>
 
         {/* Progress Indicator */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-4">
-            <div className={`flex items-center space-x-2 px-4 py-2 rounded-full ${
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
+            <div className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-full text-sm ${
               selectedMovie ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'
             }`}>
-              <Film className="h-5 w-5" />
-              <span>1. Select Movie</span>
+              <Film className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="hidden sm:inline">1. Select Movie</span>
+              <span className="sm:hidden">1. Movie</span>
             </div>
-            <ArrowRight className="h-5 w-5 text-gray-400" />
-            <div className={`flex items-center space-x-2 px-4 py-2 rounded-full ${
+            <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 hidden sm:block" />
+            <div className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-full text-sm ${
               selectedActors.actor1 && selectedActors.actor2 ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'
             }`}>
-              <Users className="h-5 w-5" />
-              <span>2. Select Actors</span>
+              <Users className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="hidden sm:inline">2. Select Actors</span>
+              <span className="sm:hidden">2. Actors</span>
             </div>
-            <ArrowRight className="h-5 w-5 text-gray-400" />
-            <div className={`flex items-center space-x-2 px-4 py-2 rounded-full ${
+            <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 hidden sm:block" />
+            <div className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-full text-sm ${
               isSubmissionComplete ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'
             }`}>
-              <CheckCircle className="h-5 w-5" />
-              <span>3. Submit</span>
+              <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="hidden sm:inline">3. Submit</span>
+              <span className="sm:hidden">3. Submit</span>
             </div>
           </div>
         </div>
@@ -291,7 +294,7 @@ export default function MultiplayerSubmissionPage() {
           </motion.div>
         )}
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Left Column - Movie Search */}
           <div className="space-y-6">
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6">

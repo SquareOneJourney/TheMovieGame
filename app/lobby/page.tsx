@@ -208,14 +208,14 @@ export default function LobbyPage() {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {/* Main Content */}
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-white mb-4">Game Lobby</h1>
-            <p className="text-xl text-gray-300">Create a new game, join an existing one, or play solo</p>
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Game Lobby</h1>
+            <p className="text-base sm:text-lg lg:text-xl text-gray-300 px-4">Create a new game, join an existing one, or play solo</p>
           </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Create Game */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

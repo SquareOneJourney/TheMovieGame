@@ -109,23 +109,24 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
         </CardHeader>
         <CardContent>
           <div className="text-center space-y-4">
-            <div className="flex items-center justify-center space-x-6 text-lg text-white">
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 text-base sm:text-lg text-white">
               <div className="flex items-center space-x-3">
                 <ActorPhoto 
                   src={clue.actor1Photo} 
                   name={clue.actor1} 
                   size="lg"
                 />
-                <span className="font-bold text-blue-300">{clue.actor1}</span>
+                <span className="font-bold text-blue-300 text-sm sm:text-base">{clue.actor1}</span>
               </div>
-              <span className="text-gray-400">&</span>
+              <span className="text-gray-400 hidden sm:inline">&</span>
+              <span className="text-gray-400 sm:hidden">and</span>
               <div className="flex items-center space-x-3">
                 <ActorPhoto 
                   src={clue.actor2Photo} 
                   name={clue.actor2} 
                   size="lg"
                 />
-                <span className="font-bold text-blue-300">{clue.actor2}</span>
+                <span className="font-bold text-blue-300 text-sm sm:text-base">{clue.actor2}</span>
               </div>
             </div>
             
@@ -227,7 +228,7 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
               />
             </div>
 
-            <div className="flex space-x-3">
+            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
               <motion.div
                 whileHover={isFormValid ? { scale: 1.02 } : {}}
                 whileTap={isFormValid ? { scale: 0.98 } : {}}
@@ -252,54 +253,58 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
                 </Button>
               </motion.div>
 
-              <motion.div
-                whileHover={!disabled && !isSubmitting ? { scale: 1.02 } : {}}
-                whileTap={!disabled && !isSubmitting ? { scale: 0.98 } : {}}
-              >
-                <Button
-                  type="button"
-                  onClick={handleNoIdea}
-                  disabled={disabled || isSubmitting || !onNoIdea}
-                  className="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              <div className="flex space-x-3">
+                <motion.div
+                  whileHover={!disabled && !isSubmitting ? { scale: 1.02 } : {}}
+                  whileTap={!disabled && !isSubmitting ? { scale: 0.98 } : {}}
+                  className="flex-1"
                 >
-                  {isSubmitting ? (
-                    <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Submitting...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <XCircle className="h-4 w-4" />
-                      <span>No Idea</span>
-                    </div>
-                  )}
-                </Button>
-              </motion.div>
+                  <Button
+                    type="button"
+                    onClick={handleNoIdea}
+                    disabled={disabled || isSubmitting || !onNoIdea}
+                    className="w-full bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex items-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Submitting...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center space-x-2">
+                        <XCircle className="h-4 w-4" />
+                        <span className="hidden sm:inline">No Idea</span>
+                        <span className="sm:hidden">Skip</span>
+                      </div>
+                    )}
+                  </Button>
+                </motion.div>
 
-              <motion.div
-                whileHover={!disabled && !isSubmitting && !hintUsed ? { scale: 1.02 } : {}}
-                whileTap={!disabled && !isSubmitting && !hintUsed ? { scale: 0.98 } : {}}
-              >
-                <Button
-                  type="button"
-                  onClick={handleHint}
-                  disabled={disabled || isSubmitting || !onHint || hintUsed}
-                  className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                  title={hintUsed ? "Hint already used" : "Get a hint (costs half a point if correct)"}
+                <motion.div
+                  whileHover={!disabled && !isSubmitting && !hintUsed ? { scale: 1.02 } : {}}
+                  whileTap={!disabled && !isSubmitting && !hintUsed ? { scale: 0.98 } : {}}
                 >
-                  {isSubmitting ? (
-                    <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Submitting...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <span>💡</span>
-                      <span>Hint</span>
-                    </div>
-                  )}
-                </Button>
-              </motion.div>
+                  <Button
+                    type="button"
+                    onClick={handleHint}
+                    disabled={disabled || isSubmitting || !onHint || hintUsed}
+                    className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold py-3 px-3 sm:px-4 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    title={hintUsed ? "Hint already used" : "Get a hint (costs half a point if correct)"}
+                  >
+                    {isSubmitting ? (
+                      <div className="flex items-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Submitting...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center space-x-2">
+                        <span>💡</span>
+                        <span className="hidden sm:inline">Hint</span>
+                      </div>
+                    )}
+                  </Button>
+                </motion.div>
+              </div>
             </div>
 
             {/* Hint Warning */}
