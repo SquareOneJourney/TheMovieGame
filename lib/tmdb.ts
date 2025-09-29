@@ -191,3 +191,10 @@ class TMDBService {
 }
 
 export const tmdbService = new TMDBService();
+
+// Export individual functions for easier use
+export const getMovieDetails = (movieId: number) => tmdbService.getMovieDetails(movieId);
+export const searchMovies = (query: string, page: number = 1) => tmdbService.searchMovies(query, page);
+export const getPopularMovies = (page: number = 1) => tmdbService.getPopularMovies(page);
+export const getRandomMovies = (count: number = 20) => tmdbService.getRandomMovies(count);
+export const getMoviesWithActorPairs = (count: number = 20) => tmdbService.getMoviesWithActorPairs(count);
