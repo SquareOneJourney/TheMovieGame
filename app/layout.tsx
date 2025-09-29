@@ -88,27 +88,27 @@ export default function RootLayout({
         <meta name="theme-color" content="#3b82f6" />
         
         {/* Standard favicon */}
-        <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="48x48" href="/icons/icon-48x48.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/MovieGame Favicon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/MovieGame Favicon.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/MovieGame Favicon.png" />
         
-        {/* For high-DPI (retina) screens */}
-        <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
-        <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png" />
+        {/* For high-DPI (retina) screens) */}
+        <link rel="icon" type="image/png" sizes="192x192" href="/MovieGame Favicon.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/MovieGame Favicon.png" />
         
         {/* Apple devices (bigger icons on home screens) */}
-        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="/icons/icon-120x120.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="/icons/icon-114x114.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="/icons/icon-76x76.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png" />
-        <link rel="apple-touch-icon" sizes="60x60" href="/icons/icon-60x60.png" />
-        <link rel="apple-touch-icon" sizes="57x57" href="/icons/icon-57x57.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/MovieGame Favicon.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/MovieGame Favicon.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/MovieGame Favicon.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/MovieGame Favicon.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/MovieGame Favicon.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/MovieGame Favicon.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/MovieGame Favicon.png" />
+        <link rel="apple-touch-icon" sizes="60x60" href="/MovieGame Favicon.png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/MovieGame Favicon.png" />
         
         {/* Microsoft Tiles */}
-        <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
+        <meta name="msapplication-TileImage" content="/MovieGame Favicon.png" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         
         {/* Manifest */}
