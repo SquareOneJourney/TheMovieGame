@@ -89,6 +89,12 @@ export default function GameRoom({ params }: GameRoomProps) {
 
     // Set up event listeners
     socketManager.onGameUpdate((newGameState) => {
+      console.log("🎮 Game state updated:", {
+        currentTurn: newGameState.currentTurn,
+        currentClue: newGameState.currentClue,
+        gameStatus: newGameState.gameStatus,
+        players: newGameState.players.map(p => ({ name: p.name, score: p.score }))
+      })
       setGameState(newGameState)
       setIsConnected(true)
     })
@@ -195,9 +201,13 @@ export default function GameRoom({ params }: GameRoomProps) {
   const handleGuess = async (guess: string) => {
     const correctMovie = gameState.currentClue?.movie || "The Matrix"
     
+    console.log("🎯 Making guess:", { guess, correctMovie, hintUsed: gameState.hintUsed })
+    
     // Use fuzzy matching instead of exact string comparison
     const matchResult = enhancedFuzzyMatch(guess, correctMovie)
     const isCorrect = matchResult.isMatch
+
+    console.log("🎯 Match result:", { isCorrect, similarity: matchResult.similarity, confidence: matchResult.confidence })
 
     socketManager.guessMovie(
       guess, 

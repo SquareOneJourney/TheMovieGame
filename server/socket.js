@@ -56,12 +56,24 @@ function initSocket(server) {
     });
 
     socket.on("guess_movie", ({ gameId, guess, correctMovie, similarity, confidence, usedHint }) => {
+      console.log("🎯 Guess received:", { gameId, guess, correctMovie, isCorrect: guess.toLowerCase() === correctMovie.toLowerCase() });
+      
       const game = games[gameId];
-      if (!game) return;
+      if (!game) {
+        console.log("❌ Game not found:", gameId);
+        return;
+      }
 
       const clueGiver = game.currentTurn;
       const guesser = game.players.find((p) => p.id !== clueGiver);
       const isCorrect = guess.toLowerCase() === correctMovie.toLowerCase();
+
+      console.log("🎯 Game state before:", {
+        clueGiver,
+        guesser: guesser?.name,
+        isCorrect,
+        currentTurn: game.currentTurn
+      });
 
       // Store result for display
       game.lastResult = {
@@ -78,10 +90,12 @@ function initSocket(server) {
         const pointsToAdd = usedHint ? 0.5 : 1;
         guesser.score += pointsToAdd;
         game.currentTurn = guesser.id; // switch turn
+        console.log("✅ Correct guess! Switched turn to:", guesser.name);
       } else {
         // Wrong guess - clue giver gets 2 points and keeps turn
         const giver = game.players.find((p) => p.id === clueGiver);
         if (giver) giver.score += 2;
+        console.log("❌ Wrong guess! Clue giver keeps turn:", giver?.name);
       }
 
       // Check for winner
@@ -89,11 +103,19 @@ function initSocket(server) {
       if (maxScore >= 10) {
         game.gameStatus = 'finished';
         game.winner = game.players.find(p => p.score >= 10)?.id || null;
+        console.log("🏆 Game finished! Winner:", game.winner);
       }
 
       // Clear the current clue for next round
       game.currentClue = undefined;
       game.hintUsed = false;
+      
+      console.log("🎯 Game state after:", {
+        currentTurn: game.currentTurn,
+        currentClue: game.currentClue,
+        gameStatus: game.gameStatus
+      });
+      
       io.to(gameId).emit("game_update", game);
     });
 

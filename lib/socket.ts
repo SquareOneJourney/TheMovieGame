@@ -13,7 +13,7 @@ class SocketManager {
 
     this.gameId = gameId
     this.socket = io(process.env.NODE_ENV === 'production' 
-      ? 'https://your-domain.com' 
+      ? 'https://the-movie-game.vercel.app' 
       : 'http://localhost:3001'
     )
 
