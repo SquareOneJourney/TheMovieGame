@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { CheckCircle, XCircle, Download, Wifi, WifiOff } from 'lucide-react'
 
 export default function PWATestPage() {
@@ -15,30 +15,7 @@ export default function PWATestPage() {
   const [isOnline, setIsOnline] = useState(true)
   const [installPrompt, setInstallPrompt] = useState<any>(null)
 
-  useEffect(() => {
-    // Check PWA features
-    checkPWAFeatures()
-    
-    // Check online status
-    setIsOnline(navigator.onLine)
-    window.addEventListener('online', () => setIsOnline(true))
-    window.addEventListener('offline', () => setIsOnline(false))
-
-    // Check for install prompt
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault()
-      setInstallPrompt(e)
-    }
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-
-    return () => {
-      window.removeEventListener('online', () => setIsOnline(true))
-      window.removeEventListener('offline', () => setIsOnline(false))
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-    }
-  }, [])
-
-  const checkPWAFeatures = async () => {
+  const checkPWAFeatures = useCallback(async () => {
     const features = { ...pwaFeatures }
 
     // Check Service Worker
@@ -73,7 +50,30 @@ export default function PWATestPage() {
     }
 
     setPwaFeatures(features)
-  }
+  }, [pwaFeatures, installPrompt])
+
+  useEffect(() => {
+    // Check PWA features
+    checkPWAFeatures()
+    
+    // Check online status
+    setIsOnline(navigator.onLine)
+    window.addEventListener('online', () => setIsOnline(true))
+    window.addEventListener('offline', () => setIsOnline(false))
+
+    // Check for install prompt
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault()
+      setInstallPrompt(e)
+    }
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+
+    return () => {
+      window.removeEventListener('online', () => setIsOnline(true))
+      window.removeEventListener('offline', () => setIsOnline(false))
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    }
+  }, [checkPWAFeatures])
 
   const handleInstall = async () => {
     if (!installPrompt) return
@@ -180,14 +180,14 @@ export default function PWATestPage() {
               <ul className="list-disc list-inside space-y-1 ml-4">
                 <li>Look for install button above (if available)</li>
                 <li>Or look for install icon in browser address bar</li>
-                <li>On mobile: "Add to Home Screen" prompt</li>
+                <li>On mobile: &quot;Add to Home Screen&quot; prompt</li>
               </ul>
             </div>
             
             <div>
               <h4 className="font-semibold text-white mb-2">2. Test Offline Mode:</h4>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Click "Test Offline Mode" button above</li>
+                <li>Click &quot;Test Offline Mode&quot; button above</li>
                 <li>Disconnect your internet</li>
                 <li>Go to the main game and try playing</li>
                 <li>App should work without internet!</li>
