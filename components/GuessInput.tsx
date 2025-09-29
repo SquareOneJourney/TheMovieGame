@@ -109,19 +109,6 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
         </CardHeader>
         <CardContent>
           <div className="text-center space-y-4">
-            {/* Movie Poster */}
-            {clue.poster && (
-              <div className="flex justify-center">
-                <Image 
-                  src={clue.poster} 
-                  alt="Movie poster"
-                  width={96}
-                  height={144}
-                  className="w-24 h-36 object-cover rounded-lg shadow-lg"
-                />
-              </div>
-            )}
-            
             <div className="flex items-center justify-center space-x-6 text-lg text-white">
               <div className="flex items-center space-x-3">
                 <ActorPhoto 

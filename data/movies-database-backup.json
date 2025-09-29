@@ -3026,14 +3026,14 @@
   },
   {
     "actor1": "Adam Sandler",
-    "actor2": "Christine Taylor",
+    "actor2": "Drew Barrymore",
     "movie": "The Wedding Singer",
     "year": "1998",
     "poster": "https://image.tmdb.org/t/p/w500/zVvyTrcZQb7kC2DPDzyo25WcxXp.jpg",
-    "hintActor": "Drew Barrymore",
+    "hintActor": "Christine Taylor",
     "actor1Photo": "https://image.tmdb.org/t/p/w185/iTMnXrPfC1rmom6a9q4hy6YSJWG.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/81jveproLhJzWHpCuJh7hN65zRl.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/9xMu2GLC5otUcC11sEWC5aEAERQ.jpg"
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/9xMu2GLC5otUcC11sEWC5aEAERQ.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/81jveproLhJzWHpCuJh7hN65zRl.jpg"
   },
   {
     "actor1": "Adam Sandler",

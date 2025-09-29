@@ -21,9 +21,9 @@ const MAINSTREAM_GENRES = [
   '36' // History
 ];
 
-// Year ranges with weights
+// Year ranges with weights (only released movies)
 const YEAR_RANGES = [
-  { gte: '2020', lte: '2025', name: 'Recent', weight: 3 },
+  { gte: '2020', lte: '2024', name: 'Recent', weight: 3 },
   { gte: '2010', lte: '2019', name: '2010s', weight: 3 },
   { gte: '2000', lte: '2009', name: '2000s', weight: 2 },
   { gte: '1990', lte: '1999', name: '1990s', weight: 2 },
@@ -89,11 +89,11 @@ async function fetchMovies() {
     }
   }
   
-  // Also fetch from popular sources
+  // Also fetch from popular sources - get more movies
   const additionalSources = [
-    { url: '/movie/popular', pages: 5 },
-    { url: '/movie/top_rated', pages: 3 },
-    { url: '/movie/now_playing', pages: 2 }
+    { url: '/movie/popular', pages: 20 },
+    { url: '/movie/top_rated', pages: 20 },
+    { url: '/movie/now_playing', pages: 10 }
   ];
   
   for (const source of additionalSources) {
@@ -120,8 +120,8 @@ async function fetchMovies() {
 async function processMoviesWithCast(movies) {
   console.log('🎭 Processing movies with cast data...');
   const gameMovies = [];
-  const maxMovies = Math.min(100, movies.length);
-  const targetCount = 50;
+  const maxMovies = Math.min(500, movies.length);
+  const targetCount = 200;
   
   for (let i = 0; i < maxMovies && gameMovies.length < targetCount; i++) {
     const movie = movies[i];
@@ -129,10 +129,17 @@ async function processMoviesWithCast(movies) {
       const details = await fetchFromTMDB(`/movie/${movie.id}?append_to_response=credits`);
       const cast = details.credits?.cast || details.cast || [];
       
-      // Filter movies from 1980 onwards
+      // Filter movies from 1980 onwards and exclude future movies
       const releaseYear = details.release_date ? new Date(details.release_date).getFullYear() : 0;
+      const currentYear = new Date().getFullYear();
+      
       if (releaseYear < 1980) {
         console.log(`⚠️ Skipped ${details.title}: Too old (${releaseYear})`);
+        continue;
+      }
+      
+      if (releaseYear > currentYear) {
+        console.log(`⚠️ Skipped ${details.title}: Future release (${releaseYear})`);
         continue;
       }
       
@@ -158,6 +165,7 @@ async function processMoviesWithCast(movies) {
           actor2: mainActors[1].name,
           movie: details.title,
           year: details.release_date ? new Date(details.release_date).getFullYear().toString() : undefined,
+          poster: details.poster_path ? `https://image.tmdb.org/t/p/w500${details.poster_path}` : undefined,
           hintActor: hintActor?.name,
           actor1Photo: mainActors[0].profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[0].profile_path}` : undefined,
           actor2Photo: mainActors[1].profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[1].profile_path}` : undefined,

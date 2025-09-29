@@ -45,6 +45,7 @@ export interface GameMovie {
   actor1Photo?: string; // Actor 1 profile image URL
   actor2Photo?: string; // Actor 2 profile image URL
   hintActorPhoto?: string; // Hint actor profile image URL
+  tmdbId?: string; // TMDB movie ID for fetching additional data
 }
 
 class TMDBService {

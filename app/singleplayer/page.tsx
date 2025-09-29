@@ -241,7 +241,7 @@ export default function SinglePlayerPage() {
             </Link>
             <div className="flex-1"></div>
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2">Single Player Mode</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">Ready Player One</h1>
           <p className="text-gray-300">Challenge the AI bot to a movie trivia duel!</p>
         </div>
 
@@ -271,7 +271,7 @@ export default function SinglePlayerPage() {
             <div className="flex items-center space-x-4">
               <Bot className="h-8 w-8 text-red-400" />
               <div>
-                <h3 className="text-xl font-bold text-white">AI Bot</h3>
+                <h3 className="text-xl font-bold text-white">Mrs. Doubtfire</h3>
                 <p className="text-3xl font-bold text-red-400">{gameState.botScore}</p>
               </div>
             </div>
@@ -325,7 +325,7 @@ export default function SinglePlayerPage() {
                   <Crown className="h-16 w-16 text-yellow-400 mx-auto" />
                 </div>
                 <h2 className="text-4xl font-bold text-yellow-400 mb-4">
-                  🎉 You&apos;re the King of Movie Town! 🎉
+                  🎉 You&apos;re the King of the World! 🎉
                 </h2>
                 <p className="text-xl text-white mb-6">
                   You beat the AI bot {gameState.playerScore % 1 === 0 ? gameState.playerScore : gameState.playerScore.toFixed(1)} to {gameState.botScore}!
@@ -335,7 +335,7 @@ export default function SinglePlayerPage() {
               <div>
                 <Trophy className="h-16 w-16 text-red-400 mx-auto mb-4" />
                 <h2 className="text-4xl font-bold text-red-400 mb-4">
-                  🤖 AI Bot Wins! 🤖
+                  🤖 Mrs. Doubtfire Wins! 🤖
                 </h2>
                 <p className="text-xl text-white mb-6">
                   The bot beat you {gameState.botScore} to {gameState.playerScore % 1 === 0 ? gameState.playerScore : gameState.playerScore.toFixed(1)}!
