@@ -337,6 +337,31 @@ export default function GameRoom({ params }: GameRoomProps) {
           </motion.div>
         )}
 
+        {/* Round Transition Notification */}
+        {gameState.players.length === 2 && gameState.gameStatus === 'playing' && !gameState.currentClue && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <Card className="bg-gradient-to-r from-green-500/20 to-blue-500/20 border-green-400">
+              <CardContent className="p-4 text-center">
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+                  <h3 className="text-lg font-bold text-white">New Round!</h3>
+                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+                </div>
+                <p className="text-gray-300">
+                  {isMyTurn 
+                    ? "🎬 It's your turn to give a clue! Think of a movie and select two actors."
+                    : `⏳ Waiting for ${currentPlayer?.name} to give their clue...`
+                  }
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
         {/* Game Content */}
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Left Column - Scoreboard */}
@@ -436,9 +461,14 @@ export default function GameRoom({ params }: GameRoomProps) {
                           <h3 className="text-xl font-bold text-white mb-2">
                             Waiting for {currentPlayer?.name}
                           </h3>
-                          <p className="text-gray-300">
-                            They&apos;re thinking of a movie and will give you two actors...
+                          <p className="text-gray-300 mb-3">
+                            It&apos;s their turn to give a clue! They need to:
                           </p>
+                          <div className="text-sm text-gray-300 space-y-1">
+                            <p>1. Think of a movie</p>
+                            <p>2. Select two actors from that movie</p>
+                            <p>3. Give the clue to you</p>
+                          </div>
                         </CardContent>
                       </Card>
                     </motion.div>

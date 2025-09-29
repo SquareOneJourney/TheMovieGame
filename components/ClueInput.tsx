@@ -49,8 +49,11 @@ export function ClueInput({ onGiveClue, disabled = false }: ClueInputProps) {
         <CardHeader>
           <CardTitle className="text-white text-center flex items-center justify-center space-x-2">
             <Film className="h-6 w-6" />
-            <span>Give Your Clue</span>
+            <span>🎬 Your Turn - Give a Clue!</span>
           </CardTitle>
+          <p className="text-center text-gray-300 text-sm mt-2">
+            Think of a movie and provide two actors from it
+          </p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

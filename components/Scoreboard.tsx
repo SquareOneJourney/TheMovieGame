@@ -91,7 +91,7 @@ export function Scoreboard({ players, currentTurn, winningScore = 10 }: Scoreboa
                           )}
                         </h3>
                         <p className="text-sm text-gray-300">
-                          {isCurrentTurn ? 'Giving clues' : 'Waiting to guess'}
+                          {isCurrentTurn ? '🎬 Give a clue (select 2 actors)' : '⏳ Waiting to guess'}
                         </p>
                       </div>
                     </div>
