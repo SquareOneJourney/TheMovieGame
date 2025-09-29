@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 // Accept or decline a friend request
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getAuthSession()
@@ -22,7 +22,7 @@ export async function PATCH(
       }, { status: 400 })
     }
 
-    const requestId = params.id
+    const { id: requestId } = await params
 
     // Find the friend request
     const friendRequest = await prisma.friendRequest.findUnique({
@@ -67,7 +67,7 @@ export async function PATCH(
 
     if (action === 'accept') {
       // Accept the friend request
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx: any) => {
         // Update the friend request status
         await tx.friendRequest.update({
           where: { id: requestId },
@@ -113,7 +113,7 @@ export async function PATCH(
 // Delete a friend request (cancel sent request)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getAuthSession()
@@ -122,7 +122,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const requestId = params.id
+    const { id: requestId } = await params
 
     // Find the friend request
     const friendRequest = await prisma.friendRequest.findUnique({

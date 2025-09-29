@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 // Accept or decline a game invite
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getAuthSession()
@@ -22,7 +22,7 @@ export async function PATCH(
       }, { status: 400 })
     }
 
-    const inviteId = params.id
+    const { id: inviteId } = await params
 
     // Find the game invite
     const gameInvite = await prisma.gameInvite.findUnique({
@@ -86,7 +86,7 @@ export async function PATCH(
       }
 
       // Accept the game invite
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx: any) => {
         // Update the game invite status
         await tx.gameInvite.update({
           where: { id: inviteId },
@@ -144,7 +144,7 @@ export async function PATCH(
 // Delete a game invite (cancel sent invite)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getAuthSession()
@@ -153,7 +153,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const inviteId = params.id
+    const { id: inviteId } = await params
 
     // Find the game invite
     const gameInvite = await prisma.gameInvite.findUnique({

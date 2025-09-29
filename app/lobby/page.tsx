@@ -189,14 +189,16 @@ export default function LobbyPage() {
                 </span>
               </div>
               
-              {/* Admin Panel Link */}
-              <Link
-                href="/admin"
-                className="inline-flex items-center text-white hover:text-gray-300 text-sm transition-colors duration-200 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 hover:bg-white/20"
-              >
-                <Settings className="w-4 h-4 mr-2" />
-                Admin Panel
-              </Link>
+              {/* Admin Panel Link - Only for bdavis241@outlook.com */}
+              {user?.email === 'bdavis241@outlook.com' && (
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center text-white hover:text-gray-300 text-sm transition-colors duration-200 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 hover:bg-white/20"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Admin Panel
+                </Link>
+              )}
               
               <Button
                 onClick={handleSignOut}

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user is a player in the game
-    const isPlayer = game.players.some(player => player.id === session.user.id)
+    const isPlayer = game.players.some((player: any) => player.id === session.user.id)
     if (!isPlayer) {
       return NextResponse.json({ 
         error: 'You must be a player in the game to send invites' 

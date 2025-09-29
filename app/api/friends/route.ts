@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Transform the data to get just the friend info
-    const friends = friendships.map(friendship => {
+    const friends = friendships.map((friendship: any) => {
       const friend = friendship.user1Id === session.user.id 
         ? friendship.user2 
         : friendship.user1

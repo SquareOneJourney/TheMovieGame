@@ -87,6 +87,18 @@ export default function Home() {
                   Welcome, {user.user_metadata?.name || user.email}!
                 </span>
               </div>
+              
+              {/* Admin Panel Link - Only for bdavis241@outlook.com */}
+              {user.email === 'bdavis241@outlook.com' && (
+                <a
+                  href="/admin"
+                  className="inline-flex items-center text-white hover:text-gray-300 text-sm transition-colors duration-200 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 hover:bg-white/20"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Admin
+                </a>
+              )}
+              
               <Button
                 onClick={handleSignOut}
                 variant="outline"
@@ -189,22 +201,15 @@ export default function Home() {
           </a>
         </div>
         
-        {/* Admin and Lobby Links - Only show for authenticated users */}
+        {/* Lobby Link - Only show for authenticated users */}
         {user && (
-          <div className="text-center mt-4 space-x-6">
+          <div className="text-center mt-4">
             <a
               href="/lobby"
               className="inline-flex items-center text-gray-300 hover:text-white text-sm transition-colors duration-200"
             >
               <Users className="w-4 h-4 mr-2" />
               Game Lobby
-            </a>
-            <a
-              href="/admin"
-              className="inline-flex items-center text-gray-300 hover:text-white text-sm transition-colors duration-200"
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Admin Panel
             </a>
           </div>
         )}
