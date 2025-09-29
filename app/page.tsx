@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { LogOut, User, Play, Users } from 'lucide-react'
+import { LogOut, User, Play, Users, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import SimpleLoginForm from '@/components/SimpleLoginForm'
@@ -181,6 +181,17 @@ export default function Home() {
           >
             <Users className="inline h-6 w-6 mr-2" />
             Multiplayer {!user && "(Login Required)"}
+          </a>
+        </div>
+        
+        {/* Admin Link */}
+        <div className="text-center mt-4">
+          <a
+            href="/admin"
+            className="inline-flex items-center text-gray-300 hover:text-white text-sm transition-colors duration-200"
+          >
+            <Settings className="w-4 h-4 mr-2" />
+            Admin Panel
           </a>
         </div>
         </div>
