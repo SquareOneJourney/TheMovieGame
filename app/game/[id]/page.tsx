@@ -83,21 +83,28 @@ export default function GameRoom({ params }: GameRoomProps) {
     }
   }
 
-  // Fallback: Load game state from database
+  // Load game state from database (with mock multiplayer support)
   const loadGameFromDatabase = useCallback(async () => {
     try {
       const response = await fetch(`/api/games/${gameId}`)
       if (response.ok) {
         const gameData = await response.json()
-        setGameState({
-          players: gameData.players || [],
-          currentTurn: gameData.currentTurn,
+        
+        // Create mock multiplayer game state
+        const mockGameState = {
+          players: [
+            { id: 'player1', name: 'Player 1', score: 0 },
+            { id: 'player2', name: playerName || 'Player 2', score: 0 }
+          ],
+          currentTurn: 'player1',
           currentClue: gameData.currentClue,
-          gameStatus: gameData.gameStatus,
-          winner: gameData.winner,
+          gameStatus: 'playing' as const,
+          winner: null,
           hintUsed: false,
           lastResult: gameData.lastResult
-        })
+        }
+        
+        setGameState(mockGameState)
         setIsConnected(true)
       } else {
         console.error('Failed to load game from database')
@@ -105,65 +112,28 @@ export default function GameRoom({ params }: GameRoomProps) {
     } catch (error) {
       console.error('Error loading game from database:', error)
     }
-  }, [gameId])
+  }, [gameId, playerName])
 
-  // Initialize socket connection with fallback
+  // Initialize game connection (API-only mode)
   useEffect(() => {
     if (!playerName || showNameInput) return
 
-    // Try socket connection first
-    const connectWithFallback = async () => {
-      try {
-        // Set up event listeners
-        socketManager.onGameUpdate((newGameState) => {
-          console.log("🎮 Game state updated:", {
-            currentTurn: newGameState.currentTurn,
-            currentClue: newGameState.currentClue,
-            gameStatus: newGameState.gameStatus,
-            players: newGameState.players.map((p: any) => ({ name: p.name, score: p.score }))
-          })
-          setGameState(newGameState)
-          setIsConnected(true)
-        })
+    // Use API-only mode (no WebSocket)
+    console.log("🎮 Using API-only mode for multiplayer game")
+    loadGameFromDatabase()
+    setIsConnected(true)
 
-        socketManager.onClueGiven((clue) => {
-          setGameState(prev => ({ ...prev, currentClue: clue }))
-        })
-
-        // Test connection
-        setTimeout(() => {
-          if (!socketManager.isConnected()) {
-            console.log("⚠️ Socket connection failed, using fallback mode")
-            // Fallback: Load game state from database
-            loadGameFromDatabase()
-          }
-        }, 2000)
-
-      } catch (error) {
-        console.log("⚠️ Socket connection error, using fallback mode:", error)
-        loadGameFromDatabase()
-      }
-    }
-
-    connectWithFallback()
+    // Set up polling for real-time updates
+    const pollInterval = setInterval(() => {
+      loadGameFromDatabase()
+    }, 2000) // Poll every 2 seconds
 
     // Cleanup on unmount
     return () => {
-      socketManager.removeAllListeners()
-      socketManager.disconnect()
+      clearInterval(pollInterval)
     }
   }, [gameId, playerName, showNameInput, loadGameFromDatabase])
 
-  // Polling mechanism for real-time updates when not using sockets
-  useEffect(() => {
-    if (!socketManager.isConnected() && gameState.players.length === 2 && gameState.gameStatus === 'playing') {
-      const interval = setInterval(() => {
-        loadGameFromDatabase()
-      }, 2000) // Poll every 2 seconds
-
-      return () => clearInterval(interval)
-    }
-  }, [gameState.players.length, gameState.gameStatus, loadGameFromDatabase])
 
   // Check if current user is the clue giver
   const isMyTurn = Boolean(gameState.currentTurn && gameState.players.some((p: any) => p.id === gameState.currentTurn))
@@ -196,33 +166,18 @@ export default function GameRoom({ params }: GameRoomProps) {
           }
         }))
         
-        // Try socket first, fallback to API
-        if (socketManager.isConnected()) {
-          socketManager.giveClue(
-            actor1, 
-            actor2, 
-            movie.title,
-            movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
-            movie.release_date ? new Date(movie.release_date).getFullYear().toString() : undefined,
-            actors.actor1?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.actor1.profile_path}` : undefined,
-            actors.actor2?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.actor2.profile_path}` : undefined,
-            actors.hintActor?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.hintActor.profile_path}` : undefined,
-            actors.hintActor?.name
-          )
-        } else {
-          // Fallback: Use API
-          await submitClueViaAPI({
-            actor1,
-            actor2,
-            movie: movie.title,
-            poster: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
-            year: movie.release_date ? new Date(movie.release_date).getFullYear().toString() : undefined,
-            actor1Photo: actors.actor1?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.actor1.profile_path}` : undefined,
-            actor2Photo: actors.actor2?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.actor2.profile_path}` : undefined,
-            hintActorPhoto: actors.hintActor?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.hintActor.profile_path}` : undefined,
-            hintActor: actors.hintActor?.name
-          })
-        }
+        // Use API for clue submission
+        await submitClueViaAPI({
+          actor1,
+          actor2,
+          movie: movie.title,
+          poster: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
+          year: movie.release_date ? new Date(movie.release_date).getFullYear().toString() : undefined,
+          actor1Photo: actors.actor1?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.actor1.profile_path}` : undefined,
+          actor2Photo: actors.actor2?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.actor2.profile_path}` : undefined,
+          hintActorPhoto: actors.hintActor?.profile_path ? `https://image.tmdb.org/t/p/w185${actors.hintActor.profile_path}` : undefined,
+          hintActor: actors.hintActor?.name
+        })
       } else {
         // Fallback to random movie if no submission found
         const randomMovie = await movieService.getSingleRandomMovie()
@@ -242,33 +197,18 @@ export default function GameRoom({ params }: GameRoomProps) {
           }
         }))
         
-        // Try socket first, fallback to API
-        if (socketManager.isConnected()) {
-          socketManager.giveClue(
-            actor1, 
-            actor2, 
-            randomMovie.movie, 
-            randomMovie.poster, 
-            randomMovie.year,
-            randomMovie.actor1Photo,
-            randomMovie.actor2Photo,
-            randomMovie.hintActorPhoto,
-            randomMovie.hintActor
-          )
-        } else {
-          // Fallback: Use API
-          await submitClueViaAPI({
-            actor1,
-            actor2,
-            movie: randomMovie.movie,
-            poster: randomMovie.poster,
-            year: randomMovie.year,
-            actor1Photo: randomMovie.actor1Photo,
-            actor2Photo: randomMovie.actor2Photo,
-            hintActorPhoto: randomMovie.hintActorPhoto,
-            hintActor: randomMovie.hintActor
-          })
-        }
+        // Use API for clue submission
+        await submitClueViaAPI({
+          actor1,
+          actor2,
+          movie: randomMovie.movie,
+          poster: randomMovie.poster,
+          year: randomMovie.year,
+          actor1Photo: randomMovie.actor1Photo,
+          actor2Photo: randomMovie.actor2Photo,
+          hintActorPhoto: randomMovie.hintActorPhoto,
+          hintActor: randomMovie.hintActor
+        })
       }
     } catch (error) {
       console.error('Error getting movie data:', error)
@@ -281,15 +221,11 @@ export default function GameRoom({ params }: GameRoomProps) {
           movie: "The Matrix"
         }
       }))
-      if (socketManager.isConnected()) {
-        socketManager.giveClue(actor1, actor2)
-      } else {
-        await submitClueViaAPI({
-          actor1,
-          actor2,
-          movie: "The Matrix"
-        })
-      }
+      await submitClueViaAPI({
+        actor1,
+        actor2,
+        movie: "The Matrix"
+      })
     }
   }
 
@@ -304,19 +240,8 @@ export default function GameRoom({ params }: GameRoomProps) {
 
     console.log("🎯 Match result:", { isCorrect, similarity: matchResult.similarity, confidence: matchResult.confidence })
 
-    // Try socket first, fallback to API
-    if (socketManager.isConnected()) {
-      socketManager.guessMovie(
-        guess, 
-        correctMovie, 
-        matchResult.similarity, 
-        matchResult.confidence, 
-        gameState.hintUsed
-      )
-    } else {
-      // Fallback: Use API
-      await submitGuessViaAPI(guess, isCorrect)
-    }
+    // Use API for guess submission
+    await submitGuessViaAPI(guess, isCorrect)
   }
 
   const submitGuessViaAPI = async (guess: string, isCorrect: boolean) => {
@@ -363,23 +288,29 @@ export default function GameRoom({ params }: GameRoomProps) {
   const handleNoIdea = async () => {
     const correctMovie = gameState.currentClue?.movie || "The Matrix"
     
-    socketManager.guessMovie("No Idea", correctMovie, 0, 'none', gameState.hintUsed)
+    await submitGuessViaAPI("No Idea", false)
   }
 
   const handleHint = async () => {
     if (!gameState.currentClue || gameState.hintUsed) return
     
-    socketManager.useHint()
     setGameState(prev => ({ ...prev, hintUsed: true }))
   }
 
   const handleLeaveGame = () => {
-    socketManager.disconnect()
     router.push('/')
   }
 
   const handleResetGame = () => {
-    socketManager.resetGame()
+    // Reset game state locally
+    setGameState(prev => ({
+      ...prev,
+      currentClue: undefined,
+      gameStatus: 'playing',
+      winner: null,
+      hintUsed: false,
+      lastResult: undefined
+    }))
   }
 
   // Show loading while gameId is being resolved

@@ -310,7 +310,7 @@ export default function SinglePlayerPage() {
         </div>
 
         {/* Scoreboard */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
           {/* Player Score */}
           <motion.div
             className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4 sm:p-6"
@@ -344,7 +344,7 @@ export default function SinglePlayerPage() {
 
         {/* Game Content */}
         {gameState.gameStatus === 'playing' ? (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4">
             {/* Current Clue */}
             {gameState.currentMovie && (
               <GuessInput

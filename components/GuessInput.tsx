@@ -98,17 +98,17 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="space-y-4"
+      className="space-y-2 sm:space-y-3"
     >
       {/* Current Clue Display */}
       <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-        <CardHeader>
-          <CardTitle className="text-white text-center">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-white text-center text-lg">
             🎬 Movie Clue 🎬
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-center space-y-4">
+        <CardContent className="pt-3">
+          <div className="text-center space-y-3">
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 text-base sm:text-lg text-white">
               <div className="flex items-center space-x-3">
                 <ActorPhoto 
@@ -203,14 +203,14 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
 
       {/* Guess Input Form */}
       <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-        <CardHeader>
-          <CardTitle className="text-white text-center flex items-center justify-center space-x-2">
-            <Search className="h-6 w-6" />
+        <CardHeader className="pb-3">
+          <CardTitle className="text-white text-center flex items-center justify-center space-x-2 text-lg">
+            <Search className="h-5 w-5" />
             <span>Make Your Guess</span>
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <CardContent className="pt-3">
+          <form onSubmit={handleSubmit} className="space-y-3">
             <div>
               <label htmlFor="guess" className="block text-sm font-medium text-gray-300 mb-2">
                 Movie Title
