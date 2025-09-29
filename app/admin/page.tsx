@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
@@ -157,9 +158,11 @@ export default function AdminDashboard() {
                       <p className="text-sm text-gray-600">Actor 1</p>
                       <p className="font-medium">{movie.actor1}</p>
                       {movie.actor1Photo && (
-                        <img 
+                        <Image 
                           src={movie.actor1Photo} 
                           alt={movie.actor1}
+                          width={48}
+                          height={48}
                           className="w-12 h-12 rounded-full object-cover mt-2"
                         />
                       )}
@@ -168,9 +171,11 @@ export default function AdminDashboard() {
                       <p className="text-sm text-gray-600">Actor 2</p>
                       <p className="font-medium">{movie.actor2}</p>
                       {movie.actor2Photo && (
-                        <img 
+                        <Image 
                           src={movie.actor2Photo} 
                           alt={movie.actor2}
+                          width={48}
+                          height={48}
                           className="w-12 h-12 rounded-full object-cover mt-2"
                         />
                       )}

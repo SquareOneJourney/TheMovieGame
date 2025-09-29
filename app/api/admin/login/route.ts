@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 
     if (password === ADMIN_PASSWORD) {
       // Set admin session cookie (expires in 24 hours)
-      const cookieStore = cookies()
+      const cookieStore = await cookies()
       cookieStore.set('admin-auth', 'true', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

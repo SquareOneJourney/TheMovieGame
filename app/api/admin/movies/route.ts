@@ -6,15 +6,15 @@ import path from 'path'
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123'
 
 // Verify admin authentication
-function verifyAdmin(request: NextRequest) {
-  const cookieStore = cookies()
+async function verifyAdmin(request: NextRequest) {
+  const cookieStore = await cookies()
   const adminAuth = cookieStore.get('admin-auth')
   return adminAuth?.value === 'true'
 }
 
 // Get movies from database
 export async function GET(request: NextRequest) {
-  if (!verifyAdmin(request)) {
+  if (!(await verifyAdmin(request))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
 // Update movies in database
 export async function PUT(request: NextRequest) {
-  if (!verifyAdmin(request)) {
+  if (!(await verifyAdmin(request))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
