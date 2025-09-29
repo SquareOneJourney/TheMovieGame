@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Crown, Bot, User, Trophy, Home } from 'lucide-react'
 import { movieService, GameMovie } from '@/lib/movieService'
@@ -42,6 +42,9 @@ export default function SinglePlayerPage() {
   const [movies, setMovies] = useState<GameMovie[]>([])
   const [usedMovies, setUsedMovies] = useState<Set<number>>(new Set())
   const [isLoading, setIsLoading] = useState(true)
+  
+  // Use refs to manage timeouts properly in production
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // Load movies from TMDB API with fallback to static data
   useEffect(() => {
@@ -79,6 +82,15 @@ export default function SinglePlayerPage() {
     loadMovies()
   }, [])
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
   const handleGuess = (guessText: string) => {
     if (!gameState.currentMovie || !guessText.trim()) return
 
@@ -108,8 +120,13 @@ export default function SinglePlayerPage() {
       }
     })
 
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
     // Check for winner and move to next movie after delay
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setGameState(prev => {
         if (prev.playerScore >= 10 || prev.botScore >= 10) {
           return {
@@ -151,8 +168,13 @@ export default function SinglePlayerPage() {
       botScore: prev.botScore + 1
     }))
 
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
     // Check for winner and move to next movie after delay
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setGameState(prev => {
         if (prev.botScore >= 10) {
           return {
@@ -242,7 +264,7 @@ export default function SinglePlayerPage() {
             <div className="flex-1"></div>
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">Ready Player One</h1>
-          <p className="text-gray-300">Challenge the AI bot to a movie trivia duel!</p>
+          <p className="text-gray-300">Challenge Mrs. Doubtfire to a movie trivia duel!</p>
         </div>
 
         {/* Scoreboard */}
