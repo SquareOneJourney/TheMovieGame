@@ -265,10 +265,11 @@ export default function LobbyPage() {
                 <div className="space-y-4">
                   <Input
                     type="text"
-                    placeholder="Enter game code (e.g., game_1759124053750_4v1vin48f)"
+                    placeholder="Enter game code (e.g., ABC123)"
                     value={gameCode}
-                    onChange={(e) => setGameCode(e.target.value)}
+                    onChange={(e) => setGameCode(e.target.value.toUpperCase())}
                     className="w-full bg-white/20 border-white/30 text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-500"
+                    maxLength={6}
                   />
                   
                   <Button

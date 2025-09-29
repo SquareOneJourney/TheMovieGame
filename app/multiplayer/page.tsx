@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Users, Film, Star, ArrowRight, Home, CheckCircle, AlertCircle } from 'lucide-react'
+import { Search, Users, Film, Star, ArrowRight, Home, CheckCircle, AlertCircle, Check, Copy } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { tmdbService, TMDBMovie, TMDBCastMember } from '@/lib/tmdb'
@@ -36,6 +36,9 @@ export default function MultiplayerSubmissionPage() {
   const [isSearching, setIsSearching] = useState(false)
   const [isLoadingCast, setIsLoadingCast] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showGameCodeModal, setShowGameCodeModal] = useState(false)
+  const [gameCode, setGameCode] = useState('')
+  const [copied, setCopied] = useState(false)
 
   // Debounced search function
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -146,11 +149,9 @@ export default function MultiplayerSubmissionPage() {
       const data = await response.json()
 
       if (data.success) {
-        // Show success message with game ID
-        alert(`Game created! Your game ID is: ${data.game.id}\n\nShare this ID with your friend to let them join the game.`)
-        
-        // Redirect to the game room
-        window.location.href = `/game/${data.game.id}`
+        // Show success modal with game code
+        setShowGameCodeModal(true)
+        setGameCode(data.game.id)
       } else {
         alert(`Error creating game: ${data.error}`)
       }
@@ -172,6 +173,16 @@ export default function MultiplayerSubmissionPage() {
       hintActor: null
     })
     setError(null)
+  }
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(gameCode)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleStartGame = () => {
+    window.location.href = `/game/${gameCode}`
   }
 
   return (
@@ -559,6 +570,60 @@ export default function MultiplayerSubmissionPage() {
           </div>
         </div>
       </div>
+
+      {/* Game Code Modal */}
+      {showGameCodeModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-8 max-w-md w-full"
+          >
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-8 w-8 text-green-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-4">Game Created!</h2>
+              <p className="text-gray-300 mb-6">Share this code with your friend to let them join:</p>
+              
+              <div className="bg-white/20 border border-white/30 rounded-lg p-4 mb-6">
+                <div className="text-3xl font-bold text-white tracking-wider mb-2">{gameCode}</div>
+                <button
+                  onClick={handleCopyCode}
+                  className="text-blue-400 hover:text-blue-300 text-sm flex items-center justify-center space-x-2 mx-auto"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="h-4 w-4" />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4" />
+                      <span>Copy Code</span>
+                    </>
+                  )}
+                </button>
+              </div>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowGameCodeModal(false)}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={handleStartGame}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                >
+                  Start Game
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
     </ProtectedRoute>
   )

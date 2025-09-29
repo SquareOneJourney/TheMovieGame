@@ -51,8 +51,17 @@ export async function POST(request: NextRequest) {
       hintActor: actors.hintActor ? actors.hintActor.trim() : null
     }
 
-    // Generate a mock game ID
-    const gameId = `game_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    // Generate a short, user-friendly game code (6 characters)
+    const generateGameCode = () => {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+      let result = ''
+      for (let i = 0; i < 6; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length))
+      }
+      return result
+    }
+    
+    const gameId = generateGameCode()
 
     // Return mock game data
     return NextResponse.json({
