@@ -18,7 +18,14 @@ export default function PWATestPage() {
 
   const checkPWAFeatures = useCallback(async () => {
     console.log('PWA Test: Checking PWA features...')
-    const features = { ...pwaFeatures }
+    const features = {
+      serviceWorker: false,
+      installable: false,
+      offline: false,
+      manifest: false,
+      cache: false,
+      manifestData: null as any
+    }
 
     // Check Service Worker
     if ('serviceWorker' in navigator) {
@@ -69,10 +76,10 @@ export default function PWATestPage() {
 
     console.log('PWA Test: Final features status:', features)
     setPwaFeatures(features)
-  }, [pwaFeatures, installPrompt])
+  }, [installPrompt]) // Removed pwaFeatures from dependencies
 
   useEffect(() => {
-    // Check PWA features
+    // Check PWA features once on mount
     checkPWAFeatures()
     
     // Check online status
@@ -87,13 +94,18 @@ export default function PWATestPage() {
     }
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
 
-    // Listen for PWA features updates
+    // Listen for PWA features updates with debounce
+    let timeoutId: NodeJS.Timeout
     const handlePWAFeaturesUpdate = () => {
-      checkPWAFeatures()
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        checkPWAFeatures()
+      }, 1000) // Debounce by 1 second
     }
     window.addEventListener('pwa-features-updated', handlePWAFeaturesUpdate)
 
     return () => {
+      clearTimeout(timeoutId)
       window.removeEventListener('online', () => setIsOnline(true))
       window.removeEventListener('offline', () => setIsOnline(false))
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
@@ -172,6 +184,12 @@ export default function PWATestPage() {
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6">
             <h3 className="text-xl font-bold text-white mb-4">Installation</h3>
             <div className="space-y-4">
+              <button
+                onClick={checkPWAFeatures}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+              >
+                🔄 Refresh PWA Status
+              </button>
               {installPrompt ? (
                 <button
                   onClick={handleInstall}
