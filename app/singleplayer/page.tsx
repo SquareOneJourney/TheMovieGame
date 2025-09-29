@@ -127,8 +127,11 @@ export default function SinglePlayerPage() {
 
     // Check for winner and move to next movie after delay
     timeoutRef.current = setTimeout(() => {
+      console.log('⏰ Timeout callback executed')
       setGameState(prev => {
+        console.log('⏰ Current scores - player:', prev.playerScore, 'bot:', prev.botScore)
         if (prev.playerScore >= 10 || prev.botScore >= 10) {
+          console.log('⏰ Game finished, winner determined')
           return {
             ...prev,
             gameStatus: 'finished',
@@ -136,6 +139,7 @@ export default function SinglePlayerPage() {
           }
         } else {
           // Get next movie after showing result
+          console.log('⏰ Getting next movie...')
           getNextMovie()
           return prev
         }
@@ -175,8 +179,11 @@ export default function SinglePlayerPage() {
 
     // Check for winner and move to next movie after delay
     timeoutRef.current = setTimeout(() => {
+      console.log('⏰ No Idea timeout callback executed')
       setGameState(prev => {
+        console.log('⏰ No Idea current scores - player:', prev.playerScore, 'bot:', prev.botScore)
         if (prev.botScore >= 10) {
+          console.log('⏰ No Idea game finished, bot wins')
           return {
             ...prev,
             gameStatus: 'finished',
@@ -184,6 +191,7 @@ export default function SinglePlayerPage() {
           }
         } else {
           // Get next movie after showing result
+          console.log('⏰ No Idea getting next movie...')
           getNextMovie()
           return prev
         }
@@ -209,7 +217,13 @@ export default function SinglePlayerPage() {
       const randomIndex = Math.floor(Math.random() * movies.length)
       const selectedMovie = movies[randomIndex]
       console.log('🎬 Selected movie (reset):', selectedMovie?.movie)
-      setGameState(prev => ({ ...prev, currentMovie: selectedMovie, hintUsed: false }))
+      console.log('🎬 Setting new movie state...')
+      setGameState(prev => {
+        console.log('🎬 Previous state currentMovie:', prev.currentMovie?.movie)
+        const newState = { ...prev, currentMovie: selectedMovie, hintUsed: false }
+        console.log('🎬 New state currentMovie:', newState.currentMovie?.movie)
+        return newState
+      })
       setUsedMovies(new Set([randomIndex]))
     } else {
       const randomIndex = Math.floor(Math.random() * availableMovies.length)
@@ -217,7 +231,13 @@ export default function SinglePlayerPage() {
       const originalIndex = movies.findIndex(m => m === selectedMovie)
       console.log('🎬 Selected movie:', selectedMovie?.movie, 'originalIndex:', originalIndex)
       
-      setGameState(prev => ({ ...prev, currentMovie: selectedMovie, hintUsed: false }))
+      console.log('🎬 Setting new movie state...')
+      setGameState(prev => {
+        console.log('🎬 Previous state currentMovie:', prev.currentMovie?.movie)
+        const newState = { ...prev, currentMovie: selectedMovie, hintUsed: false }
+        console.log('🎬 New state currentMovie:', newState.currentMovie?.movie)
+        return newState
+      })
       setUsedMovies(prev => new Set([...prev, originalIndex]))
     }
   }
