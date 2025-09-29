@@ -1260,7 +1260,7 @@ export default function AdminDashboard() {
                   {actorSearchLoading && (
                     <div className="text-center py-4">
                       <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                      <p className="text-gray-600">Searching TMDB for movies featuring "{actorSearchQuery}"...</p>
+                      <p className="text-gray-600">Searching TMDB for movies featuring &quot;{actorSearchQuery}&quot;...</p>
                     </div>
                   )}
                 </div>

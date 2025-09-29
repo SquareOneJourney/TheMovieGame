@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,11 +14,7 @@ export default function AdminLogin() {
   const [user, setUser] = useState<any>(null)
   const router = useRouter()
 
-  useEffect(() => {
-    checkUser()
-  }, [])
-
-  const checkUser = async () => {
+  const checkUser = useCallback(async () => {
     try {
       const { user, error } = await getCurrentUser()
       if (error || !user) {
@@ -29,7 +25,11 @@ export default function AdminLogin() {
     } catch (error) {
       router.push('/')
     }
-  }
+  }, [router])
+
+  useEffect(() => {
+    checkUser()
+  }, [checkUser])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
