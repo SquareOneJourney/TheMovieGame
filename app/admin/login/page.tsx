@@ -27,7 +27,14 @@ export default function AdminLogin() {
       if (response.ok) {
         router.push('/admin')
       } else {
-        setError('Invalid password')
+        const data = await response.json()
+        if (response.status === 403) {
+          setError('You are not authorized to access the admin panel')
+        } else if (response.status === 401) {
+          setError('Must be logged in to access admin panel')
+        } else {
+          setError(data.error || 'Invalid password')
+        }
       }
     } catch (error) {
       setError('Login failed')

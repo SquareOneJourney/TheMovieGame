@@ -184,16 +184,18 @@ export default function Home() {
           </a>
         </div>
         
-        {/* Admin Link */}
-        <div className="text-center mt-4">
-          <a
-            href="/admin"
-            className="inline-flex items-center text-gray-300 hover:text-white text-sm transition-colors duration-200"
-          >
-            <Settings className="w-4 h-4 mr-2" />
-            Admin Panel
-          </a>
-        </div>
+        {/* Admin Link - Only show for authenticated users */}
+        {user && (
+          <div className="text-center mt-4">
+            <a
+              href="/admin"
+              className="inline-flex items-center text-gray-300 hover:text-white text-sm transition-colors duration-200"
+            >
+              <Settings className="w-4 h-4 mr-2" />
+              Admin Panel
+            </a>
+          </div>
+        )}
         </div>
 
         {/* Game Rules */}

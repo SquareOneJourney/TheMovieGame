@@ -23,7 +23,11 @@ export default function AdminDashboard() {
       try {
         const response = await fetch('/api/admin/verify')
         if (!response.ok) {
-          router.push('/admin/login')
+          if (response.status === 403) {
+            router.push('/') // Redirect to home if not authorized
+          } else {
+            router.push('/admin/login')
+          }
         }
       } catch (error) {
         router.push('/admin/login')
