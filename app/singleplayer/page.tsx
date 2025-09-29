@@ -138,9 +138,18 @@ export default function SinglePlayerPage() {
             winner: prev.playerScore >= 10 ? 'player' : 'bot'
           }
         } else {
-          // Get next movie after showing result
+          // Get next movie after showing result - do it directly in the state update
           console.log('⏰ Getting next movie...')
-          getNextMovie()
+          const nextMovie = getNextMovieDirect()
+          if (nextMovie) {
+            console.log('⏰ Setting next movie in state:', nextMovie.movie)
+            return {
+              ...prev,
+              currentMovie: nextMovie,
+              hintUsed: false,
+              lastResult: null // Clear the last result
+            }
+          }
           return prev
         }
       })
@@ -190,21 +199,31 @@ export default function SinglePlayerPage() {
             winner: 'bot'
           }
         } else {
-          // Get next movie after showing result
+          // Get next movie after showing result - do it directly in the state update
           console.log('⏰ No Idea getting next movie...')
-          getNextMovie()
+          const nextMovie = getNextMovieDirect()
+          if (nextMovie) {
+            console.log('⏰ No Idea setting next movie in state:', nextMovie.movie)
+            return {
+              ...prev,
+              currentMovie: nextMovie,
+              hintUsed: false,
+              lastResult: null // Clear the last result
+            }
+          }
           return prev
         }
       })
     }, 2000) // Wait 2 seconds before moving to next movie
   }
 
-  const getNextMovie = () => {
-    console.log('🎬 getNextMovie called - movies.length:', movies.length, 'usedMovies.size:', usedMovies.size)
+  // Helper function to get next movie without updating state
+  const getNextMovieDirect = (): GameMovie | null => {
+    console.log('🎬 getNextMovieDirect called - movies.length:', movies.length, 'usedMovies.size:', usedMovies.size)
     
     if (movies.length === 0) {
       console.error('❌ No movies available for next movie')
-      return
+      return null
     }
     
     const availableMovies = movies.filter((_, index) => !usedMovies.has(index))
@@ -217,28 +236,31 @@ export default function SinglePlayerPage() {
       const randomIndex = Math.floor(Math.random() * movies.length)
       const selectedMovie = movies[randomIndex]
       console.log('🎬 Selected movie (reset):', selectedMovie?.movie)
-      console.log('🎬 Setting new movie state...')
-      setGameState(prev => {
-        console.log('🎬 Previous state currentMovie:', prev.currentMovie?.movie)
-        const newState = { ...prev, currentMovie: selectedMovie, hintUsed: false }
-        console.log('🎬 New state currentMovie:', newState.currentMovie?.movie)
-        return newState
-      })
       setUsedMovies(new Set([randomIndex]))
+      return selectedMovie
     } else {
       const randomIndex = Math.floor(Math.random() * availableMovies.length)
       const selectedMovie = availableMovies[randomIndex]
       const originalIndex = movies.findIndex(m => m === selectedMovie)
       console.log('🎬 Selected movie:', selectedMovie?.movie, 'originalIndex:', originalIndex)
       
+      setUsedMovies(prev => new Set([...prev, originalIndex]))
+      return selectedMovie
+    }
+  }
+
+  const getNextMovie = () => {
+    console.log('🎬 getNextMovie called - movies.length:', movies.length, 'usedMovies.size:', usedMovies.size)
+    
+    const nextMovie = getNextMovieDirect()
+    if (nextMovie) {
       console.log('🎬 Setting new movie state...')
       setGameState(prev => {
         console.log('🎬 Previous state currentMovie:', prev.currentMovie?.movie)
-        const newState = { ...prev, currentMovie: selectedMovie, hintUsed: false }
+        const newState = { ...prev, currentMovie: nextMovie, hintUsed: false, lastResult: null }
         console.log('🎬 New state currentMovie:', newState.currentMovie?.movie)
         return newState
       })
-      setUsedMovies(prev => new Set([...prev, originalIndex]))
     }
   }
 
