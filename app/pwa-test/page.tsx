@@ -16,7 +16,7 @@ export default function PWATestPage() {
   const [isOnline, setIsOnline] = useState(true)
   const [installPrompt, setInstallPrompt] = useState<any>(null)
 
-  const checkPWAFeatures = useCallback(async () => {
+  const checkPWAFeatures = async () => {
     console.log('PWA Test: Checking PWA features...')
     const features = {
       serviceWorker: false,
@@ -76,7 +76,7 @@ export default function PWATestPage() {
 
     console.log('PWA Test: Final features status:', features)
     setPwaFeatures(features)
-  }, [installPrompt]) // Removed pwaFeatures from dependencies
+  }
 
   useEffect(() => {
     // Check PWA features once on mount
@@ -111,7 +111,7 @@ export default function PWATestPage() {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
       window.removeEventListener('pwa-features-updated', handlePWAFeaturesUpdate)
     }
-  }, [checkPWAFeatures])
+  }, []) // Empty dependency array - only run once on mount
 
   const handleInstall = async () => {
     if (!installPrompt) return
