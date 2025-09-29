@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { LogOut, User, Play, Users, Settings } from 'lucide-react'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import SimpleLoginForm from '@/components/SimpleLoginForm'
@@ -68,9 +69,11 @@ export default function Home() {
       <div className="w-full px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-3">
-            <img 
+            <Image 
               src="/TheMovieGame Logo.png" 
               alt="The Movie Game" 
+              width={120}
+              height={32}
               className="h-8 w-auto"
             />
             <span className="text-xl font-bold text-white">The Movie Game</span>
@@ -120,9 +123,11 @@ export default function Home() {
         {/* Main Content */}
         <div className="text-center mb-16">
           <div className="inline-block mb-6">
-            <img 
+            <Image 
               src="/TheMovieGame Logo.png" 
               alt="The Movie Game" 
+              width={200}
+              height={96}
               className="h-24 w-auto mx-auto"
             />
           </div>

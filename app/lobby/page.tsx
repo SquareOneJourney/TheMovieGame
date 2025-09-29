@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Plus, ArrowRight, Home, Copy, Check, LogOut, User, Clock, Play, Settings } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getCurrentUser, signOut } from '@/lib/supabase-auth'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import FriendsPanel from '@/components/FriendsPanel'
 import StatsPanel from '@/components/StatsPanel'
@@ -169,9 +170,11 @@ export default function LobbyPage() {
               href="/"
               className="flex items-center space-x-3 text-white hover:text-blue-400 transition-colors"
             >
-              <img 
+              <Image 
                 src="/TheMovieGame Logo.png" 
                 alt="The Movie Game" 
+                width={120}
+                height={32}
                 className="h-8 w-auto"
               />
               <span className="text-lg font-semibold">Home</span>
