@@ -64,11 +64,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create movie object for admin database
+    // Create movie object for admin database (using GameMovie structure)
     const adminMovie = {
       id: `admin_${Date.now()}`,
       tmdbId: movie.id,
-      title: movieDetails.title,
+      movie: movieDetails.title, // Use 'movie' instead of 'title' to match GameMovie interface
       year: movieDetails.release_date?.split('-')[0] || 'Unknown',
       poster: movieDetails.poster_path ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}` : null,
       actor1: movieDetails.cast?.[0]?.name || 'Unknown',
@@ -93,6 +93,72 @@ export async function POST(request: NextRequest) {
     console.error('Error adding movie:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to add movie' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const { movies } = await request.json()
+    
+    if (!Array.isArray(movies)) {
+      return NextResponse.json(
+        { success: false, error: 'Movies array is required' },
+        { status: 400 }
+      )
+    }
+
+    // Update the in-memory storage
+    adminMovies = movies
+
+    return NextResponse.json({
+      success: true,
+      message: 'Movies updated successfully',
+      count: adminMovies.length
+    })
+
+  } catch (error) {
+    console.error('Error updating movies:', error)
+    return NextResponse.json(
+      { success: false, error: 'Failed to update movies' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { movieTitle } = await request.json()
+    
+    if (!movieTitle) {
+      return NextResponse.json(
+        { success: false, error: 'Movie title is required' },
+        { status: 400 }
+      )
+    }
+
+    // Remove movie from in-memory storage
+    const initialLength = adminMovies.length
+    adminMovies = adminMovies.filter(movie => movie.movie !== movieTitle)
+
+    if (adminMovies.length === initialLength) {
+      return NextResponse.json(
+        { success: false, error: 'Movie not found' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Movie deleted successfully',
+      count: adminMovies.length
+    })
+
+  } catch (error) {
+    console.error('Error deleting movie:', error)
+    return NextResponse.json(
+      { success: false, error: 'Failed to delete movie' },
       { status: 500 }
     )
   }
