@@ -102,9 +102,9 @@ export default function AdminDashboard() {
     // Apply search query filter
     if (searchQuery.trim()) {
       filtered = filtered.filter(movie => 
-        movie.movie.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        movie.actor1.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        movie.actor2.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (movie.movie && movie.movie.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (movie.actor1 && movie.actor1.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (movie.actor2 && movie.actor2.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (movie.year && movie.year.includes(searchQuery))
       )
     }
@@ -117,8 +117,8 @@ export default function AdminDashboard() {
     // Apply actor filter
     if (actorFilter.trim()) {
       filtered = filtered.filter(movie => 
-        movie.actor1.toLowerCase().includes(actorFilter.toLowerCase()) ||
-        movie.actor2.toLowerCase().includes(actorFilter.toLowerCase()) ||
+        (movie.actor1 && movie.actor1.toLowerCase().includes(actorFilter.toLowerCase())) ||
+        (movie.actor2 && movie.actor2.toLowerCase().includes(actorFilter.toLowerCase())) ||
         (movie.hintActor && movie.hintActor.toLowerCase().includes(actorFilter.toLowerCase()))
       )
     }
@@ -137,8 +137,8 @@ export default function AdminDashboard() {
           comparison = yearA - yearB
           break
         case 'actors':
-          const actorsA = `${a.actor1} ${a.actor2}`.toLowerCase()
-          const actorsB = `${b.actor1} ${b.actor2}`.toLowerCase()
+          const actorsA = `${a.actor1 || ''} ${a.actor2 || ''}`.toLowerCase()
+          const actorsB = `${b.actor1 || ''} ${b.actor2 || ''}`.toLowerCase()
           comparison = actorsA.localeCompare(actorsB)
           break
       }
@@ -181,8 +181,8 @@ export default function AdminDashboard() {
     
     // Search existing database
     const dbResults = movies.filter(movie => 
-      movie.actor1.toLowerCase().includes(query) ||
-      movie.actor2.toLowerCase().includes(query) ||
+      (movie.actor1 && movie.actor1.toLowerCase().includes(query)) ||
+      (movie.actor2 && movie.actor2.toLowerCase().includes(query)) ||
       (movie.hintActor && movie.hintActor.toLowerCase().includes(query))
     )
     setActorSearchResults(dbResults)
@@ -404,6 +404,7 @@ export default function AdminDashboard() {
   const isMovieInDatabase = (tmdbMovie: any) => {
     const tmdbYear = new Date(tmdbMovie.release_date).getFullYear().toString()
     return movies.some(movie => 
+      movie.movie && tmdbMovie.title && 
       movie.movie.toLowerCase() === tmdbMovie.title.toLowerCase() && 
       movie.year === tmdbYear
     )
@@ -413,6 +414,7 @@ export default function AdminDashboard() {
   const findExactMovieMatch = (tmdbMovie: any) => {
     const tmdbYear = new Date(tmdbMovie.release_date).getFullYear().toString()
     return movies.find(movie => 
+      movie.movie && tmdbMovie.title && 
       movie.movie.toLowerCase() === tmdbMovie.title.toLowerCase() && 
       movie.year === tmdbYear
     )
@@ -455,7 +457,7 @@ export default function AdminDashboard() {
 
   const handleEdit = (movie: GameMovie) => {
     setEditingMovie({ ...movie })
-    setOriginalMovieTitle(movie.movie)
+    setOriginalMovieTitle(movie.movie || '')
     
     // Fetch actors if we have a TMDB ID and haven't fetched them yet
     if (movie.tmdbId && !movieActors[movie.tmdbId]) {
@@ -495,7 +497,7 @@ export default function AdminDashboard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ movies: updatedMovies })
       })
-      
+
       if (response.ok) {
         const result = await response.json()
         console.log('API response:', result)
@@ -682,8 +684,8 @@ export default function AdminDashboard() {
                       <option value="year">Year</option>
                       <option value="actors">Actors</option>
                     </select>
-                  </div>
-                  
+          </div>
+          
                   {/* Sort Order */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Order</label>
@@ -732,8 +734,8 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {Array.isArray(filteredMovies) && filteredMovies.length > 0 ? filteredMovies.map((movie) => (
-                      <React.Fragment key={movie.movie}>
+                    {Array.isArray(filteredMovies) && filteredMovies.length > 0 ? filteredMovies.map((movie, index) => (
+                      <React.Fragment key={movie.movie || `movie-${index}`}>
                         <tr className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap">
                             {movie.poster ? (
@@ -803,20 +805,20 @@ export default function AdminDashboard() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div className="flex justify-end space-x-2">
-                              <Button 
+              <Button
                                 onClick={() => handleEdit(movie)} 
-                                variant="outline" 
-                                size="sm"
+                variant="outline"
+                size="sm"
                               >
                                 <Edit2 className="w-4 h-4 mr-1" /> Edit
                               </Button>
                               <Button 
-                                onClick={() => handleDelete(movie.movie)} 
+                                onClick={() => movie.movie && handleDelete(movie.movie)} 
                                 variant="destructive" 
                                 size="sm"
                               >
                                 <Trash2 className="w-4 h-4 mr-1" /> Delete
-                              </Button>
+              </Button>
                             </div>
                           </td>
                         </tr>
@@ -964,10 +966,10 @@ export default function AdminDashboard() {
                                           </select>
                                           <div className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
                                             🎭 Main
-                                          </div>
-                                        </div>
-                                      </div>
-                                      
+          </div>
+        </div>
+      </div>
+
                                       {/* Hint Actor */}
                                       {editingMovie.hintActor && (
                                         <div className="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
@@ -1034,14 +1036,14 @@ export default function AdminDashboard() {
                                   >
                                     <X className="w-4 h-4 mr-2" /> Cancel
                                   </Button>
-                                  <Button 
+              <Button
                                     onClick={handleSave} 
                                     className="bg-green-600 hover:bg-green-700 text-white" 
                                     disabled={saving}
                                   >
                                     <Save className="w-4 h-4 mr-2" /> {saving ? 'Saving...' : 'Save'}
-                                  </Button>
-                                </div>
+              </Button>
+            </div>
                               </div>
                             </td>
                           </tr>
@@ -1058,7 +1060,7 @@ export default function AdminDashboard() {
                 </table>
               </div>
             </div>
-          </div>
+              </div>
         )}
 
 
@@ -1108,18 +1110,18 @@ export default function AdminDashboard() {
                         In Your Database ({actorSearchResults.length})
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {actorSearchResults.map((movie) => (
-                          <Card key={movie.movie} className="p-4 hover:shadow-lg transition-shadow bg-green-50 border-green-200">
+                        {actorSearchResults.map((movie, index) => (
+                          <Card key={movie.movie || `search-movie-${index}`} className="p-4 hover:shadow-lg transition-shadow bg-green-50 border-green-200">
                             <div className="flex space-x-3">
-                              {movie.poster && (
-                                <Image
-                                  src={movie.poster}
+                      {movie.poster && (
+                        <Image
+                          src={movie.poster}
                                   alt={movie.movie}
-                                  width={60}
-                                  height={90}
-                                  className="w-15 h-22 object-cover rounded"
-                                />
-                              )}
+                          width={60}
+                          height={90}
+                          className="w-15 h-22 object-cover rounded"
+                        />
+                      )}
                               <div className="flex-1">
                                 <div className="flex items-start justify-between">
                                   <h4 className="font-semibold text-gray-800">{movie.movie}</h4>
@@ -1128,19 +1130,19 @@ export default function AdminDashboard() {
                                   </span>
                                 </div>
                                 <p className="text-sm text-gray-600">{movie.year}</p>
-                                <div className="mt-2 space-y-1">
+                        <div className="mt-2 space-y-1">
                                   <p className="text-xs text-gray-500">
                                     <span className="font-medium">Actor 1:</span> {movie.actor1}
-                                  </p>
+                          </p>
                                   <p className="text-xs text-gray-500">
                                     <span className="font-medium">Actor 2:</span> {movie.actor2}
-                                  </p>
-                                  {movie.hintActor && (
+                          </p>
+                          {movie.hintActor && (
                                     <p className="text-xs text-gray-500">
                                       <span className="font-medium">Hint Actor:</span> {movie.hintActor}
-                                    </p>
-                                  )}
-                                </div>
+                            </p>
+                          )}
+                        </div>
                                 <div className="mt-3 flex space-x-2">
                                   <Button 
                                     onClick={() => handleEdit(movie)} 
@@ -1151,7 +1153,7 @@ export default function AdminDashboard() {
                                     <Edit2 className="w-3 h-3 mr-1" /> Edit
                                   </Button>
                                   <Button 
-                                    onClick={() => handleDelete(movie.movie)} 
+                                    onClick={() => movie.movie && handleDelete(movie.movie)} 
                                     variant="destructive" 
                                     size="sm"
                                     className="flex-1"
@@ -1231,10 +1233,10 @@ export default function AdminDashboard() {
                                       </Button>
                                     </div>
                                   ) : (
-                                    <Button
+                      <Button
                                       onClick={() => addFromTMDB(movie)}
                                       disabled={isAdding}
-                                      size="sm"
+                        size="sm"
                                       className="mt-2 w-full bg-green-600 hover:bg-green-700 text-white"
                                     >
                                       {isAdding ? (
@@ -1245,7 +1247,7 @@ export default function AdminDashboard() {
                                           Add to Database
                                         </>
                                       )}
-                                    </Button>
+                      </Button>
                                   )}
                                 </div>
                               </div>
@@ -1375,9 +1377,9 @@ export default function AdminDashboard() {
                       )
                     })}
                   </div>
-                </div>
-              )}
-            </Card>
+              </div>
+            )}
+        </Card>
           </div>
         )}
       </div>
