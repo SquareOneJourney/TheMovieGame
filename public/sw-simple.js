@@ -1,7 +1,7 @@
 // Simple Service Worker for The Movie Game
 // This file is only used in production builds
 
-const CACHE_NAME = 'movie-game-v1'
+const CACHE_NAME = 'movie-game-v2'
 const urlsToCache = [
   '/',
   '/admin',
@@ -30,6 +30,22 @@ self.addEventListener('install', (event) => {
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
   console.log('Service Worker: Fetch event for', event.request.url)
+  
+  // For HTML pages, always try network first to get fresh content
+  if (event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          console.log('Service Worker: Fetched fresh HTML from network:', event.request.url)
+          return response
+        })
+        .catch(() => {
+          console.log('Service Worker: Network failed, trying cache for HTML:', event.request.url)
+          return caches.match(event.request)
+        })
+    )
+    return
+  }
   
   event.respondWith(
     caches.match(event.request)

@@ -53,6 +53,10 @@ const nextConfig = {
   poweredByHeader: false,
   // Optimize for production
   compress: true,
+  // Add build timestamp for cache busting
+  env: {
+    BUILD_TIMESTAMP: new Date().toISOString(),
+  },
 }
 
 module.exports = withPWA(nextConfig)
