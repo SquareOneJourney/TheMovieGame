@@ -1,16 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getMovieDetails, searchMovies } from '@/lib/tmdb'
+import fs from 'fs'
+import path from 'path'
 
-// Simple in-memory storage for admin movies
-// In production, you'd want to use a database
-let adminMovies: any[] = []
+// Load movies from the actual database file
+function loadMoviesFromDatabase(): any[] {
+  try {
+    const filePath = path.join(process.cwd(), 'data', 'movies-database.json')
+    const data = fs.readFileSync(filePath, 'utf8')
+    return JSON.parse(data)
+  } catch (error) {
+    console.error('Error loading movies database:', error)
+    return []
+  }
+}
+
+// Save movies to the actual database file
+function saveMoviesToDatabase(movies: any[]): void {
+  try {
+    const filePath = path.join(process.cwd(), 'data', 'movies-database.json')
+    fs.writeFileSync(filePath, JSON.stringify(movies, null, 2))
+    console.log(`💾 Saved ${movies.length} movies to database`)
+  } catch (error) {
+    console.error('Error saving movies database:', error)
+  }
+}
 
 export async function GET() {
   try {
+    const movies = loadMoviesFromDatabase()
     return NextResponse.json({ 
       success: true, 
-      movies: adminMovies,
-      count: adminMovies.length 
+      movies: movies,
+      count: movies.length 
     })
   } catch (error) {
     console.error('Error fetching admin movies:', error)
@@ -55,8 +77,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Load current movies from database
+    const currentMovies = loadMoviesFromDatabase()
+    
     // Check if movie already exists
-    const existingMovie = adminMovies.find(m => m.tmdbId === movie.id)
+    const existingMovie = currentMovies.find(m => m.movie === movieDetails.title)
     if (existingMovie) {
       return NextResponse.json(
         { success: false, error: 'Movie already exists in database' },
@@ -64,28 +89,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create movie object for admin database (using GameMovie structure)
-    const adminMovie = {
-      id: `admin_${Date.now()}`,
-      tmdbId: movie.id,
-      movie: movieDetails.title, // Use 'movie' instead of 'title' to match GameMovie interface
+    // Create movie object for database (using GameMovie structure)
+    const newMovie = {
+      movie: movieDetails.title,
       year: movieDetails.release_date?.split('-')[0] || 'Unknown',
       poster: movieDetails.poster_path ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}` : null,
       actor1: movieDetails.cast?.[0]?.name || 'Unknown',
       actor2: movieDetails.cast?.[1]?.name || 'Unknown',
       hintActor: movieDetails.cast?.[2]?.name || null,
-      actor1Photo: movieDetails.cast?.[0]?.profile_path ? `https://image.tmdb.org/t/p/w500${movieDetails.cast[0].profile_path}` : null,
-      actor2Photo: movieDetails.cast?.[1]?.profile_path ? `https://image.tmdb.org/t/p/w500${movieDetails.cast[1].profile_path}` : null,
-      hintActorPhoto: movieDetails.cast?.[2]?.profile_path ? `https://image.tmdb.org/t/p/w500${movieDetails.cast[2].profile_path}` : null,
-      addedAt: new Date().toISOString()
+      actor1Photo: movieDetails.cast?.[0]?.profile_path ? `https://image.tmdb.org/t/p/w185${movieDetails.cast[0].profile_path}` : null,
+      actor2Photo: movieDetails.cast?.[1]?.profile_path ? `https://image.tmdb.org/t/p/w185${movieDetails.cast[1].profile_path}` : null,
+      hintActorPhoto: movieDetails.cast?.[2]?.profile_path ? `https://image.tmdb.org/t/p/w185${movieDetails.cast[2].profile_path}` : null
     }
 
-    // Add to admin movies
-    adminMovies.push(adminMovie)
+    // Add to database
+    currentMovies.push(newMovie)
+    saveMoviesToDatabase(currentMovies)
 
     return NextResponse.json({
       success: true,
-      movie: adminMovie,
+      movie: newMovie,
       message: 'Movie added successfully'
     })
 
@@ -109,13 +132,13 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // Update the in-memory storage
-    adminMovies = movies
+    // Update the database file
+    saveMoviesToDatabase(movies)
 
     return NextResponse.json({
       success: true,
       message: 'Movies updated successfully',
-      count: adminMovies.length
+      count: movies.length
     })
 
   } catch (error) {
@@ -138,21 +161,27 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    // Remove movie from in-memory storage
-    const initialLength = adminMovies.length
-    adminMovies = adminMovies.filter(movie => movie.movie !== movieTitle)
+    // Load current movies from database
+    const currentMovies = loadMoviesFromDatabase()
+    const initialLength = currentMovies.length
+    
+    // Remove movie from database
+    const updatedMovies = currentMovies.filter(movie => movie.movie !== movieTitle)
 
-    if (adminMovies.length === initialLength) {
+    if (updatedMovies.length === initialLength) {
       return NextResponse.json(
         { success: false, error: 'Movie not found' },
         { status: 404 }
       )
     }
 
+    // Save updated movies to database
+    saveMoviesToDatabase(updatedMovies)
+
     return NextResponse.json({
       success: true,
       message: 'Movie deleted successfully',
-      count: adminMovies.length
+      count: updatedMovies.length
     })
 
   } catch (error) {
