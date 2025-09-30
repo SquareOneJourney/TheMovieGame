@@ -74,21 +74,21 @@ export default function AdminDashboard() {
 
   // Load movies
   useEffect(() => {
-    const loadMovies = async () => {
-      try {
-        const response = await fetch('/api/admin/movies')
-        if (response.ok) {
-          const data = await response.json()
+  const loadMovies = async () => {
+    try {
+      const response = await fetch('/api/admin/movies')
+      if (response.ok) {
+        const data = await response.json()
           // Handle both direct array and wrapped object responses
           const moviesArray = Array.isArray(data) ? data : data.movies || []
           setMovies(moviesArray)
           setFilteredMovies(moviesArray)
         } else {
           console.error('Failed to fetch movies:', response.statusText)
-        }
-      } catch (error) {
-        console.error('Error loading movies:', error)
-      } finally {
+      }
+    } catch (error) {
+      console.error('Error loading movies:', error)
+    } finally {
         setLoading(false)
       }
     }
@@ -97,17 +97,23 @@ export default function AdminDashboard() {
 
   // Filter and sort movies based on all criteria
   useEffect(() => {
-    let filtered = [...(movies || [])].filter(movie => movie && typeof movie === 'object')
+    try {
+      let filtered = [...(movies || [])].filter(movie => movie && typeof movie === 'object')
 
-    // Apply search query filter
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(movie => 
-        (movie.movie && movie.movie.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (movie.actor1 && movie.actor1.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (movie.actor2 && movie.actor2.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (movie.year && movie.year.includes(searchQuery))
-      )
-    }
+      // Apply search query filter
+      if (searchQuery.trim()) {
+        filtered = filtered.filter(movie => {
+          try {
+            return (movie.movie && typeof movie.movie === 'string' && movie.movie.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                   (movie.actor1 && typeof movie.actor1 === 'string' && movie.actor1.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                   (movie.actor2 && typeof movie.actor2 === 'string' && movie.actor2.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                   (movie.year && movie.year.includes(searchQuery))
+          } catch (error) {
+            console.error('Error in search filter:', error, movie)
+            return false
+          }
+        })
+      }
 
     // Apply year filter
     if (yearFilter) {
@@ -116,37 +122,51 @@ export default function AdminDashboard() {
 
     // Apply actor filter
     if (actorFilter.trim()) {
-      filtered = filtered.filter(movie => 
-        (movie.actor1 && movie.actor1.toLowerCase().includes(actorFilter.toLowerCase())) ||
-        (movie.actor2 && movie.actor2.toLowerCase().includes(actorFilter.toLowerCase())) ||
-        (movie.hintActor && movie.hintActor.toLowerCase().includes(actorFilter.toLowerCase()))
-      )
+      filtered = filtered.filter(movie => {
+        try {
+          return (movie.actor1 && typeof movie.actor1 === 'string' && movie.actor1.toLowerCase().includes(actorFilter.toLowerCase())) ||
+                 (movie.actor2 && typeof movie.actor2 === 'string' && movie.actor2.toLowerCase().includes(actorFilter.toLowerCase())) ||
+                 (movie.hintActor && typeof movie.hintActor === 'string' && movie.hintActor.toLowerCase().includes(actorFilter.toLowerCase()))
+        } catch (error) {
+          console.error('Error in actor filter:', error, movie)
+          return false
+        }
+      })
     }
 
     // Apply sorting
     filtered.sort((a, b) => {
-      let comparison = 0
-      
-      switch (sortBy) {
-        case 'title':
-          comparison = a.movie.localeCompare(b.movie)
-          break
-        case 'year':
-          const yearA = parseInt(a.year || '0')
-          const yearB = parseInt(b.year || '0')
-          comparison = yearA - yearB
-          break
-        case 'actors':
-          const actorsA = `${a.actor1 || ''} ${a.actor2 || ''}`.toLowerCase()
-          const actorsB = `${b.actor1 || ''} ${b.actor2 || ''}`.toLowerCase()
-          comparison = actorsA.localeCompare(actorsB)
-          break
+      try {
+        let comparison = 0
+        
+        switch (sortBy) {
+          case 'title':
+            comparison = (a.movie || '').localeCompare(b.movie || '')
+            break
+          case 'year':
+            const yearA = parseInt(a.year || '0')
+            const yearB = parseInt(b.year || '0')
+            comparison = yearA - yearB
+            break
+          case 'actors':
+            const actorsA = `${a.actor1 || ''} ${a.actor2 || ''}`.toLowerCase()
+            const actorsB = `${b.actor1 || ''} ${b.actor2 || ''}`.toLowerCase()
+            comparison = actorsA.localeCompare(actorsB)
+            break
+        }
+        
+        return sortOrder === 'asc' ? comparison : -comparison
+      } catch (error) {
+        console.error('Error in sorting:', error, a, b)
+        return 0
       }
-      
-      return sortOrder === 'asc' ? comparison : -comparison
     })
 
     setFilteredMovies(filtered)
+    } catch (error) {
+      console.error('Error in filter/sort effect:', error)
+      setFilteredMovies([])
+    }
   }, [searchQuery, yearFilter, actorFilter, sortBy, sortOrder, movies])
 
   // Search TMDB
@@ -159,7 +179,7 @@ export default function AdminDashboard() {
       if (response.ok) {
         const data = await response.json()
         setTmdbResults(data.movies || [])
-      } else {
+        } else {
         console.error('Failed to search TMDB:', response.statusText)
       }
     } catch (error) {
@@ -640,8 +660,8 @@ export default function AdminDashboard() {
                       className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-                </div>
-                
+          </div>
+          
                 {/* Filters Row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                   {/* Year Filter */}
@@ -811,9 +831,9 @@ export default function AdminDashboard() {
                                 onClick={() => handleEdit(movie)} 
                 variant="outline"
                 size="sm"
-                              >
+              >
                                 <Edit2 className="w-4 h-4 mr-1" /> Edit
-                              </Button>
+              </Button>
                               <Button 
                                 onClick={() => movie.movie && handleDelete(movie.movie)} 
                                 variant="destructive" 
@@ -821,7 +841,7 @@ export default function AdminDashboard() {
                               >
                                 <Trash2 className="w-4 h-4 mr-1" /> Delete
               </Button>
-                            </div>
+          </div>
                           </td>
                         </tr>
                         
@@ -840,10 +860,10 @@ export default function AdminDashboard() {
                                       <div className="flex items-center space-x-2 text-sm text-gray-500">
                                         <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                                         <span>Loading actors...</span>
-                                      </div>
+        </div>
                                     )}
-                                  </div>
-                                  
+      </div>
+
                                   {/* Show TMDB actors if available */}
                                   {movie.tmdbId && movieActors[movie.tmdbId] ? (
                                     <div className="space-y-2">
@@ -1027,7 +1047,7 @@ export default function AdminDashboard() {
                                 </div>
                                 
                                 <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200">
-                                  <Button 
+              <Button
                                     type="button" 
                                     variant="outline" 
                                     onClick={() => {
@@ -1046,7 +1066,7 @@ export default function AdminDashboard() {
                                     <Save className="w-4 h-4 mr-2" /> {saving ? 'Saving...' : 'Save'}
               </Button>
             </div>
-                              </div>
+              </div>
                             </td>
                           </tr>
                         )}
@@ -1146,10 +1166,10 @@ export default function AdminDashboard() {
                           )}
                         </div>
                                 <div className="mt-3 flex space-x-2">
-                                  <Button 
+                      <Button
                                     onClick={() => handleEdit(movie)} 
-                                    variant="outline" 
-                                    size="sm"
+                        variant="outline"
+                        size="sm"
                                     className="flex-1"
                                   >
                                     <Edit2 className="w-3 h-3 mr-1" /> Edit
@@ -1161,15 +1181,15 @@ export default function AdminDashboard() {
                                     className="flex-1"
                                   >
                                     <Trash2 className="w-3 h-3 mr-1" /> Delete
-                                  </Button>
-                                </div>
+                      </Button>
+                    </div>
                               </div>
                             </div>
                           </Card>
-                        ))}
+                ))}
                       </div>
-                    </div>
-                  )}
+              </div>
+            )}
 
                   {/* TMDB Results */}
                   {actorTmdbResults.length > 0 && (
@@ -1253,7 +1273,7 @@ export default function AdminDashboard() {
                                   )}
                                 </div>
                               </div>
-                            </Card>
+        </Card>
                           )
                         })}
                       </div>
