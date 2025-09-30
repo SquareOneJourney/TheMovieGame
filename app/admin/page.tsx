@@ -104,10 +104,10 @@ export default function AdminDashboard() {
       if (searchQuery.trim()) {
         filtered = filtered.filter(movie => {
           try {
-            return (movie.movie && typeof movie.movie === 'string' && movie.movie.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                   (movie.actor1 && typeof movie.actor1 === 'string' && movie.actor1.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                   (movie.actor2 && typeof movie.actor2 === 'string' && movie.actor2.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                   (movie.year && movie.year.includes(searchQuery))
+            return (movie?.movie && typeof movie.movie === 'string' && movie.movie.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                   (movie?.actor1 && typeof movie.actor1 === 'string' && movie.actor1.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                   (movie?.actor2 && typeof movie.actor2 === 'string' && movie.actor2.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                   (movie?.year && movie.year.includes(searchQuery))
           } catch (error) {
             console.error('Error in search filter:', error, movie)
             return false
@@ -124,9 +124,9 @@ export default function AdminDashboard() {
     if (actorFilter.trim()) {
       filtered = filtered.filter(movie => {
         try {
-          return (movie.actor1 && typeof movie.actor1 === 'string' && movie.actor1.toLowerCase().includes(actorFilter.toLowerCase())) ||
-                 (movie.actor2 && typeof movie.actor2 === 'string' && movie.actor2.toLowerCase().includes(actorFilter.toLowerCase())) ||
-                 (movie.hintActor && typeof movie.hintActor === 'string' && movie.hintActor.toLowerCase().includes(actorFilter.toLowerCase()))
+          return (movie?.actor1 && typeof movie.actor1 === 'string' && movie.actor1.toLowerCase().includes(actorFilter.toLowerCase())) ||
+                 (movie?.actor2 && typeof movie.actor2 === 'string' && movie.actor2.toLowerCase().includes(actorFilter.toLowerCase())) ||
+                 (movie?.hintActor && typeof movie.hintActor === 'string' && movie.hintActor.toLowerCase().includes(actorFilter.toLowerCase()))
         } catch (error) {
           console.error('Error in actor filter:', error, movie)
           return false
@@ -141,16 +141,16 @@ export default function AdminDashboard() {
         
         switch (sortBy) {
           case 'title':
-            comparison = (a.movie || '').localeCompare(b.movie || '')
+            comparison = (a?.movie || '').localeCompare(b?.movie || '')
             break
           case 'year':
-            const yearA = parseInt(a.year || '0')
-            const yearB = parseInt(b.year || '0')
+            const yearA = parseInt(a?.year || '0')
+            const yearB = parseInt(b?.year || '0')
             comparison = yearA - yearB
             break
           case 'actors':
-            const actorsA = `${a.actor1 || ''} ${a.actor2 || ''}`.toLowerCase()
-            const actorsB = `${b.actor1 || ''} ${b.actor2 || ''}`.toLowerCase()
+            const actorsA = `${a?.actor1 || ''} ${a?.actor2 || ''}`.toLowerCase()
+            const actorsB = `${b?.actor1 || ''} ${b?.actor2 || ''}`.toLowerCase()
             comparison = actorsA.localeCompare(actorsB)
             break
         }
@@ -201,9 +201,9 @@ export default function AdminDashboard() {
     
     // Search existing database
     const dbResults = movies.filter(movie => 
-      (movie.actor1 && movie.actor1.toLowerCase().includes(query)) ||
-      (movie.actor2 && movie.actor2.toLowerCase().includes(query)) ||
-      (movie.hintActor && movie.hintActor.toLowerCase().includes(query))
+      (movie?.actor1 && movie.actor1.toLowerCase().includes(query)) ||
+      (movie?.actor2 && movie.actor2.toLowerCase().includes(query)) ||
+      (movie?.hintActor && movie.hintActor.toLowerCase().includes(query))
     )
     setActorSearchResults(dbResults)
 
@@ -424,7 +424,7 @@ export default function AdminDashboard() {
   const isMovieInDatabase = (tmdbMovie: any) => {
     const tmdbYear = new Date(tmdbMovie.release_date).getFullYear().toString()
     return movies.some(movie => 
-      movie.movie && tmdbMovie.title && 
+      movie?.movie && tmdbMovie?.title && 
       typeof movie.movie === 'string' && typeof tmdbMovie.title === 'string' &&
       movie.movie.toLowerCase() === tmdbMovie.title.toLowerCase() && 
       movie.year === tmdbYear
@@ -435,7 +435,7 @@ export default function AdminDashboard() {
   const findExactMovieMatch = (tmdbMovie: any) => {
     const tmdbYear = new Date(tmdbMovie.release_date).getFullYear().toString()
     return movies.find(movie => 
-      movie.movie && tmdbMovie.title && 
+      movie?.movie && tmdbMovie?.title && 
       typeof movie.movie === 'string' && typeof tmdbMovie.title === 'string' &&
       movie.movie.toLowerCase() === tmdbMovie.title.toLowerCase() && 
       movie.year === tmdbYear
@@ -550,13 +550,19 @@ export default function AdminDashboard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ movieTitle })
       })
+      
       if (response.ok) {
+        const data = await response.json()
         setMovies(movies.filter(m => m.movie !== movieTitle))
+        console.log('✅ Movie deleted successfully:', data.message)
       } else {
-        console.error('Failed to delete movie:', response.statusText)
+        const errorData = await response.json()
+        console.error('Failed to delete movie:', errorData.error || response.statusText)
+        alert(`Failed to delete movie: ${errorData.error || response.statusText}`)
       }
     } catch (error) {
       console.error('Error deleting movie:', error)
+      alert('Error deleting movie. Please try again.')
     } finally {
       setSaving(false)
     }

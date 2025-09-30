@@ -11,17 +11,6 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/xD8GVNayMpiTZxLfahy2DseYcQq.jpg"
   },
   {
-    "actor1": "Cailee Spaeny",
-    "actor2": "David Jonsson",
-    "movie": "Alien: Romulus",
-    "year": "2024",
-    "poster": "https://image.tmdb.org/t/p/w500/b33nnKl1GSFbao4l3fZDDqsMx0F.jpg",
-    "hintActor": "Archie Renaux",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/yl3YeRSHlDVArfgMdHh2v7Ui9zO.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/2ZZNGZw57KKMrVIr27g7W16G0jV.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/uTd18t2VJovN2jSJyhuG8Yy3PV6.jpg"
-  },
-  {
     "actor1": "Vin Diesel",
     "actor2": "Michelle Rodriguez",
     "movie": "Fast X",
@@ -33,17 +22,6 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/jxoy4fbXNKFQtBdK73cLXEz3ufS.jpg"
   },
   {
-    "actor1": "Daniel Radcliffe",
-    "actor2": "Rupert Grint",
-    "movie": "Harry Potter and the Goblet of Fire",
-    "year": "2005",
-    "poster": "https://image.tmdb.org/t/p/w500/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
-    "hintActor": "Emma Watson",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/iPg0J9UzAlPj1fLEJNllpW9IhGe.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/q2KZZ0ltTEl7Sf8volNFV1JDEP4.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/A14lLCZYDhfYdBa0fFRpwMDiwRN.jpg"
-  },
-  {
     "actor1": "Tom Holland",
     "actor2": "Zendaya",
     "movie": "Spider-Man: No Way Home",
@@ -53,17 +31,6 @@
     "actor1Photo": "https://image.tmdb.org/t/p/w185/4eiFdjEtqb2pnWX6z98ADcYD9zV.jpg",
     "actor2Photo": "https://image.tmdb.org/t/p/w185/3WdOloHpjtjL96uVOhFRRCcYSwq.jpg",
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/wz3MRiMmoz6b5X3oSzMRC9nLxY1.jpg"
-  },
-  {
-    "actor1": "Sophie Thatcher",
-    "actor2": "Jack Quaid",
-    "movie": "Companion",
-    "year": "2025",
-    "poster": "https://image.tmdb.org/t/p/w500/oCoTgC3UyWGfyQ9thE10ulWR7bn.jpg",
-    "hintActor": "Lukas Gage",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/rUEPZaDxFdDGM76t4g6cYa8Ru7b.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/320qW5yEbxpmyxQ3evmClJbtKag.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/sftjB0MjD92meZqnL9OLtcTI02d.jpg"
   },
   {
     "actor1": "Robert Downey Jr.",
@@ -99,17 +66,6 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/stEZxIVAWFlrifbWkeULsD4LHnf.jpg"
   },
   {
-    "actor1": "Dakota Johnson",
-    "actor2": "Jamie Dornan",
-    "movie": "Fifty Shades Freed",
-    "year": "2018",
-    "poster": "https://image.tmdb.org/t/p/w500/jjPJ4s3DWZZvI4vw8Xfi4Vqa1Q8.jpg",
-    "hintActor": "Eric Johnson",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/bSfVBJ8S3F1MPpCmIWb8UJcUZGP.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/dPCjxgq4YsqkcZ3fsE84Ifq0Wxv.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/oSwKvCo9duqcOfUAYPLdNHyXnna.jpg"
-  },
-  {
     "actor1": "Ian McKellen",
     "actor2": "Martin Freeman",
     "movie": "The Hobbit: The Battle of the Five Armies",
@@ -143,26 +99,15 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/w2t30L5Cmr34myAaUobLoSgsLfS.jpg"
   },
   {
-    "actor1": "Sam Worthington",
-    "actor2": "Zoe Saldaña",
-    "movie": "Avatar: The Way of Water",
-    "year": "2022",
-    "poster": "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg",
-    "hintActor": "Sigourney Weaver",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/mflBcox36s9ZPbsZPVOuhf6axaJ.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/iOVbUH20il632nj2v01NCtYYeSg.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/wTSnfktNBLd6kwQxgvkqYw6vEon.jpg"
-  },
-  {
     "actor1": "Daniel Radcliffe",
-    "actor2": "Rupert Grint",
+    "actor2": "Emma Watson",
     "movie": "Harry Potter and the Philosopher's Stone",
     "year": "2001",
     "poster": "https://image.tmdb.org/t/p/w500/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
-    "hintActor": "Emma Watson",
+    "hintActor": "Rupert Grint",
     "actor1Photo": "https://image.tmdb.org/t/p/w185/iPg0J9UzAlPj1fLEJNllpW9IhGe.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/q2KZZ0ltTEl7Sf8volNFV1JDEP4.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/A14lLCZYDhfYdBa0fFRpwMDiwRN.jpg"
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/A14lLCZYDhfYdBa0fFRpwMDiwRN.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/q2KZZ0ltTEl7Sf8volNFV1JDEP4.jpg"
   },
   {
     "actor1": "Liam Neeson",
@@ -264,17 +209,6 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/5qHNjhtjMD4YWH3UP0rm4tKwxCL.jpg"
   },
   {
-    "actor1": "Daniel Radcliffe",
-    "actor2": "Emma Watson",
-    "movie": "Harry Potter and the Deathly Hallows: Part 2",
-    "year": "2011",
-    "poster": "https://image.tmdb.org/t/p/w500/c54HpQmuwXjHq2C9wmoACjxoom3.jpg",
-    "hintActor": "Rupert Grint",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/iPg0J9UzAlPj1fLEJNllpW9IhGe.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/A14lLCZYDhfYdBa0fFRpwMDiwRN.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/q2KZZ0ltTEl7Sf8volNFV1JDEP4.jpg"
-  },
-  {
     "actor1": "Mike Myers",
     "actor2": "Eddie Murphy",
     "movie": "Shrek",
@@ -295,39 +229,6 @@
     "actor1Photo": "https://image.tmdb.org/t/p/w185/d81K0RH8UX7tZj49tZaQhZ9ewH.jpg",
     "actor2Photo": "https://image.tmdb.org/t/p/w185/kq5DDnqqofoRI0t6ddtRlsJnNPT.jpg",
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/ntBw3aUZmIw9ObmsmvPgk1UKMd8.jpg"
-  },
-  {
-    "actor1": "Tom Cruise",
-    "actor2": "Hayley Atwell",
-    "movie": "Mission: Impossible - Dead Reckoning Part One",
-    "year": "2023",
-    "poster": "https://image.tmdb.org/t/p/w500/NNxYkU70HPurnNCSiCjYAmacwm.jpg",
-    "hintActor": "Ving Rhames",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/x57wXHexIjD2ywly9cRA4rov7cu.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/4gpLVNKPZlVucc4fT2fSZ7DksTK.jpg"
-  },
-  {
-    "actor1": "Daniel Radcliffe",
-    "actor2": "Rupert Grint",
-    "movie": "Harry Potter and the Half-Blood Prince",
-    "year": "2009",
-    "poster": "https://image.tmdb.org/t/p/w500/z7uo9zmQdQwU5ZJHFpv2Upl30i1.jpg",
-    "hintActor": "Emma Watson",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/iPg0J9UzAlPj1fLEJNllpW9IhGe.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/q2KZZ0ltTEl7Sf8volNFV1JDEP4.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/A14lLCZYDhfYdBa0fFRpwMDiwRN.jpg"
-  },
-  {
-    "actor1": "Daniel Radcliffe",
-    "actor2": "Rupert Grint",
-    "movie": "Harry Potter and the Chamber of Secrets",
-    "year": "2002",
-    "poster": "https://image.tmdb.org/t/p/w500/sdEOH0992YZ0QSxgXNIGLq1ToUi.jpg",
-    "hintActor": "Emma Watson",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/iPg0J9UzAlPj1fLEJNllpW9IhGe.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/q2KZZ0ltTEl7Sf8volNFV1JDEP4.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/A14lLCZYDhfYdBa0fFRpwMDiwRN.jpg"
   },
   {
     "actor1": "Andrew Garfield",
@@ -364,25 +265,14 @@
   },
   {
     "actor1": "Timothée Chalamet",
-    "actor2": "Rebecca Ferguson",
+    "actor2": "Oscar Isaac",
     "movie": "Dune",
     "year": "2021",
     "poster": "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg",
-    "hintActor": "Oscar Isaac",
+    "hintActor": "Rebecca Ferguson",
     "actor1Photo": "https://image.tmdb.org/t/p/w185/BE2sdjpgsa2rNTFa66f7upkaOP.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/lJloTOheuQSirSLXNA3JHsrMNfH.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/dW5U5yrIIPmMjRThR9KT2xH6nTz.jpg"
-  },
-  {
-    "actor1": "Jodie Comer",
-    "actor2": "Alfie Williams",
-    "movie": "28 Years Later",
-    "year": "2025",
-    "poster": "https://image.tmdb.org/t/p/w500/mIg1qCkVxnAlM2TK3RUF0tdEXlE.jpg",
-    "hintActor": "Aaron Taylor-Johnson",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/iOP2tHyxtPiUzIBHzxxehBy9Khu.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/wqfyAhZH6uCu5J4THsz2gJxsizB.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/pFtHhih2XEaFaD3qOFyQW6q83br.jpg"
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/dW5U5yrIIPmMjRThR9KT2xH6nTz.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/lJloTOheuQSirSLXNA3JHsrMNfH.jpg"
   },
   {
     "actor1": "Liam Neeson",
@@ -394,17 +284,6 @@
     "actor1Photo": "https://image.tmdb.org/t/p/w185/sRLev3wJioBgun3ZoeAUFpkLy0D.jpg",
     "actor2Photo": "https://image.tmdb.org/t/p/w185/vQtBqpF2HDdzbfXHDzR4u37i1Ac.jpg",
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/u29BOqiV5GCQ8k8WUJM50i9xlBf.jpg"
-  },
-  {
-    "actor1": "Gerard Butler",
-    "actor2": "Morena Baccarin",
-    "movie": "Greenland",
-    "year": "2020",
-    "poster": "https://image.tmdb.org/t/p/w500/bNo2mcvSwIvnx8K6y1euAc1TLVq.jpg",
-    "hintActor": "David Denman",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/rTO5opVC3Gs6hPYAxWSP9eEjogi.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/kBSKKaOtsqIzZPhtEeHfCBmhWl9.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/bY3YssOOP0yTnaPZx2EWVjeCXc2.jpg"
   },
   {
     "actor1": "Anthony Mackie",
@@ -429,17 +308,6 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/vH5gVSpHAMhDaFWfh0Q7BG61O1y.jpg"
   },
   {
-    "actor1": "Daniel Radcliffe",
-    "actor2": "Rupert Grint",
-    "movie": "Harry Potter and the Prisoner of Azkaban",
-    "year": "2004",
-    "poster": "https://image.tmdb.org/t/p/w500/aWxwnYoe8p2d2fcxOqtvAtJ72Rw.jpg",
-    "hintActor": "Emma Watson",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/iPg0J9UzAlPj1fLEJNllpW9IhGe.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/q2KZZ0ltTEl7Sf8volNFV1JDEP4.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/A14lLCZYDhfYdBa0fFRpwMDiwRN.jpg"
-  },
-  {
     "actor1": "Scarlett Johansson",
     "actor2": "Mahershala Ali",
     "movie": "Jurassic World Rebirth",
@@ -449,17 +317,6 @@
     "actor1Photo": "https://image.tmdb.org/t/p/w185/mjReG6rR7NPMEIWb1T4YWtV11ty.jpg",
     "actor2Photo": "https://image.tmdb.org/t/p/w185/9ZmSejm5lnUVY5IJ1iNx2QEjnHb.jpg",
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/kMtZtavkXIXYA0CnhaWqbNo6uFV.jpg"
-  },
-  {
-    "actor1": "Cillian Murphy",
-    "actor2": "Naomie Harris",
-    "movie": "28 Days Later",
-    "year": "2002",
-    "poster": "https://image.tmdb.org/t/p/w500/sQckQRt17VaWbo39GIu0TMOiszq.jpg",
-    "hintActor": "Brendan Gleeson",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/llkbyWKwpfowZ6C8peBjIV9jj99.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/41TVAcYqKKF7PGf3x7QfaLvkLSW.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/ctPPJu5ZYDZr1IPmzoNpezczrm0.jpg"
   },
   {
     "actor1": "Robert De Niro",
@@ -605,17 +462,6 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/vWChiHhXFjZVKC6HbACyyRFmdW4.jpg"
   },
   {
-    "actor1": "Jay Baruchel",
-    "actor2": "Cate Blanchett",
-    "movie": "How to Train Your Dragon 2",
-    "year": "2014",
-    "poster": "https://image.tmdb.org/t/p/w500/d13Uj86LdbDLrfDoHR5aDOFYyJC.jpg",
-    "hintActor": "Gerard Butler",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/1GYJeQzPcY9Pfmc3FFsBwClkCv7.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/mXpe59YDxcvAJS6EtshsvsRvLZP.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/rTO5opVC3Gs6hPYAxWSP9eEjogi.jpg"
-  },
-  {
     "actor1": "Leonardo DiCaprio",
     "actor2": "Jonah Hill",
     "movie": "The Wolf of Wall Street",
@@ -726,17 +572,6 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/40HNkoB3RKPMPgLhTyKQU6kG0sc.jpg"
   },
   {
-    "actor1": "Robert Downey Jr.",
-    "actor2": "Gwyneth Paltrow",
-    "movie": "Iron Man 2",
-    "year": "2010",
-    "poster": "https://image.tmdb.org/t/p/w500/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg",
-    "hintActor": "Don Cheadle",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/5qHNjhtjMD4YWH3UP0rm4tKwxCL.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/kvk2UXWO45pQWlbErtotK3npHNP.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/oZ1u1GmudvUGpbMfi9Hxonzp3lF.jpg"
-  },
-  {
     "actor1": "Ben Affleck",
     "actor2": "Rosamund Pike",
     "movie": "Gone Girl",
@@ -801,17 +636,6 @@
     "actor1Photo": "https://image.tmdb.org/t/p/w185/8A4PS5iG7GWEAVFftyqMZKl3qcr.jpg",
     "actor2Photo": "https://image.tmdb.org/t/p/w185/hJKmhbuzDjmfw2nPBDWGbLagj16.jpg",
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/yGcuHGW4glqRpOPxgiCvjcren7F.jpg"
-  },
-  {
-    "actor1": "Adam Sandler",
-    "actor2": "Julie Bowen",
-    "movie": "Happy Gilmore 2",
-    "year": "2025",
-    "poster": "https://image.tmdb.org/t/p/w500/ynT06XivgBDkg7AtbDbX1dJeBGY.jpg",
-    "hintActor": "Christopher McDonald",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/iTMnXrPfC1rmom6a9q4hy6YSJWG.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/5ewqnbPAY0EzZObGHIKU4VsCanD.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/gK1XhbfD9Xd8s3VXRPpgDCluyZp.jpg"
   },
   {
     "actor1": "Robert De Niro",
@@ -903,14 +727,14 @@
   },
   {
     "actor1": "Robert Downey Jr.",
-    "actor2": "Chris Evans",
+    "actor2": "Mark Ruffalo",
     "movie": "Avengers: Endgame",
     "year": "2019",
     "poster": "https://image.tmdb.org/t/p/w500/ulzhLuWrPK07P1YkdWQLZnQh1JL.jpg",
-    "hintActor": "Mark Ruffalo",
+    "hintActor": "Chris Evans",
     "actor1Photo": "https://image.tmdb.org/t/p/w185/5qHNjhtjMD4YWH3UP0rm4tKwxCL.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/3bOGNsHlrswhyW79uvIHH1V43JI.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/5GilHMOt5PAQh6rlUKZzGmaKEI7.jpg"
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/5GilHMOt5PAQh6rlUKZzGmaKEI7.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/3bOGNsHlrswhyW79uvIHH1V43JI.jpg"
   },
   {
     "actor1": "Tom Cruise",
@@ -1111,17 +935,6 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/lwQoA0qJTCZ6l2FH6PjmhRQjiaB.jpg"
   },
   {
-    "actor1": "Robert Downey Jr.",
-    "actor2": "Chris Evans",
-    "movie": "Avengers: Infinity War",
-    "year": "2018",
-    "poster": "https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-    "hintActor": "Chris Hemsworth",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/5qHNjhtjMD4YWH3UP0rm4tKwxCL.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/3bOGNsHlrswhyW79uvIHH1V43JI.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/piQGdoIQOF3C1EI5cbYZLAW1gfj.jpg"
-  },
-  {
     "actor1": "Lily James",
     "actor2": "Cate Blanchett",
     "movie": "Cinderella",
@@ -1298,17 +1111,6 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/wqGOVOsHzZaHeHymIS40elGCnY0.jpg"
   },
   {
-    "actor1": "Daniel Radcliffe",
-    "actor2": "Rupert Grint",
-    "movie": "Harry Potter and the Order of the Phoenix",
-    "year": "2007",
-    "poster": "https://image.tmdb.org/t/p/w500/5aOyriWkPec0zUDxmHFP9qMmBaj.jpg",
-    "hintActor": "Emma Watson",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/iPg0J9UzAlPj1fLEJNllpW9IhGe.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/q2KZZ0ltTEl7Sf8volNFV1JDEP4.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/A14lLCZYDhfYdBa0fFRpwMDiwRN.jpg"
-  },
-  {
     "actor1": "Tobey Maguire",
     "actor2": "Willem Dafoe",
     "movie": "Spider-Man",
@@ -1397,17 +1199,6 @@
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/ssFXWN5li5OWJLgUoFlUDY0ZyPc.jpg"
   },
   {
-    "actor1": "Daniel Radcliffe",
-    "actor2": "Emma Watson",
-    "movie": "Harry Potter and the Deathly Hallows: Part 1",
-    "year": "2010",
-    "poster": "https://image.tmdb.org/t/p/w500/iGoXIpQb7Pot00EEdwpwPajheZ5.jpg",
-    "hintActor": "Rupert Grint",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/iPg0J9UzAlPj1fLEJNllpW9IhGe.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/A14lLCZYDhfYdBa0fFRpwMDiwRN.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/q2KZZ0ltTEl7Sf8volNFV1JDEP4.jpg"
-  },
-  {
     "actor1": "Jason Statham",
     "actor2": "Holt McCallany",
     "movie": "Wrath of Man",
@@ -1428,17 +1219,6 @@
     "actor1Photo": "https://image.tmdb.org/t/p/w185/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
     "actor2Photo": "https://image.tmdb.org/t/p/w185/cPRq7uH3PIFcHilP15BrMKunink.jpg",
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/wr4fuwLzQvW1G0MS7cmQ3ObFjvL.jpg"
-  },
-  {
-    "actor1": "Erika Linder",
-    "actor2": "Natalie Krill",
-    "movie": "Below Her Mouth",
-    "year": "2017",
-    "poster": "https://image.tmdb.org/t/p/w500/tPhBftWySbanfEialbsUzOuccgN.jpg",
-    "hintActor": "Sebastian Pigott",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/kuHbhuXrkbpTeVQBibKSxAGEpPU.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/iXcAX1tDHeWwmD8BI4htTdV3Z2p.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/dFdv24Qa9j3WhJDxchn6s8jeepj.jpg"
   },
   {
     "actor1": "Tom Hanks",
@@ -1835,17 +1615,6 @@
     "actor1Photo": "https://image.tmdb.org/t/p/w185/u0AqTz6Y7GHPCHINS01P7gPvDSb.jpg",
     "actor2Photo": "https://image.tmdb.org/t/p/w185/u0RWIWMVaUNFYnDflWIJGJ3fzWt.jpg",
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/e4IkxsEo5O4oUWrIpXlEhWa6lqB.jpg"
-  },
-  {
-    "actor1": "Jim Carrey",
-    "actor2": "Ian McNeice",
-    "movie": "Ace Ventura: When Nature Calls",
-    "year": "1995",
-    "poster": "https://image.tmdb.org/t/p/w500/wcinCf1ov2D6M3P7BBZkzQFOiIb.jpg",
-    "hintActor": "Simon Callow",
-    "actor1Photo": "https://image.tmdb.org/t/p/w185/u0AqTz6Y7GHPCHINS01P7gPvDSb.jpg",
-    "actor2Photo": "https://image.tmdb.org/t/p/w185/mJ1AwYRoWycLvCs5VRGyeM7KxrG.jpg",
-    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/no6qlnMrWeUzSt1FjD2Vf9x992e.jpg"
   },
   {
     "actor1": "Jim Carrey",
@@ -3441,5 +3210,173 @@
     "actor1Photo": "https://image.tmdb.org/t/p/w185/wcI594cwM4ArPwvRd2IU0Z0yLuh.jpg",
     "actor2Photo": "https://image.tmdb.org/t/p/w185/bXNxIKcJ5cNNW8QFrBPWcfTSu9x.jpg",
     "hintActorPhoto": "https://image.tmdb.org/t/p/w185/oNrDowF5cRtK5lJJuCAh0KeFizy.jpg"
+  },
+  {
+    "actor1": "Tom Cruise",
+    "actor2": "Penélope Cruz",
+    "movie": "Vanilla Sky",
+    "year": "2001",
+    "poster": "https://image.tmdb.org/t/p/w500/cAh2pCiNPftsY3aSqJuIOde7uWr.jpg",
+    "hintActor": "Cameron Diaz",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/mSUUioSTuECMiyRR1DabK6leTdg.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/d4f4cQ9EiYuvNMjT1IB2h06KoRx.jpg",
+    "tmdbId": "1903"
+  },
+  {
+    "actor1": "Tom Cruise",
+    "actor2": "Samantha Morton",
+    "movie": "Minority Report",
+    "year": "2002",
+    "poster": "https://image.tmdb.org/t/p/w500/ccqpHq5tk5W4ymbSbuoy4uYOxFI.jpg",
+    "hintActor": "Colin Farrell",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/v84b7MENeD9rwX6xTD7fSdhSOC9.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/lZ3dU4uFEV4BccAEvjJUBIY2OaB.jpg",
+    "tmdbId": "180"
+  },
+  {
+    "actor1": "Dustin Hoffman",
+    "actor2": "Tom Cruise",
+    "movie": "Rain Man",
+    "year": "1988",
+    "poster": "https://image.tmdb.org/t/p/w500/iTNHwO896WKkaoPtpMMS74d8VNi.jpg",
+    "hintActor": "Valeria Golino",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/yFjTzJHE6AFbwQifOlnNDzmiwlq.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/bLw0lNPEhICtbTLtnTswamefN7C.jpg",
+    "tmdbId": "380"
+  },
+  {
+    "actor1": "Tom Cruise",
+    "actor2": "Dakota Fanning",
+    "movie": "War of the Worlds",
+    "year": "2005",
+    "poster": "https://image.tmdb.org/t/p/w500/6Biy7R9LfumYshur3YKhpj56MpB.jpg",
+    "hintActor": "Justin Chatwin",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/6bNiiHnZZfA7YYIxO5FszvNFBlI.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/nEHYlooGSwRzkhze1rQ7DOpJXLD.jpg",
+    "tmdbId": "74"
+  },
+  {
+    "actor1": "Tom Cruise",
+    "actor2": "Jack Nicholson",
+    "movie": "A Few Good Men",
+    "year": "1992",
+    "poster": "https://image.tmdb.org/t/p/w500/rLOk4z9zL1tTukIYV56P94aZXKk.jpg",
+    "hintActor": "Demi Moore",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/hBHcQIEa6P48HQAlLZkh0eKSSkG.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/wApParZYBDi4yxekjfxjKEifJYh.jpg",
+    "tmdbId": "881"
+  },
+  {
+    "actor1": "Tom Cruise",
+    "actor2": "Kelly McGillis",
+    "movie": "Top Gun",
+    "year": "1986",
+    "poster": "https://image.tmdb.org/t/p/w500/xUuHj3CgmZQ9P2cMaqQs4J0d4Zc.jpg",
+    "hintActor": "Val Kilmer",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/150q3jC4YF1pzSCRe29Kn12W9Ao.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/sWH9jTD0bC5gWhhceUlzfNiNup0.jpg",
+    "tmdbId": "744"
+  },
+  {
+    "actor1": "Paul Newman",
+    "actor2": "Tom Cruise",
+    "movie": "The Color of Money",
+    "year": "1986",
+    "poster": "https://image.tmdb.org/t/p/w500/dVdnHmdQu3JtLAAksjTmTEF76gD.jpg",
+    "hintActor": "Mary Elizabeth Mastrantonio",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/bP2fByqNR7BorsUNuD6nSm0u2vJ.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/vbZ1E557K5oj34xLHR5ErO8wPCi.jpg",
+    "tmdbId": "11873"
+  },
+  {
+    "actor1": "Tom Cruise",
+    "actor2": "Renée Zellweger",
+    "movie": "Jerry Maguire",
+    "year": "1996",
+    "poster": "https://image.tmdb.org/t/p/w500/lABvGN7fDk5ifnwZoxij6G96t2w.jpg",
+    "hintActor": "Cuba Gooding Jr.",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/iNnPqkEF0hPWhmWpjyuLuUdbKN8.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/2JguzbpOXoTGzSmLbWFlulKyyAe.jpg",
+    "tmdbId": "9390"
+  },
+  {
+    "actor1": "Tom Cruise",
+    "actor2": "Cameron Diaz",
+    "movie": "Knight and Day",
+    "year": "2010",
+    "poster": "https://image.tmdb.org/t/p/w500/phhp52CZZJiGYmiOTp9ZBDkGHB3.jpg",
+    "hintActor": "Peter Sarsgaard",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/d4f4cQ9EiYuvNMjT1IB2h06KoRx.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/jOc4VjxPaOkWOqnLCxd8BJy9g5i.jpg",
+    "tmdbId": "37834"
+  },
+  {
+    "actor1": "Tom Cruise",
+    "actor2": "Emily Blunt",
+    "movie": "Edge of Tomorrow",
+    "year": "2014",
+    "poster": "https://image.tmdb.org/t/p/w500/nBM9MMa2WCwvMG4IJ3eiGUdbPe6.jpg",
+    "hintActor": "Brendan Gleeson",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/zpJ7pupuNF3W0zTxm6yioGIoxbd.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/ctPPJu5ZYDZr1IPmzoNpezczrm0.jpg",
+    "tmdbId": "137113"
+  },
+  {
+    "actor1": "Tom Cruise",
+    "actor2": "Morgan Freeman",
+    "movie": "Oblivion",
+    "year": "2013",
+    "poster": "https://image.tmdb.org/t/p/w500/eO3r38fwnhb58M1YgcjQBd3VNcp.jpg",
+    "hintActor": "Olga Kurylenko",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/jPsLqiYGSofU4s6BjrxnefMfabb.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/ei6eYUhQFw2AaV6U5fyPptBaPF0.jpg",
+    "tmdbId": "75612"
+  },
+  {
+    "actor1": "Meryl Streep",
+    "actor2": "Tom Cruise",
+    "movie": "Lions for Lambs",
+    "year": "2007",
+    "poster": "https://image.tmdb.org/t/p/w500/uvXbCXwStaBpHXSSgfh9gDlgoNX.jpg",
+    "hintActor": "Robert Redford",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/emAAzyK1rJ6aiMi0wsWYp51EC3h.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/9mH0VihvSM3Ym4rQp8oY8S5iI5d.jpg",
+    "tmdbId": "4515"
+  },
+  {
+    "actor1": "Tom Cruise",
+    "actor2": "Philip Seymour Hoffman",
+    "movie": "Mission: Impossible III",
+    "year": "2006",
+    "poster": "https://image.tmdb.org/t/p/w500/vKGYCpmQyV9uHybWDzXuII8Los5.jpg",
+    "hintActor": "Ving Rhames",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/50rqDkmvXwjwVhFH7q6ph2Rkw7S.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/4gpLVNKPZlVucc4fT2fSZ7DksTK.jpg",
+    "tmdbId": "956"
+  },
+  {
+    "actor1": "C. Thomas Howell",
+    "actor2": "Matt Dillon",
+    "movie": "The Outsiders",
+    "year": "1983",
+    "poster": "https://image.tmdb.org/t/p/w500/pl8Tf36TAOb2i561yPbQ9xl4P4D.jpg",
+    "hintActor": "Ralph Macchio",
+    "actor1Photo": "https://image.tmdb.org/t/p/w185/739YbFWpAYyo9neHvBGThgmT4YH.jpg",
+    "actor2Photo": "https://image.tmdb.org/t/p/w185/wVoSUexYH79igPgxIXKWRlV2uBk.jpg",
+    "hintActorPhoto": "https://image.tmdb.org/t/p/w185/AoqqL9UlyPrcTLnpzbQvKXPvXrz.jpg",
+    "tmdbId": "227"
   }
 ]

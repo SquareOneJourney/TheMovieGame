@@ -7,8 +7,8 @@ export default function PWAInstaller() {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false)
 
   useEffect(() => {
-    // Register service worker
-    if ('serviceWorker' in navigator) {
+    // Only register service worker in production
+    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
       console.log('PWA Installer: Registering service worker...')
       navigator.serviceWorker.register('/sw-simple.js')
         .then((registration) => {
@@ -32,6 +32,8 @@ export default function PWAInstaller() {
               console.error('PWA Installer: Both service workers failed:', fallbackError)
             })
         })
+    } else if (process.env.NODE_ENV === 'development') {
+      console.log('PWA Installer: Skipping service worker registration in development mode')
     } else {
       console.log('PWA Installer: Service workers not supported')
     }
