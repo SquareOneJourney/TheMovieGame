@@ -1,11 +1,6 @@
 {
   "buildCommand": "npm run build:clean",
   "installCommand": "npm ci && npx prisma generate",
-  "functions": {
-    "app/api/**/*.ts": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "headers": [
     {
       "source": "/_next/static/(.*)",
