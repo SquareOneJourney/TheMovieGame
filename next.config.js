@@ -47,6 +47,12 @@ const nextConfig = {
   },
   // Fix lockfile warning
   outputFileTracingRoot: __dirname,
+  // Ensure proper static file handling
+  trailingSlash: false,
+  // Disable x-powered-by header
+  poweredByHeader: false,
+  // Optimize for production
+  compress: true,
 }
 
 module.exports = withPWA(nextConfig)
