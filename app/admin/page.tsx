@@ -37,10 +37,10 @@ export default function AdminDashboard() {
   const router = useRouter()
 
   // Get unique years and actors for filter dropdowns
-  const uniqueYears = Array.from(new Set(movies.map(m => m.year).filter(Boolean))).sort((a, b) => parseInt(b!) - parseInt(a!))
+  const uniqueYears = Array.from(new Set(movies.map(m => m.year).filter(Boolean))).sort((a, b) => parseInt(b || '0') - parseInt(a || '0'))
   const uniqueActors = Array.from(new Set([
-    ...movies.map(m => m.actor1),
-    ...movies.map(m => m.actor2),
+    ...movies.map(m => m.actor1).filter(Boolean),
+    ...movies.map(m => m.actor2).filter(Boolean),
     ...movies.map(m => m.hintActor).filter(Boolean)
   ])).sort()
 
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
 
   // Filter and sort movies based on all criteria
   useEffect(() => {
-    let filtered = [...movies]
+    let filtered = [...(movies || [])].filter(movie => movie && typeof movie === 'object')
 
     // Apply search query filter
     if (searchQuery.trim()) {
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
       return
     }
 
-    const query = actorSearchQuery.toLowerCase().trim()
+    const query = (actorSearchQuery || '').toLowerCase().trim()
     
     // Search existing database
     const dbResults = movies.filter(movie => 
@@ -405,6 +405,7 @@ export default function AdminDashboard() {
     const tmdbYear = new Date(tmdbMovie.release_date).getFullYear().toString()
     return movies.some(movie => 
       movie.movie && tmdbMovie.title && 
+      typeof movie.movie === 'string' && typeof tmdbMovie.title === 'string' &&
       movie.movie.toLowerCase() === tmdbMovie.title.toLowerCase() && 
       movie.year === tmdbYear
     )
@@ -415,6 +416,7 @@ export default function AdminDashboard() {
     const tmdbYear = new Date(tmdbMovie.release_date).getFullYear().toString()
     return movies.find(movie => 
       movie.movie && tmdbMovie.title && 
+      typeof movie.movie === 'string' && typeof tmdbMovie.title === 'string' &&
       movie.movie.toLowerCase() === tmdbMovie.title.toLowerCase() && 
       movie.year === tmdbYear
     )
