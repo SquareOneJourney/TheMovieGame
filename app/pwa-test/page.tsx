@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { CheckCircle, XCircle, Download, Wifi, WifiOff } from 'lucide-react'
 
 // Global flag to prevent multiple calls across all instances
@@ -18,8 +18,13 @@ export default function PWATestPage() {
 
   const [isOnline, setIsOnline] = useState(true)
   const [installPrompt, setInstallPrompt] = useState<any>(null)
+  const [isServiceWorkerRegistered, setIsServiceWorkerRegistered] = useState(false)
+  const [hasServiceWorkerSupport, setHasServiceWorkerSupport] = useState(false)
+  const [hasLocalStorageSupport, setHasLocalStorageSupport] = useState(false)
+  const [hasIndexedDBSupport, setHasIndexedDBSupport] = useState(false)
+  const [hasNotificationSupport, setHasNotificationSupport] = useState(false)
 
-  const checkPWAFeatures = async () => {
+  const checkPWAFeatures = useCallback(async () => {
     console.log('PWA Test: checkPWAFeatures called, globalHasChecked:', globalHasChecked)
     
     if (globalHasChecked) {
@@ -88,12 +93,26 @@ export default function PWATestPage() {
 
     console.log('PWA Test: Final features status:', features)
     setPwaFeatures(features)
-  }
+  }, [installPrompt])
 
   useEffect(() => {
-    // Check PWA features once on mount
+    if (globalHasChecked) return
+
+    globalHasChecked = true
     checkPWAFeatures()
-    
+
+    // Check browser support
+    setHasServiceWorkerSupport('serviceWorker' in navigator)
+    setHasLocalStorageSupport('localStorage' in window)
+    setHasIndexedDBSupport('indexedDB' in window)
+    setHasNotificationSupport('Notification' in window)
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(() => {
+        setIsServiceWorkerRegistered(true)
+      })
+    }
+
     // Check online status
     setIsOnline(navigator.onLine)
     window.addEventListener('online', () => setIsOnline(true))
@@ -111,7 +130,7 @@ export default function PWATestPage() {
       window.removeEventListener('offline', () => setIsOnline(false))
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
     }
-  }, []) // Empty dependency array - only run once on mount
+  }, [checkPWAFeatures]) // Empty dependency array - only run once on mount
 
   const handleInstall = async () => {
     if (!installPrompt) return

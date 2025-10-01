@@ -22,8 +22,6 @@ NEXTAUTH_SECRET="your-secret-key-here"
 GOOGLE_CLIENT_ID="your-google-client-id"
 GOOGLE_CLIENT_SECRET="your-google-client-secret"
 
-# Socket.IO
-SOCKET_IO_PORT=3001
 
 # TMDB API (Required)
 TMDB_BEARER_TOKEN="your-tmdb-bearer-token-here"
@@ -37,68 +35,42 @@ TMDB_BEARER_TOKEN="your-tmdb-bearer-token-here"
 - [ ] **Authentication Flow** - Test login/logout
 - [ ] **Database Connection** - Verify data persistence
 
-### Phase 2: Authentication System
-- [ ] **Login Required** - Try accessing /lobby without login
-- [ ] **Google OAuth** - Test Google sign-in (if configured)
-- [ ] **Session Persistence** - Refresh page, stay logged in
-- [ ] **Logout Functionality** - Sign out works properly
+### Phase 2: Single Player Game
+- [ ] **Game Start** - Click "Play Now" to start single-player game
+- [ ] **Movie Display** - Verify actors and movie poster show correctly
+- [ ] **Guess Input** - Test guessing movie titles
+- [ ] **Hint System** - Test hint functionality (costs half point)
+- [ ] **Score Tracking** - Verify scoring works correctly
+- [ ] **Game Completion** - Test winning/losing conditions
 
-### Phase 3: Multiplayer Game Creation
-- [ ] **Create Game** - Go to /multiplayer, create a game
-- [ ] **Movie Search** - Search for movies using TMDB
-- [ ] **Actor Selection** - Select two actors and hint actor
-- [ ] **Game Storage** - Game appears in database
-- [ ] **Game ID Generation** - Get unique game ID
-
-### Phase 4: Friend System
-- [ ] **User Search** - Search for other users
-- [ ] **Send Friend Request** - Add friends
-- [ ] **Accept/Decline Requests** - Manage friend requests
-- [ ] **Friends List** - View added friends
-- [ ] **Game Invites** - Send invites to friends
-
-### Phase 5: Game Joining & Playing
-- [ ] **Join by ID** - Use game ID to join
-- [ ] **Join via Invite** - Accept friend's game invite
-- [ ] **Real-time Gameplay** - Test Socket.IO connection
-- [ ] **Game Persistence** - Refresh during game, stay connected
-- [ ] **Score Tracking** - Verify scoring works
-
-### Phase 6: Statistics & Leaderboard
-- [ ] **Personal Stats** - View your statistics
-- [ ] **Game History** - See past games
-- [ ] **Round History** - View individual rounds
-- [ ] **Leaderboard** - Check rankings
-- [ ] **Timeframe Filters** - Test week/month/all time
+### Phase 3: Admin Dashboard
+- [ ] **Admin Login** - Access admin dashboard
+- [ ] **Movie Management** - Add, edit, delete movies
+- [ ] **TMDB Integration** - Search and import movies from TMDB
+- [ ] **Actor Management** - Assign actor roles and photos
+- [ ] **Database Operations** - Verify data persistence
 
 ## 🔧 Testing Scenarios
 
-### Scenario 1: Two Players, Same Browser
-1. Open two incognito windows
-2. Sign in with different accounts
-3. Create game in one window
-4. Join game in other window
-5. Play complete game
-6. Check statistics update
+### Scenario 1: Complete Single Player Game
+1. Start a new game
+2. Play through multiple rounds
+3. Test hint functionality
+4. Complete game (win or lose)
+5. Verify scoring works correctly
 
-### Scenario 2: Friend System Test
-1. Create two user accounts
-2. Search for and add each other as friends
-3. Send game invite from one to other
-4. Accept invite and play game
-5. Verify friend relationship persists
+### Scenario 2: Admin Movie Management
+1. Access admin dashboard
+2. Search for movies on TMDB
+3. Add new movies to database
+4. Edit existing movies
+5. Delete movies
+6. Verify changes persist
 
-### Scenario 3: Database Persistence
-1. Create a game
-2. Close browser completely
-3. Reopen and sign back in
-4. Verify game still exists
-5. Join the same game
-
-### Scenario 4: Error Handling
-1. Try joining non-existent game
-2. Try creating game without selecting actors
-3. Test with invalid game IDs
+### Scenario 3: Error Handling
+1. Test with invalid movie titles
+2. Test hint system edge cases
+3. Test game state persistence
 4. Verify proper error messages
 
 ## 🐛 Common Issues & Solutions
@@ -109,14 +81,11 @@ TMDB_BEARER_TOKEN="your-tmdb-bearer-token-here"
 ### Issue: "TMDB API error"
 **Solution:** Check TMDB_BEARER_TOKEN in .env.local
 
-### Issue: "Socket connection failed"
-**Solution:** Ensure Socket.IO server is running on port 3001
-
 ### Issue: "Authentication not working"
 **Solution:** Check NEXTAUTH_SECRET is set
 
-### Issue: "Can't find users to add as friends"
-**Solution:** Create multiple test accounts first
+### Issue: "Admin access denied"
+**Solution:** Check admin credentials and permissions
 
 ## 📱 Mobile Testing
 

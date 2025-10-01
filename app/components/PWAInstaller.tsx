@@ -7,37 +7,9 @@ export default function PWAInstaller() {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false)
 
   useEffect(() => {
-    // Only register service worker in production
-    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
-      console.log('PWA Installer: Registering service worker...')
-      navigator.serviceWorker.register('/sw-simple.js')
-        .then((registration) => {
-          console.log('PWA Installer: Service worker registered successfully:', registration)
-          // Force update the PWA features check
-          setTimeout(() => {
-            window.dispatchEvent(new Event('pwa-features-updated'))
-          }, 1000)
-        })
-        .catch((registrationError) => {
-          console.error('PWA Installer: Service worker registration failed:', registrationError)
-          // Try fallback to the generated service worker
-          navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              console.log('PWA Installer: Fallback service worker registered:', registration)
-              setTimeout(() => {
-                window.dispatchEvent(new Event('pwa-features-updated'))
-              }, 1000)
-            })
-            .catch((fallbackError) => {
-              console.error('PWA Installer: Both service workers failed:', fallbackError)
-            })
-        })
-    } else if (process.env.NODE_ENV === 'development') {
-      console.log('PWA Installer: Skipping service worker registration in development mode')
-    } else {
-      console.log('PWA Installer: Service workers not supported')
-    }
-
+    // Service worker registration removed - PWA functionality disabled for now
+    // Can be re-enabled with Next.js 15 compatible PWA solution
+    
     // Listen for beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()

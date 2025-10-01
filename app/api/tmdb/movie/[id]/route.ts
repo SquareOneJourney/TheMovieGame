@@ -48,7 +48,7 @@ export async function GET(
         actor.order < 10 && // Top 10 billed actors
         actor.known_for_department === 'Acting'
       )
-      .slice(0, 3) // Get top 3 actors
+      .slice(0, 5) // Get top 5 actors
 
     if (mainActors.length < 2) {
       return NextResponse.json({ 
@@ -60,12 +60,18 @@ export async function GET(
     const gameMovie = {
       actor1: mainActors[0].name,
       actor2: mainActors[1].name,
+      actor3: mainActors[2]?.name,
+      actor4: mainActors[3]?.name,
+      actor5: mainActors[4]?.name,
       movie: movieData.title,
       year: movieData.release_date ? new Date(movieData.release_date).getFullYear().toString() : undefined,
       poster: movieData.poster_path ? `https://image.tmdb.org/t/p/w500${movieData.poster_path}` : undefined,
-      hintActor: mainActors[2]?.name,
+      hintActor: mainActors[2]?.name, // Keep hintActor for backward compatibility
       actor1Photo: mainActors[0].profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[0].profile_path}` : undefined,
       actor2Photo: mainActors[1].profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[1].profile_path}` : undefined,
+      actor3Photo: mainActors[2]?.profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[2].profile_path}` : undefined,
+      actor4Photo: mainActors[3]?.profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[3].profile_path}` : undefined,
+      actor5Photo: mainActors[4]?.profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[4].profile_path}` : undefined,
       hintActorPhoto: mainActors[2]?.profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[2].profile_path}` : undefined
     }
 

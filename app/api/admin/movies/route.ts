@@ -88,16 +88,22 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Create movie object for database (using GameMovie structure)
+      // Create movie object for database (using GameMovie structure with 5 actors)
       const newMovie = {
         movie: movieDetails.title,
         year: movieDetails.release_date?.split('-')[0] || 'Unknown',
         poster: movieDetails.poster_path ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}` : null,
         actor1: movieDetails.cast?.[0]?.name || 'Unknown',
         actor2: movieDetails.cast?.[1]?.name || 'Unknown',
-        hintActor: movieDetails.cast?.[2]?.name || null,
+        actor3: movieDetails.cast?.[2]?.name || null,
+        actor4: movieDetails.cast?.[3]?.name || null,
+        actor5: movieDetails.cast?.[4]?.name || null,
+        hintActor: movieDetails.cast?.[2]?.name || null, // Keep for backward compatibility
         actor1Photo: movieDetails.cast?.[0]?.profile_path ? `https://image.tmdb.org/t/p/w185${movieDetails.cast[0].profile_path}` : null,
         actor2Photo: movieDetails.cast?.[1]?.profile_path ? `https://image.tmdb.org/t/p/w185${movieDetails.cast[1].profile_path}` : null,
+        actor3Photo: movieDetails.cast?.[2]?.profile_path ? `https://image.tmdb.org/t/p/w185${movieDetails.cast[2].profile_path}` : null,
+        actor4Photo: movieDetails.cast?.[3]?.profile_path ? `https://image.tmdb.org/t/p/w185${movieDetails.cast[3].profile_path}` : null,
+        actor5Photo: movieDetails.cast?.[4]?.profile_path ? `https://image.tmdb.org/t/p/w185${movieDetails.cast[4].profile_path}` : null,
         hintActorPhoto: movieDetails.cast?.[2]?.profile_path ? `https://image.tmdb.org/t/p/w185${movieDetails.cast[2].profile_path}` : null
       }
 

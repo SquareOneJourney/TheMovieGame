@@ -17,7 +17,7 @@ export const viewport = {
 
 export const metadata: Metadata = {
   title: 'The Movie Game',
-  description: 'A fun movie trivia game where you guess movies from actor clues! Play against AI or challenge friends.',
+  description: 'A fun movie trivia game where you guess movies from actor clues! Challenge Mr. Robot in single-player mode.',
   keywords: ['movie', 'trivia', 'game', 'actors', 'guess', 'entertainment'],
   authors: [{ name: 'The Movie Game Team' }],
   creator: 'The Movie Game',

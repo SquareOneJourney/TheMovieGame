@@ -1,23 +1,23 @@
 # 🎬 The Movie Game
 
-A fun multiplayer movie trivia game where players give clues by naming two actors from a movie, and others guess the movie title!
+A fun single-player movie trivia game where you challenge Mr. Robot by guessing movie titles from actor clues!
 
 ## 🎮 How to Play
 
-1. **Player 1** names two actors from a movie
-2. **Player 2** guesses the movie title
-3. **Correct guess** = 1 point + your turn to give clues
-4. **Wrong guess** = 2 points for the clue giver
+1. **Mr. Robot** shows you two actors from a movie
+2. **You guess** the movie title from the actors
+3. **Correct guess** = 1 point for you + your turn to give clues
+4. **Wrong guess** = 1 point for Mr. Robot + he keeps giving clues
 5. **First to 10 points wins!**
 
 ## ✨ Features
 
 - 🎭 **Real Movie Data**: Powered by TMDB API with movies from 1980 onwards
-- 🤖 **Single Player Mode**: Play against an AI bot
-- 👥 **Multiplayer**: Challenge friends in real-time
+- 🤖 **AI Opponent**: Challenge Mr. Robot in movie trivia
 - 💡 **Hints**: Get a third actor as a hint (costs half a point)
 - 🎯 **Smart Matching**: Fuzzy matching for movie titles
 - 📱 **Responsive Design**: Works on desktop and mobile
+- 🔧 **Admin Dashboard**: Manage movie database and settings
 
 ## 🚀 Quick Start
 
@@ -148,14 +148,10 @@ Make sure to set these in your deployment platform:
 ## 🎮 Game Modes
 
 ### Single Player
-- Play against an AI bot
-- Practice your movie knowledge
+- AI-powered opponent (Mr. Robot)
+- Progressive difficulty
+- Score tracking
 - Perfect for solo gaming
-
-### Multiplayer
-- Real-time gameplay with friends
-- Share game links
-- Competitive scoring
 
 ## 🤝 Contributing
 

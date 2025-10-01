@@ -26,7 +26,7 @@ export default function Home() {
             The Movie Game
           </h1>
           <p className="text-2xl font-semibold text-gray-300 max-w-2xl mx-auto mb-8">
-            &quot;If you ain&apos;t first, you&apos;re last.&quot;
+            Challenge Mr. Robot to a movie trivia duel!
           </p>
           
           {/* Single Player Button */}
@@ -46,7 +46,7 @@ export default function Home() {
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 text-center">
             <div className="text-4xl mb-4">🤖</div>
             <h3 className="text-xl font-bold text-white mb-2">AI Opponent</h3>
-            <p className="text-gray-300">Play against Mr. Robot in movie trivia</p>
+            <p className="text-gray-300">Challenge Mr. Robot in movie trivia</p>
           </div>
 
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 text-center">

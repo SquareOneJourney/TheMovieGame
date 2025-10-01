@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Search, CheckCircle, XCircle, AlertCircle } from 'lucide-react'
+import { Search, CheckCircle, AlertCircle, XCircle } from 'lucide-react'
 import { enhancedFuzzyMatch } from '@/lib/fuzzyMatch'
 import { ActorPhoto } from '@/components/ActorPhoto'
 
@@ -23,7 +23,6 @@ interface GuessInputProps {
     hintActor?: string
   }
   onGuess: (guess: string) => void
-  onNoIdea?: () => void
   onHint?: () => void
   disabled?: boolean
   hintUsed?: boolean
@@ -36,7 +35,7 @@ interface GuessInputProps {
   }
 }
 
-export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, hintUsed = false, lastResult }: GuessInputProps) {
+export function GuessInput({ clue, onGuess, onHint, disabled = false, hintUsed = false, lastResult }: GuessInputProps) {
   const [guess, setGuess] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -59,21 +58,6 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
     }
   }
 
-  const handleNoIdea = async () => {
-    if (disabled || isSubmitting || !onNoIdea) {
-      return
-    }
-
-    setIsSubmitting(true)
-    
-    try {
-      await onNoIdea()
-    } catch (error) {
-      console.error('Error submitting no idea:', error)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
 
   const handleHint = async () => {
     if (disabled || isSubmitting || !onHint) {
@@ -253,33 +237,7 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
                 </Button>
               </motion.div>
 
-              <div className="flex space-x-3">
-                <motion.div
-                  whileHover={!disabled && !isSubmitting ? { scale: 1.02 } : {}}
-                  whileTap={!disabled && !isSubmitting ? { scale: 0.98 } : {}}
-                  className="flex-1"
-                >
-                  <Button
-                    type="button"
-                    onClick={handleNoIdea}
-                    disabled={disabled || isSubmitting || !onNoIdea}
-                    className="w-full bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? (
-                      <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Submitting...</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <XCircle className="h-4 w-4" />
-                        <span className="hidden sm:inline">No Idea</span>
-                        <span className="sm:hidden">Skip</span>
-                      </div>
-                    )}
-                  </Button>
-                </motion.div>
-
+              <div className="flex justify-center">
                 <motion.div
                   whileHover={!disabled && !isSubmitting && !hintUsed ? { scale: 1.02 } : {}}
                   whileTap={!disabled && !isSubmitting && !hintUsed ? { scale: 0.98 } : {}}
@@ -288,7 +246,7 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
                     type="button"
                     onClick={handleHint}
                     disabled={disabled || isSubmitting || !onHint || hintUsed}
-                    className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold py-3 px-3 sm:px-4 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     title={hintUsed ? "Hint already used" : "Get a hint (costs half a point if correct)"}
                   >
                     {isSubmitting ? (
@@ -319,7 +277,7 @@ export function GuessInput({ clue, onGuess, onNoIdea, onHint, disabled = false, 
             {/* Instructions */}
             <div className="text-center">
               <p className="text-sm text-gray-400">
-                Type the full movie title as accurately as possible, or click &quot;No Idea&quot; if you don&apos;t know
+                Type the full movie title as accurately as possible
               </p>
             </div>
           </form>

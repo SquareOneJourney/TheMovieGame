@@ -299,7 +299,7 @@ export default function AdminDashboard() {
     
     // Sort actors by their assigned roles
     const sortedActors = updatedActors.sort((a, b) => {
-      const roleOrder = { actor1: 0, actor2: 1, hint: 2, extra: 3 }
+      const roleOrder = { actor1: 0, actor2: 1, actor3: 2, actor4: 3, actor5: 4, hint: 5, extra: 6 }
       return (roleOrder[a.role as keyof typeof roleOrder] || 999) - (roleOrder[b.role as keyof typeof roleOrder] || 999)
     })
     
@@ -321,6 +321,18 @@ export default function AdminDashboard() {
       name: editingMovie.actor2,
       photo: editingMovie.actor2Photo
     }
+    const actor3Data = editingMovie.actor3 ? {
+      name: editingMovie.actor3,
+      photo: editingMovie.actor3Photo
+    } : null
+    const actor4Data = editingMovie.actor4 ? {
+      name: editingMovie.actor4,
+      photo: editingMovie.actor4Photo
+    } : null
+    const actor5Data = editingMovie.actor5 ? {
+      name: editingMovie.actor5,
+      photo: editingMovie.actor5Photo
+    } : null
     const hintActorData = editingMovie.hintActor ? {
       name: editingMovie.hintActor,
       photo: editingMovie.hintActorPhoto
@@ -329,63 +341,71 @@ export default function AdminDashboard() {
     // If moving to the same role, do nothing
     if (currentRole === newRole) return
 
-    // Handle the swap logic properly
-    if (currentRole === 'actor1') {
-      // Moving actor1 to a new role
-      if (newRole === 'actor2') {
-        // Swap actor1 and actor2
-        updatedMovie.actor1 = actor2Data.name
-        updatedMovie.actor1Photo = actor2Data.photo
-        updatedMovie.actor2 = actor1Data.name
-        updatedMovie.actor2Photo = actor1Data.photo
-      } else if (newRole === 'hint') {
-        // Move actor1 to hint, move hint to actor1
-        if (hintActorData) {
-          updatedMovie.actor1 = hintActorData.name
-          updatedMovie.actor1Photo = hintActorData.photo
-        } else {
-          updatedMovie.actor1 = ''
-          updatedMovie.actor1Photo = ''
-        }
-        updatedMovie.hintActor = actor1Data.name
-        updatedMovie.hintActorPhoto = actor1Data.photo
+    // Helper function to swap actors
+    const swapActors = (role1: string, role2: string, data1: any, data2: any) => {
+      if (role1 === 'actor1') {
+        updatedMovie.actor1 = data2.name
+        updatedMovie.actor1Photo = data2.photo
+      } else if (role1 === 'actor2') {
+        updatedMovie.actor2 = data2.name
+        updatedMovie.actor2Photo = data2.photo
+      } else if (role1 === 'actor3') {
+        updatedMovie.actor3 = data2.name
+        updatedMovie.actor3Photo = data2.photo
+      } else if (role1 === 'actor4') {
+        updatedMovie.actor4 = data2.name
+        updatedMovie.actor4Photo = data2.photo
+      } else if (role1 === 'actor5') {
+        updatedMovie.actor5 = data2.name
+        updatedMovie.actor5Photo = data2.photo
+      } else if (role1 === 'hint') {
+        updatedMovie.hintActor = data2.name
+        updatedMovie.hintActorPhoto = data2.photo
       }
-    } else if (currentRole === 'actor2') {
-      // Moving actor2 to a new role
-      if (newRole === 'actor1') {
-        // Swap actor1 and actor2
-        updatedMovie.actor1 = actor2Data.name
-        updatedMovie.actor1Photo = actor2Data.photo
-        updatedMovie.actor2 = actor1Data.name
-        updatedMovie.actor2Photo = actor1Data.photo
-      } else if (newRole === 'hint') {
-        // Move actor2 to hint, move hint to actor2
-        if (hintActorData) {
-          updatedMovie.actor2 = hintActorData.name
-          updatedMovie.actor2Photo = hintActorData.photo
-        } else {
-          updatedMovie.actor2 = ''
-          updatedMovie.actor2Photo = ''
-        }
-        updatedMovie.hintActor = actor2Data.name
-        updatedMovie.hintActorPhoto = actor2Data.photo
-      }
-    } else if (currentRole === 'hint' && hintActorData) {
-      // Moving hint actor to a new role
-      if (newRole === 'actor1') {
-        // Move hint to actor1, move actor1 to hint
-        updatedMovie.hintActor = actor1Data.name
-        updatedMovie.hintActorPhoto = actor1Data.photo
-        updatedMovie.actor1 = hintActorData.name
-        updatedMovie.actor1Photo = hintActorData.photo
-      } else if (newRole === 'actor2') {
-        // Move hint to actor2, move actor2 to hint
-        updatedMovie.hintActor = actor2Data.name
-        updatedMovie.hintActorPhoto = actor2Data.photo
-        updatedMovie.actor2 = hintActorData.name
-        updatedMovie.actor2Photo = hintActorData.photo
+
+      if (role2 === 'actor1') {
+        updatedMovie.actor1 = data1.name
+        updatedMovie.actor1Photo = data1.photo
+      } else if (role2 === 'actor2') {
+        updatedMovie.actor2 = data1.name
+        updatedMovie.actor2Photo = data1.photo
+      } else if (role2 === 'actor3') {
+        updatedMovie.actor3 = data1.name
+        updatedMovie.actor3Photo = data1.photo
+      } else if (role2 === 'actor4') {
+        updatedMovie.actor4 = data1.name
+        updatedMovie.actor4Photo = data1.photo
+      } else if (role2 === 'actor5') {
+        updatedMovie.actor5 = data1.name
+        updatedMovie.actor5Photo = data1.photo
+      } else if (role2 === 'hint') {
+        updatedMovie.hintActor = data1.name
+        updatedMovie.hintActorPhoto = data1.photo
       }
     }
+
+    // Get current actor data based on role
+    let currentActorData = null
+    if (currentRole === 'actor1') currentActorData = actor1Data
+    else if (currentRole === 'actor2') currentActorData = actor2Data
+    else if (currentRole === 'actor3') currentActorData = actor3Data
+    else if (currentRole === 'actor4') currentActorData = actor4Data
+    else if (currentRole === 'actor5') currentActorData = actor5Data
+    else if (currentRole === 'hint') currentActorData = hintActorData
+
+    if (!currentActorData) return
+
+    // Get target actor data based on new role
+    let targetActorData = null
+    if (newRole === 'actor1') targetActorData = actor1Data
+    else if (newRole === 'actor2') targetActorData = actor2Data
+    else if (newRole === 'actor3') targetActorData = actor3Data
+    else if (newRole === 'actor4') targetActorData = actor4Data
+    else if (newRole === 'actor5') targetActorData = actor5Data
+    else if (newRole === 'hint') targetActorData = hintActorData
+
+    // Perform the swap
+    swapActors(currentRole, newRole, currentActorData, targetActorData)
 
     setEditingMovie(updatedMovie)
   }
@@ -478,7 +498,25 @@ export default function AdminDashboard() {
   }
 
   const handleEdit = (movie: GameMovie) => {
-    setEditingMovie({ ...movie })
+    // Ensure all string fields are not null to prevent React input errors
+    const movieWithDefaults = {
+      ...movie,
+      year: movie.year || '',
+      actor1: movie.actor1 || '',
+      actor2: movie.actor2 || '',
+      actor3: movie.actor3 || '',
+      actor4: movie.actor4 || '',
+      actor5: movie.actor5 || '',
+      hintActor: movie.hintActor || '',
+      actor1Photo: movie.actor1Photo || '',
+      actor2Photo: movie.actor2Photo || '',
+      actor3Photo: movie.actor3Photo || '',
+      actor4Photo: movie.actor4Photo || '',
+      actor5Photo: movie.actor5Photo || '',
+      hintActorPhoto: movie.hintActorPhoto || '',
+      poster: movie.poster || ''
+    }
+    setEditingMovie(movieWithDefaults)
     setOriginalMovieTitle(movie.movie || '')
     
     // Fetch actors if we have a TMDB ID and haven't fetched them yet
@@ -640,8 +678,9 @@ export default function AdminDashboard() {
             onSave={handleAdd}
             onCancel={() => setIsAdding(false)}
             initialMovie={{
-              movie: '', actor1: '', actor2: '', year: '', poster: '', hintActor: '',
-              actor1Photo: '', actor2Photo: '', hintActorPhoto: ''
+              movie: '', actor1: '', actor2: '', actor3: '', actor4: '', actor5: '', 
+              year: '', poster: '', hintActor: '',
+              actor1Photo: '', actor2Photo: '', actor3Photo: '', actor4Photo: '', actor5Photo: '', hintActorPhoto: ''
             }}
             isNew={true}
             saving={saving}
@@ -869,6 +908,23 @@ export default function AdminDashboard() {
         </div>
                                     )}
       </div>
+                                  
+                                  {/* Help text for movies with missing actors */}
+                                  {(!movie.actor3 || !movie.actor4 || !movie.actor5) && (
+                                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                      <div className="flex items-start space-x-2">
+                                        <div className="text-yellow-600">💡</div>
+                                        <div className="text-sm text-yellow-800">
+                                          <p className="font-medium">Missing actors detected</p>
+                                          <p>This movie was added before the 5-actor update. To get all 5 actors, you can:</p>
+                                          <ul className="list-disc list-inside mt-1 space-y-1">
+                                            <li>Manually add actors using the form fields below</li>
+                                            <li>Or re-add this movie from TMDB to get fresh actor data</li>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
 
                                   {/* Show TMDB actors if available */}
                                   {movie.tmdbId && movieActors[movie.tmdbId] ? (
@@ -905,12 +961,18 @@ export default function AdminDashboard() {
                                               >
                                                 <option value="actor1">Actor 1</option>
                                                 <option value="actor2">Actor 2</option>
+                                                <option value="actor3">Actor 3</option>
+                                                <option value="actor4">Actor 4</option>
+                                                <option value="actor5">Actor 5</option>
                                                 <option value="hint">Hint Actor</option>
                                                 <option value="extra">Extra</option>
                                               </select>
                                               <div className="text-xs text-gray-400">
                                                 {actor.role === 'actor1' && "🎭 Main"}
                                                 {actor.role === 'actor2' && "🎭 Main"}
+                                                {actor.role === 'actor3' && "🎭 Main"}
+                                                {actor.role === 'actor4' && "🎭 Main"}
+                                                {actor.role === 'actor5' && "🎭 Main"}
                                                 {actor.role === 'hint' && "💡 Hint"}
                                                 {actor.role === 'extra' && "👥 Extra"}
                                               </div>
@@ -954,6 +1016,9 @@ export default function AdminDashboard() {
                                           >
                                             <option value="actor1">Actor 1</option>
                                             <option value="actor2">Actor 2</option>
+                                            <option value="actor3">Actor 3</option>
+                                            <option value="actor4">Actor 4</option>
+                                            <option value="actor5">Actor 5</option>
                                             <option value="hint">Hint Actor</option>
                                           </select>
                                           <div className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
@@ -990,6 +1055,9 @@ export default function AdminDashboard() {
                                           >
                                             <option value="actor1">Actor 1</option>
                                             <option value="actor2">Actor 2</option>
+                                            <option value="actor3">Actor 3</option>
+                                            <option value="actor4">Actor 4</option>
+                                            <option value="actor5">Actor 5</option>
                                             <option value="hint">Hint Actor</option>
                                           </select>
                                           <div className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
@@ -1027,10 +1095,136 @@ export default function AdminDashboard() {
                                             >
                                               <option value="actor1">Actor 1</option>
                                               <option value="actor2">Actor 2</option>
+                                              <option value="actor3">Actor 3</option>
+                                              <option value="actor4">Actor 4</option>
+                                              <option value="actor5">Actor 5</option>
                                               <option value="hint">Hint Actor</option>
                                             </select>
                                             <div className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
                                               💡 Hint
+                                            </div>
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {/* Actor 3 */}
+                                      {(editingMovie.actor3 || editingMovie.actor3 === null) && (
+                                        <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-200">
+                                          <div className="flex items-center space-x-2 text-orange-600">
+                                            <div className="w-6 h-6 bg-orange-200 rounded flex items-center justify-center text-xs font-medium">
+                                              4
+                                            </div>
+                                          </div>
+                                          {editingMovie.actor3Photo && (
+                                            <Image 
+                                              src={editingMovie.actor3Photo} 
+                                              alt={editingMovie.actor3}
+                                              width={40}
+                                              height={40}
+                                              className="w-10 h-10 rounded-full object-cover"
+                                            />
+                                          )}
+                                          <div className="flex-1">
+                                            <div className="font-medium text-gray-900">{editingMovie.actor3 || 'No actor'}</div>
+                                            <div className="text-sm text-gray-500">Actor 3</div>
+                                          </div>
+                                          <div className="flex items-center space-x-2">
+                                            <select
+                                              value="actor3"
+                                              onChange={(e) => handleManualActorRoleChange('actor3', e.target.value)}
+                                              className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            >
+                                              <option value="actor1">Actor 1</option>
+                                              <option value="actor2">Actor 2</option>
+                                              <option value="actor3">Actor 3</option>
+                                              <option value="actor4">Actor 4</option>
+                                              <option value="actor5">Actor 5</option>
+                                              <option value="hint">Hint Actor</option>
+                                            </select>
+                                            <div className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+                                              🎭 Main
+                                            </div>
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {/* Actor 4 */}
+                                      {(editingMovie.actor4 || editingMovie.actor4 === null) && (
+                                        <div className="flex items-center space-x-3 p-3 bg-teal-50 rounded-lg border border-teal-200">
+                                          <div className="flex items-center space-x-2 text-teal-600">
+                                            <div className="w-6 h-6 bg-teal-200 rounded flex items-center justify-center text-xs font-medium">
+                                              5
+                                            </div>
+                                          </div>
+                                          {editingMovie.actor4Photo && (
+                                            <Image 
+                                              src={editingMovie.actor4Photo} 
+                                              alt={editingMovie.actor4}
+                                              width={40}
+                                              height={40}
+                                              className="w-10 h-10 rounded-full object-cover"
+                                            />
+                                          )}
+                                          <div className="flex-1">
+                                            <div className="font-medium text-gray-900">{editingMovie.actor4 || 'No actor'}</div>
+                                            <div className="text-sm text-gray-500">Actor 4</div>
+                                          </div>
+                                          <div className="flex items-center space-x-2">
+                                            <select
+                                              value="actor4"
+                                              onChange={(e) => handleManualActorRoleChange('actor4', e.target.value)}
+                                              className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            >
+                                              <option value="actor1">Actor 1</option>
+                                              <option value="actor2">Actor 2</option>
+                                              <option value="actor3">Actor 3</option>
+                                              <option value="actor4">Actor 4</option>
+                                              <option value="actor5">Actor 5</option>
+                                              <option value="hint">Hint Actor</option>
+                                            </select>
+                                            <div className="text-xs text-teal-600 bg-teal-100 px-2 py-1 rounded-full">
+                                              🎭 Main
+                                            </div>
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {/* Actor 5 */}
+                                      {(editingMovie.actor5 || editingMovie.actor5 === null) && (
+                                        <div className="flex items-center space-x-3 p-3 bg-pink-50 rounded-lg border border-pink-200">
+                                          <div className="flex items-center space-x-2 text-pink-600">
+                                            <div className="w-6 h-6 bg-pink-200 rounded flex items-center justify-center text-xs font-medium">
+                                              6
+                                            </div>
+                                          </div>
+                                          {editingMovie.actor5Photo && (
+                                            <Image 
+                                              src={editingMovie.actor5Photo} 
+                                              alt={editingMovie.actor5}
+                                              width={40}
+                                              height={40}
+                                              className="w-10 h-10 rounded-full object-cover"
+                                            />
+                                          )}
+                                          <div className="flex-1">
+                                            <div className="font-medium text-gray-900">{editingMovie.actor5 || 'No actor'}</div>
+                                            <div className="text-sm text-gray-500">Actor 5</div>
+                                          </div>
+                                          <div className="flex items-center space-x-2">
+                                            <select
+                                              value="actor5"
+                                              onChange={(e) => handleManualActorRoleChange('actor5', e.target.value)}
+                                              className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            >
+                                              <option value="actor1">Actor 1</option>
+                                              <option value="actor2">Actor 2</option>
+                                              <option value="actor3">Actor 3</option>
+                                              <option value="actor4">Actor 4</option>
+                                              <option value="actor5">Actor 5</option>
+                                              <option value="hint">Hint Actor</option>
+                                            </select>
+                                            <div className="text-xs text-pink-600 bg-pink-100 px-2 py-1 rounded-full">
+                                              🎭 Main
                                             </div>
                                           </div>
                                         </div>
@@ -1042,14 +1236,20 @@ export default function AdminDashboard() {
                                 {/* Traditional Form Fields */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   <FormInput label="Movie Title" name="movie" value={editingMovie.movie} onChange={(e) => setEditingMovie(prev => prev ? {...prev, movie: e.target.value} : null)} required />
-                                  <FormInput label="Year" name="year" value={editingMovie.year} onChange={(e) => setEditingMovie(prev => prev ? {...prev, year: e.target.value} : null)} />
-                                  <FormInput label="Actor 1 Name" name="actor1" value={editingMovie.actor1} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor1: e.target.value} : null)} required />
-                                  <FormInput label="Actor 1 Photo URL" name="actor1Photo" value={editingMovie.actor1Photo} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor1Photo: e.target.value} : null)} />
-                                  <FormInput label="Actor 2 Name" name="actor2" value={editingMovie.actor2} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor2: e.target.value} : null)} required />
-                                  <FormInput label="Actor 2 Photo URL" name="actor2Photo" value={editingMovie.actor2Photo} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor2Photo: e.target.value} : null)} />
-                                  <FormInput label="Hint Actor Name" name="hintActor" value={editingMovie.hintActor} onChange={(e) => setEditingMovie(prev => prev ? {...prev, hintActor: e.target.value} : null)} />
-                                  <FormInput label="Hint Actor Photo URL" name="hintActorPhoto" value={editingMovie.hintActorPhoto} onChange={(e) => setEditingMovie(prev => prev ? {...prev, hintActorPhoto: e.target.value} : null)} />
-                                  <FormInput label="Poster URL" name="poster" value={editingMovie.poster} onChange={(e) => setEditingMovie(prev => prev ? {...prev, poster: e.target.value} : null)} />
+                                  <FormInput label="Year" name="year" value={editingMovie.year || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, year: e.target.value} : null)} />
+                                  <FormInput label="Actor 1 Name" name="actor1" value={editingMovie.actor1 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor1: e.target.value} : null)} required />
+                                  <FormInput label="Actor 1 Photo URL" name="actor1Photo" value={editingMovie.actor1Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor1Photo: e.target.value} : null)} />
+                                  <FormInput label="Actor 2 Name" name="actor2" value={editingMovie.actor2 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor2: e.target.value} : null)} required />
+                                  <FormInput label="Actor 2 Photo URL" name="actor2Photo" value={editingMovie.actor2Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor2Photo: e.target.value} : null)} />
+                                  <FormInput label="Actor 3 Name" name="actor3" value={editingMovie.actor3 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor3: e.target.value} : null)} />
+                                  <FormInput label="Actor 3 Photo URL" name="actor3Photo" value={editingMovie.actor3Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor3Photo: e.target.value} : null)} />
+                                  <FormInput label="Actor 4 Name" name="actor4" value={editingMovie.actor4 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor4: e.target.value} : null)} />
+                                  <FormInput label="Actor 4 Photo URL" name="actor4Photo" value={editingMovie.actor4Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor4Photo: e.target.value} : null)} />
+                                  <FormInput label="Actor 5 Name" name="actor5" value={editingMovie.actor5 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor5: e.target.value} : null)} />
+                                  <FormInput label="Actor 5 Photo URL" name="actor5Photo" value={editingMovie.actor5Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor5Photo: e.target.value} : null)} />
+                                  <FormInput label="Hint Actor Name" name="hintActor" value={editingMovie.hintActor || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, hintActor: e.target.value} : null)} />
+                                  <FormInput label="Hint Actor Photo URL" name="hintActorPhoto" value={editingMovie.hintActorPhoto || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, hintActorPhoto: e.target.value} : null)} />
+                                  <FormInput label="Poster URL" name="poster" value={editingMovie.poster || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, poster: e.target.value} : null)} />
                                 </div>
                                 
                                 <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200">
@@ -1440,15 +1640,21 @@ function MovieForm({ initialMovie, onSave, onCancel, isNew, saving }: MovieFormP
     <Card className="p-6 shadow-lg mb-6 bg-blue-50 border-blue-200">
       <h3 className="text-xl font-bold text-blue-800 mb-4">{isNew ? 'Add New Movie' : `Edit ${movie.movie}`}</h3>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormInput label="Movie Title" name="movie" value={movie.movie} onChange={handleChange} required />
-        <FormInput label="Year" name="year" value={movie.year} onChange={handleChange} />
-        <FormInput label="Actor 1 Name" name="actor1" value={movie.actor1} onChange={handleChange} required />
-        <FormInput label="Actor 1 Photo URL" name="actor1Photo" value={movie.actor1Photo} onChange={handleChange} />
-        <FormInput label="Actor 2 Name" name="actor2" value={movie.actor2} onChange={handleChange} required />
-        <FormInput label="Actor 2 Photo URL" name="actor2Photo" value={movie.actor2Photo} onChange={handleChange} />
-        <FormInput label="Hint Actor Name" name="hintActor" value={movie.hintActor} onChange={handleChange} />
-        <FormInput label="Hint Actor Photo URL" name="hintActorPhoto" value={movie.hintActorPhoto} onChange={handleChange} />
-        <FormInput label="Poster URL" name="poster" value={movie.poster} onChange={handleChange} />
+        <FormInput label="Movie Title" name="movie" value={movie.movie || ''} onChange={handleChange} required />
+        <FormInput label="Year" name="year" value={movie.year || ''} onChange={handleChange} />
+        <FormInput label="Actor 1 Name" name="actor1" value={movie.actor1 || ''} onChange={handleChange} required />
+        <FormInput label="Actor 1 Photo URL" name="actor1Photo" value={movie.actor1Photo || ''} onChange={handleChange} />
+        <FormInput label="Actor 2 Name" name="actor2" value={movie.actor2 || ''} onChange={handleChange} required />
+        <FormInput label="Actor 2 Photo URL" name="actor2Photo" value={movie.actor2Photo || ''} onChange={handleChange} />
+        <FormInput label="Actor 3 Name" name="actor3" value={movie.actor3 || ''} onChange={handleChange} />
+        <FormInput label="Actor 3 Photo URL" name="actor3Photo" value={movie.actor3Photo || ''} onChange={handleChange} />
+        <FormInput label="Actor 4 Name" name="actor4" value={movie.actor4 || ''} onChange={handleChange} />
+        <FormInput label="Actor 4 Photo URL" name="actor4Photo" value={movie.actor4Photo || ''} onChange={handleChange} />
+        <FormInput label="Actor 5 Name" name="actor5" value={movie.actor5 || ''} onChange={handleChange} />
+        <FormInput label="Actor 5 Photo URL" name="actor5Photo" value={movie.actor5Photo || ''} onChange={handleChange} />
+        <FormInput label="Hint Actor Name" name="hintActor" value={movie.hintActor || ''} onChange={handleChange} />
+        <FormInput label="Hint Actor Photo URL" name="hintActorPhoto" value={movie.hintActorPhoto || ''} onChange={handleChange} />
+        <FormInput label="Poster URL" name="poster" value={movie.poster || ''} onChange={handleChange} />
         <div className="md:col-span-2 flex justify-end space-x-2 mt-4">
           <Button type="button" variant="outline" onClick={onCancel} disabled={saving}>
             <X className="w-4 h-4 mr-2" /> Cancel

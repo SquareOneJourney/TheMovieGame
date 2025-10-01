@@ -38,12 +38,18 @@ export interface TMDBMovieWithCast extends TMDBMovie {
 export interface GameMovie {
   actor1: string;
   actor2: string;
+  actor3?: string; // Additional actor for flexibility
+  actor4?: string; // Additional actor for flexibility
+  actor5?: string; // Additional actor for flexibility
   movie: string;
   poster?: string;
   year?: string;
-  hintActor?: string; // Third actor for hints
+  hintActor?: string; // Third actor for hints (kept for backward compatibility)
   actor1Photo?: string; // Actor 1 profile image URL
   actor2Photo?: string; // Actor 2 profile image URL
+  actor3Photo?: string; // Actor 3 profile image URL
+  actor4Photo?: string; // Actor 4 profile image URL
+  actor5Photo?: string; // Actor 5 profile image URL
   hintActorPhoto?: string; // Hint actor profile image URL
   tmdbId?: string; // TMDB movie ID for fetching additional data
 }
@@ -141,10 +147,10 @@ class TMDBService {
           const movieDetails = await this.getMovieDetails(movie.id);
           const cast = movieDetails.cast || [];
           
-          // Filter for actors (not crew) and get only the top 2 main actors
+          // Filter for actors (not crew) and get the top 5 main actors
           const mainActors = cast
             .filter(actor => actor.order < 5) // Only top 5 cast members (main actors)
-            .slice(0, 2);
+            .slice(0, 5);
           
           if (mainActors.length >= 2) {
             // Skip actor popularity checks for faster loading
@@ -158,12 +164,18 @@ class TMDBService {
             gameMovies.push({
               actor1: mainActors[0].name,
               actor2: mainActors[1].name,
+              actor3: mainActors[2]?.name,
+              actor4: mainActors[3]?.name,
+              actor5: mainActors[4]?.name,
               movie: movie.title,
               poster: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
               year: movie.release_date ? new Date(movie.release_date).getFullYear().toString() : undefined,
-              hintActor: hintActor?.name,
+              hintActor: hintActor?.name, // Keep for backward compatibility
               actor1Photo: mainActors[0].profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[0].profile_path}` : undefined,
               actor2Photo: mainActors[1].profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[1].profile_path}` : undefined,
+              actor3Photo: mainActors[2]?.profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[2].profile_path}` : undefined,
+              actor4Photo: mainActors[3]?.profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[3].profile_path}` : undefined,
+              actor5Photo: mainActors[4]?.profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[4].profile_path}` : undefined,
               hintActorPhoto: hintActor?.profile_path ? `https://image.tmdb.org/t/p/w185${hintActor.profile_path}` : undefined
             });
           }

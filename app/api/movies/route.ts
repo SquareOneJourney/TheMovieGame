@@ -170,10 +170,10 @@ export async function GET() {
             continue;
           }
           
-          // Get only the top 2 main actors (very strict filtering)
+          // Get the top 5 main actors for more flexibility
           const mainActors = cast
             .filter((actor: any) => actor.order < 5) // Only top 5 cast members
-            .slice(0, 2);
+            .slice(0, 5);
           
           if (mainActors.length >= 2) {
             // Get a third actor for hints (from main cast only)
@@ -184,11 +184,17 @@ export async function GET() {
             detailedMovies.push({
               actor1: mainActors[0].name,
               actor2: mainActors[1].name,
+              actor3: mainActors[2]?.name,
+              actor4: mainActors[3]?.name,
+              actor5: mainActors[4]?.name,
               movie: details.title,
               year: details.release_date ? new Date(details.release_date).getFullYear().toString() : undefined,
-              hintActor: hintActor?.name,
+              hintActor: hintActor?.name, // Keep for backward compatibility
               actor1Photo: mainActors[0].profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[0].profile_path}` : undefined,
               actor2Photo: mainActors[1].profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[1].profile_path}` : undefined,
+              actor3Photo: mainActors[2]?.profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[2].profile_path}` : undefined,
+              actor4Photo: mainActors[3]?.profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[3].profile_path}` : undefined,
+              actor5Photo: mainActors[4]?.profile_path ? `https://image.tmdb.org/t/p/w185${mainActors[4].profile_path}` : undefined,
               hintActorPhoto: hintActor?.profile_path ? `https://image.tmdb.org/t/p/w185${hintActor.profile_path}` : undefined
             });
           }

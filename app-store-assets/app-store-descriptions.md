@@ -159,7 +159,7 @@ Download now and prove your movie knowledge! How many can you guess correctly?
 ### Microsoft Store (PWA)
 **The Movie Game - Movie Trivia PWA**
 
-A fun movie trivia game where you guess movies from actor clues. Play against AI or challenge friends in this engaging Progressive Web App.
+A fun movie trivia game where you guess movies from actor clues. Challenge Mr. Robot in this engaging single-player Progressive Web App.
 
 ### Samsung Galaxy Store (PWA)
 **The Movie Game**

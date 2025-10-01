@@ -12,7 +12,7 @@
       ]
     },
     {
-      "source": "/(.*\\.html|/|/admin|/singleplayer|/multiplayer|/pwa-debug|/pwa-test)",
+      "source": "/(.*\\.html|/|/admin|/singleplayer|/pwa-debug|/pwa-test)",
       "headers": [
         {
           "key": "Cache-Control",
