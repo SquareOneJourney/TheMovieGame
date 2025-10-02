@@ -16,11 +16,11 @@ export function ActorPhoto({ src, name, size = 'md', className = '' }: ActorPhot
   const [imageError, setImageError] = useState(false)
   const [imageLoading, setImageLoading] = useState(true)
 
-  // Size configurations
+  // Size configurations - Mobile Optimized
   const sizeConfig = {
-    sm: 'w-12 h-12 text-sm',
-    md: 'w-16 h-16 text-base',
-    lg: 'w-20 h-20 text-lg'
+    sm: 'w-8 h-8 sm:w-12 sm:h-12 text-xs sm:text-sm',
+    md: 'w-12 h-12 sm:w-16 sm:h-16 text-sm sm:text-base',
+    lg: 'w-16 h-16 sm:w-20 sm:h-20 text-base sm:text-lg'
   }
 
   const sizeClasses = sizeConfig[size]
@@ -91,7 +91,7 @@ export function ActorPhoto({ src, name, size = 'md', className = '' }: ActorPhot
         </div>
       )}
 
-      {/* Actual image */}
+      {/* Actual image - Mobile Optimized */}
       <Image
         src={src}
         alt={name}
@@ -103,8 +103,8 @@ export function ActorPhoto({ src, name, size = 'md', className = '' }: ActorPhot
           ${sizeClasses}
           rounded-full
           object-cover
-          shadow-lg
-          border-2 border-gray-300
+          shadow-md sm:shadow-lg
+          border border-gray-300 sm:border-2
           transition-all duration-300
           ${imageLoading ? 'opacity-0' : 'opacity-100'}
         `}

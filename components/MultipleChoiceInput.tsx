@@ -80,48 +80,48 @@ export function MultipleChoiceInput({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="space-y-2 sm:space-y-3"
+      className="space-y-1 sm:space-y-2 md:space-y-3"
     >
-      {/* Current Clue Display */}
+      {/* Current Clue Display - Mobile Optimized */}
       <Card className="bg-gradient-to-b from-[#fffef8] via-[#fffcf0] to-[#fffef8]">
-        <CardContent className="p-4">
+        <CardContent className="p-2 sm:p-4">
           
-          <div className="relative text-center space-y-2">
-            <h3 className="text-slate-900 text-center text-base sm:text-lg font-bold mb-3">
+          <div className="relative text-center space-y-1 sm:space-y-2">
+            <h3 className="text-slate-900 text-center text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
               🎬 Movie Clue 🎬
             </h3>
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-6 text-base sm:text-lg">
-              <div className="flex items-center space-x-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6 text-sm sm:text-base md:text-lg">
+              <div className="flex items-center space-x-2 sm:space-x-3">
                 <ActorPhoto 
                   src={clue.actor1Photo} 
                   name={clue.actor1} 
-                  size="lg"
+                  size="md"
                 />
-                <span className="font-bold text-slate-700 text-sm sm:text-base">{clue.actor1}</span>
+                <span className="font-bold text-slate-700 text-xs sm:text-sm md:text-base">{clue.actor1}</span>
               </div>
               <span className="text-slate-500 hidden sm:inline">&</span>
               <span className="text-slate-500 sm:hidden">and</span>
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2 sm:space-x-3">
                 <ActorPhoto 
                   src={clue.actor2Photo} 
                   name={clue.actor2} 
-                  size="lg"
+                  size="md"
                 />
-                <span className="font-bold text-slate-700 text-sm sm:text-base">{clue.actor2}</span>
+                <span className="font-bold text-slate-700 text-xs sm:text-sm md:text-base">{clue.actor2}</span>
               </div>
             </div>
             
-            {/* Hint Actor Display */}
+            {/* Hint Actor Display - Mobile Optimized */}
             {hintUsed && clue.hintActor && (
-              <div className="flex items-center justify-center space-x-3 mt-3">
-                <span className="text-sm text-slate-500">Hint:</span>
-                <div className="flex items-center space-x-2">
+              <div className="flex items-center justify-center space-x-2 sm:space-x-3 mt-2 sm:mt-3">
+                <span className="text-xs sm:text-sm text-slate-500">Hint:</span>
+                <div className="flex items-center space-x-1 sm:space-x-2">
                   <ActorPhoto 
                     src={clue.hintActorPhoto} 
                     name={clue.hintActor} 
-                    size="md"
+                    size="sm"
                   />
-                  <span className="font-bold text-orange-600">{clue.hintActor}</span>
+                  <span className="font-bold text-orange-600 text-xs sm:text-sm">{clue.hintActor}</span>
                 </div>
               </div>
             )}
@@ -130,17 +130,17 @@ export function MultipleChoiceInput({
       </Card>
 
 
-      {/* Multiple Choice Options */}
+      {/* Multiple Choice Options - Mobile Optimized */}
       <Card className="bg-gradient-to-b from-[#fffef8] via-[#fffcf0] to-[#fffef8]">
-        <CardContent className="p-4">
+        <CardContent className="p-2 sm:p-4">
           
           <div className="relative">
-            <h3 className="text-slate-900 text-center flex items-center justify-center space-x-2 text-base sm:text-lg font-bold mb-3">
-              <Search className="h-4 w-4" />
+            <h3 className="text-slate-900 text-center flex items-center justify-center space-x-1 sm:space-x-2 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
+              <Search className="h-3 w-3 sm:h-4 sm:w-4" />
               <span>Choose the Movie</span>
             </h3>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
+            <div className="grid grid-cols-1 gap-2 sm:gap-4 mb-2 sm:mb-3">
               {options.map((option, index) => (
                 <motion.div
                   key={option.id}
@@ -148,28 +148,28 @@ export function MultipleChoiceInput({
                   whileTap={!disabled && !isSubmitting ? { scale: 0.98 } : {}}
                   className="relative"
                 >
-                  {/* Film Strip Background */}
-                  <div className={`relative w-full h-20 bg-black rounded-lg overflow-hidden shadow-lg border-2 ${
+                  {/* Film Strip Background - Mobile Optimized */}
+                  <div className={`relative w-full h-16 sm:h-20 bg-black rounded-md sm:rounded-lg overflow-hidden shadow-lg border-2 ${
                     selectedOption?.id === option.id 
                       ? 'border-amber-400 shadow-amber-400/50' 
                       : 'border-slate-600'
                   }`}>
                     {/* Film strip sprocket holes - top */}
-                    <div className="absolute top-0 left-0 right-0 h-3 bg-black flex justify-between items-center px-2">
-                      {[...Array(18)].map((_, i) => (
-                        <div key={i} className="w-1 h-2 bg-white rounded-sm"></div>
+                    <div className="absolute top-0 left-0 right-0 h-2 sm:h-3 bg-black flex justify-between items-center px-1 sm:px-2">
+                      {[...Array(12)].map((_, i) => (
+                        <div key={i} className="w-0.5 sm:w-1 h-1 sm:h-2 bg-white rounded-sm"></div>
                       ))}
                     </div>
                     
                     {/* Film strip sprocket holes - bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 h-3 bg-black flex justify-between items-center px-2">
-                      {[...Array(18)].map((_, i) => (
-                        <div key={i} className="w-1 h-2 bg-white rounded-sm"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-2 sm:h-3 bg-black flex justify-between items-center px-1 sm:px-2">
+                      {[...Array(12)].map((_, i) => (
+                        <div key={i} className="w-0.5 sm:w-1 h-1 sm:h-2 bg-white rounded-sm"></div>
                       ))}
                     </div>
 
                     {/* Film frame outline */}
-                    <div className="absolute inset-3 border border-white rounded-md"></div>
+                    <div className="absolute inset-2 sm:inset-3 border border-white rounded-sm sm:rounded-md"></div>
                     
                     {/* Grunge texture overlay */}
                     <div className="absolute inset-0 opacity-30">
@@ -193,15 +193,15 @@ export function MultipleChoiceInput({
                     <Button
                       onClick={() => handleOptionSelect(option)}
                       disabled={disabled || isSubmitting}
-                      className={`absolute inset-3 w-auto h-auto p-3 text-left justify-start space-x-3 bg-transparent hover:bg-white/10 border-0 text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-md ${
+                      className={`film-strip-button absolute inset-2 sm:inset-3 w-auto h-auto p-2 sm:p-3 text-left justify-start space-x-2 sm:space-x-3 bg-transparent hover:bg-white/10 border-0 text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-sm sm:rounded-md ${
                         selectedOption?.id === option.id 
                           ? 'ring-2 ring-amber-400 bg-amber-400/20' 
                           : ''
                       }`}
                     >
-                      <div className="flex items-center space-x-3 w-full">
-                        {/* Option Letter - film frame style */}
-                        <div className={`flex-shrink-0 w-8 h-8 rounded border-2 flex items-center justify-center text-sm font-bold ${
+                      <div className="flex items-center space-x-2 sm:space-x-3 w-full">
+                        {/* Option Letter - film frame style - Mobile Optimized */}
+                        <div className={`flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded border-2 flex items-center justify-center text-xs sm:text-sm font-bold ${
                           selectedOption?.id === option.id 
                             ? 'bg-amber-400 border-amber-300 text-black' 
                             : 'bg-white/20 border-white/40 text-white'
@@ -209,12 +209,12 @@ export function MultipleChoiceInput({
                           {String.fromCharCode(65 + index)}
                         </div>
                         
-                        {/* Movie Info */}
+                        {/* Movie Info - Mobile Optimized */}
                         <div className="flex-1 min-w-0">
-                          <div className="font-bold text-sm truncate text-white drop-shadow-lg">
+                          <div className="font-bold text-xs sm:text-sm truncate text-white drop-shadow-lg">
                             {option.title}
                           </div>
-                          <div className="text-xs text-white/80 font-medium drop-shadow-md">
+                          <div className="text-[10px] sm:text-xs text-white/80 font-medium drop-shadow-md">
                             {option.year}
                           </div>
                         </div>
@@ -225,7 +225,7 @@ export function MultipleChoiceInput({
               ))}
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons - Mobile Optimized */}
             <div className="flex justify-center">
               <motion.div
                 whileHover={!disabled && !isSubmitting && !hintUsed ? { scale: 1.02 } : {}}
@@ -234,36 +234,36 @@ export function MultipleChoiceInput({
                 <Button
                   onClick={handleHint}
                   disabled={disabled || isSubmitting || !onHint || hintUsed}
-                  className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold py-1.5 sm:py-2 px-3 sm:px-4 rounded-md sm:rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
                   title={hintUsed ? "Hint already used" : "Get a hint (costs half a point if correct)"}
                 >
                   {isSubmitting ? (
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span className="text-sm">Submitting...</span>
+                    <div className="flex items-center space-x-1 sm:space-x-2">
+                      <div className="w-2 h-2 sm:w-3 sm:h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span className="text-xs sm:text-sm">Submitting...</span>
                     </div>
                   ) : (
                     <div className="flex items-center space-x-1">
                       <span>💡</span>
-                      <span className="hidden sm:inline text-sm">Hint</span>
+                      <span className="text-xs sm:text-sm">Hint</span>
                     </div>
                   )}
                 </Button>
               </motion.div>
             </div>
 
-            {/* Hint Warning */}
+            {/* Hint Warning - Mobile Optimized */}
             {hintUsed && (
-              <div className="text-center mt-2">
-                <p className="text-orange-600 text-xs font-medium">
+              <div className="text-center mt-1 sm:mt-2">
+                <p className="text-orange-600 text-[10px] sm:text-xs font-medium">
                   ⚠️ Hint used! Correct answer will only give 0.5 points
                 </p>
               </div>
             )}
 
-            {/* Instructions */}
-            <div className="text-center mt-2">
-              <p className="text-xs text-slate-500">
+            {/* Instructions - Mobile Optimized */}
+            <div className="text-center mt-1 sm:mt-2">
+              <p className="text-[10px] sm:text-xs text-slate-500">
                 Select the movie you think these actors are from
               </p>
             </div>

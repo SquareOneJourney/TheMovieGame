@@ -296,9 +296,9 @@ export default function SinglePlayerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 sm:p-6 lg:p-8 relative">
-      {/* Left Theater Curtain */}
-      <div className="fixed left-0 top-0 w-96 sm:w-[30rem] lg:w-[36rem] h-full z-10 pointer-events-none">
+    <div className="mobile-min-h-screen min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-1 sm:p-2 md:p-4 lg:p-6 xl:p-8 relative">
+      {/* Left Theater Curtain - Hidden on mobile */}
+      <div className="fixed left-0 top-0 w-96 sm:w-[30rem] lg:w-[36rem] h-full z-10 pointer-events-none hidden sm:block">
         <div className="relative w-full h-full">
           {/* Curtain fabric with curved opening effect */}
           <div className="absolute inset-0 bg-gradient-to-b from-red-800 via-red-700 to-red-900 shadow-2xl" 
@@ -330,8 +330,8 @@ export default function SinglePlayerPage() {
         </div>
       </div>
 
-      {/* Right Theater Curtain */}
-      <div className="fixed right-0 top-0 w-96 sm:w-[30rem] lg:w-[36rem] h-full z-10 pointer-events-none">
+      {/* Right Theater Curtain - Hidden on mobile */}
+      <div className="fixed right-0 top-0 w-96 sm:w-[30rem] lg:w-[36rem] h-full z-10 pointer-events-none hidden sm:block">
         <div className="relative w-full h-full">
           {/* Curtain fabric with curved opening effect */}
           <div className="absolute inset-0 bg-gradient-to-b from-red-800 via-red-700 to-red-900 shadow-2xl" 
@@ -364,23 +364,23 @@ export default function SinglePlayerPage() {
       </div>
 
       <div className="max-w-4xl mx-auto relative z-20">
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-6">
+        {/* Header - Mobile Optimized */}
+        <div className="mb-1 sm:mb-2 md:mb-6">
+          <div className="flex justify-between items-center mb-1 sm:mb-2 md:mb-6">
             <Link
               href="/"
-              className="flex items-center space-x-2 text-white hover:text-blue-400 transition-colors"
+              className="flex items-center space-x-1 sm:space-x-2 text-white hover:text-blue-400 transition-colors"
             >
-              <Home className="h-6 w-6" />
-              <span>Home</span>
+              <Home className="h-3 w-3 sm:h-4 sm:w-4 md:h-6 md:w-6" />
+              <span className="text-xs sm:text-sm md:text-base">Home</span>
             </Link>
             <div className="flex-1"></div>
           </div>
 
         </div>
 
-        {/* Movie Marquee Scoreboard */}
-        <div className="mb-8">
+        {/* Movie Marquee Scoreboard - Mobile Optimized */}
+        <div className="mb-2 sm:mb-4 md:mb-8">
           <Scoreboard
             players={[
               {
@@ -407,9 +407,9 @@ export default function SinglePlayerPage() {
           />
         </div>
 
-        {/* Game Content */}
+        {/* Game Content - Mobile Optimized */}
         {gameState.gameStatus === 'playing' ? (
-          <div className="space-y-3 sm:space-y-4">
+          <div className="mobile-space-y-1 space-y-1 sm:space-y-2 md:space-y-3 lg:space-y-4">
             {/* Current Clue */}
             {gameState.currentMovie && gameState.currentOptions.length > 0 && (
               <MultipleChoiceInput

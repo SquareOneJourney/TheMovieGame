@@ -11,8 +11,8 @@ const inter = Inter({ subsets: ['latin'] })
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
+  userScalable: true,
 }
 
 export const metadata: Metadata = {
@@ -121,6 +121,23 @@ export default function RootLayout({
         <PWAInstaller />
         <SpeedInsights />
         <Analytics />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Clean up any old service workers
+              if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                  registrations.forEach(registration => {
+                    if (registration.scope.includes('localhost:3000')) {
+                      registration.unregister();
+                      console.log('Cleaned up old service worker');
+                    }
+                  });
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   )
