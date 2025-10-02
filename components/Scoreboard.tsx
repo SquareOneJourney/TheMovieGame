@@ -5,7 +5,7 @@ import clsx from "clsx"
 import { motion, useReducedMotion } from "framer-motion"
 import type { Variants } from "framer-motion"
 import { Bebas_Neue, Oswald } from "next/font/google"
-import { CheckCircle, XCircle } from "lucide-react"
+ 
 
 interface Player {
   id: string
@@ -51,82 +51,7 @@ export function Scoreboard({ players, highlightedPlayerId, resultFlash }: Scoreb
 
   return (
     <section className="flex w-full items-center justify-center px-2 sm:px-4 py-1 sm:py-2">
-      {/* Result Flash Overlay */}
-      {resultFlash && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8, y: -50 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.8, y: -50 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="absolute inset-0 z-50 flex items-center justify-center"
-        >
-          <div className={`relative w-full max-w-2xl mx-2 sm:mx-4 rounded-xl sm:rounded-2xl p-4 sm:p-8 shadow-2xl ${
-            resultFlash.correct 
-              ? 'bg-gradient-to-br from-green-500/90 to-green-600/90 border-2 border-green-400' 
-              : 'bg-gradient-to-br from-red-500/90 to-red-600/90 border-2 border-red-400'
-          }`}>
-            {/* Animated background pattern */}
-            <div className="absolute inset-0 rounded-2xl overflow-hidden">
-              <div className={`absolute inset-0 opacity-20 ${
-                resultFlash.correct ? 'bg-green-300' : 'bg-red-300'
-              }`} style={{
-                backgroundImage: `radial-gradient(circle at 20% 50%, transparent 20%, rgba(255,255,255,0.1) 21%, rgba(255,255,255,0.1) 34%, transparent 35%), radial-gradient(circle at 80% 20%, transparent 20%, rgba(255,255,255,0.1) 21%, rgba(255,255,255,0.1) 34%, transparent 35%), radial-gradient(circle at 40% 80%, transparent 20%, rgba(255,255,255,0.1) 21%, rgba(255,255,255,0.1) 34%, transparent 35%)`,
-                backgroundSize: '60px 60px'
-              }} />
-            </div>
-            
-            <div className="relative flex flex-col items-center justify-center space-y-4 text-center">
-              {/* Icon */}
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.3, ease: "easeOut" }}
-                className={`p-4 rounded-full ${
-                  resultFlash.correct ? 'bg-green-400/20' : 'bg-red-400/20'
-                }`}
-              >
-                {resultFlash.correct ? (
-                  <CheckCircle className="h-12 w-12 text-green-100" />
-                ) : (
-                  <XCircle className="h-12 w-12 text-red-100" />
-                )}
-              </motion.div>
-              
-              {/* Main message */}
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.3 }}
-                className={`text-xl sm:text-3xl md:text-4xl font-bold ${
-                  resultFlash.correct ? 'text-green-100' : 'text-red-100'
-                }`}
-              >
-                {resultFlash.correct 
-                  ? 'Elementary, my dear Watson!' 
-                  : 'Houston, we have a problem!'
-                }
-              </motion.h2>
-              
-              {/* Details */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.3 }}
-                className="space-y-2"
-              >
-                <p className="text-lg text-white/90">
-                  You selected: <span className="font-semibold">&quot;{resultFlash.guess}&quot;</span>
-                </p>
-                {resultFlash.correctAnswer && (
-                  <p className="text-lg text-white/90">
-                    The answer: <span className="font-semibold">&quot;{resultFlash.correctAnswer}&quot;</span>
-                  </p>
-                )}
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-      )}
+      {/* Result Flash Overlay moved to answer card overlay in MultipleChoiceInput */}
       
       <div className="relative w-full max-w-5xl" aria-live="polite">
 

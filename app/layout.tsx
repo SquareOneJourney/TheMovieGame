@@ -88,9 +88,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#3b82f6" />
         
         {/* Standard favicon */}
-        <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="48x48" href="/icons/icon-48x48.png" />
+        <link rel="icon" type="image/png" href="/MovieGame Favicon.png" />
         
         {/* For high-DPI (retina) screens) */}
         <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />

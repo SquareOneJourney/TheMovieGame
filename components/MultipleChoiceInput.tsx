@@ -1,10 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Search } from 'lucide-react'
 import { ActorPhoto } from '@/components/ActorPhoto'
 
 interface MultipleChoiceOption {
@@ -32,6 +31,11 @@ interface MultipleChoiceInputProps {
   onHint?: () => void
   disabled?: boolean
   hintUsed?: boolean
+  lastResult?: {
+    correct: boolean
+    guess: string
+    correctAnswer?: string
+  } | null
 }
 
 export function MultipleChoiceInput({ 
@@ -40,7 +44,8 @@ export function MultipleChoiceInput({
   onSelect, 
   onHint, 
   disabled = false, 
-  hintUsed = false
+  hintUsed = false,
+  lastResult
 }: MultipleChoiceInputProps) {
   const [selectedOption, setSelectedOption] = useState<MultipleChoiceOption | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -87,8 +92,10 @@ export function MultipleChoiceInput({
         <CardContent className="p-2 sm:p-4">
           
           <div className="relative text-center space-y-1 sm:space-y-2">
-            <h3 className="text-slate-900 text-center text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
-              🎬 Movie Clue 🎬
+            <h3 className="text-slate-900 text-center flex items-center justify-center space-x-1 sm:space-x-2 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
+              <img src="/TheMovieGame Logo.png" alt="The Movie Game Logo" className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span>Movie Clue</span>
+              <img src="/TheMovieGame Logo.png" alt="The Movie Game Logo" className="h-4 w-4 sm:h-5 sm:w-5" />
             </h3>
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6 text-sm sm:text-base md:text-lg">
               <div className="flex items-center space-x-2 sm:space-x-3">
@@ -136,8 +143,8 @@ export function MultipleChoiceInput({
           
           <div className="relative">
             <h3 className="text-slate-900 text-center flex items-center justify-center space-x-1 sm:space-x-2 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
-              <Search className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span>Choose the Movie</span>
+              <img src="/TheMovieGame Logo.png" alt="The Movie Game Logo" className="h-8 w-8 sm:h-10 sm:w-10" />
+              <span>Choose Wisely</span>
             </h3>
             
             <div className="grid grid-cols-1 gap-2 sm:gap-4 mb-2 sm:mb-3">
@@ -192,7 +199,7 @@ export function MultipleChoiceInput({
 
                     <Button
                       onClick={() => handleOptionSelect(option)}
-                      disabled={disabled || isSubmitting}
+                      disabled={disabled || isSubmitting || Boolean(lastResult)}
                       className={`film-strip-button absolute inset-2 sm:inset-3 w-auto h-auto p-2 sm:p-3 text-left justify-start space-x-2 sm:space-x-3 bg-transparent hover:bg-white/10 border-0 text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-sm sm:rounded-md ${
                         selectedOption?.id === option.id 
                           ? 'ring-2 ring-amber-400 bg-amber-400/20' 
@@ -220,6 +227,34 @@ export function MultipleChoiceInput({
                         </div>
                       </div>
                     </Button>
+
+                    {/* Slide-over Result Overlay on selected answer */}
+                    <AnimatePresence>
+                      {selectedOption?.id === option.id && lastResult && (
+                        <motion.div
+                          key="result-overlay"
+                          initial={{ y: -60, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          exit={{ y: -60, opacity: 0 }}
+                          transition={{ duration: 0.25, ease: 'easeOut' }}
+                          className={`pointer-events-none absolute inset-2 sm:inset-3 z-10 rounded-sm sm:rounded-md flex items-center justify-center border ${
+                            lastResult.correct ? 'bg-green-600/90 border-green-400' : 'bg-red-600/90 border-red-400'
+                          }`}
+                          role="status"
+                          aria-live="polite"
+                          aria-atomic="true"
+                        >
+                          <div className="text-center px-2">
+                            <div className="text-white font-bold text-xs sm:text-sm">
+                              {lastResult.correct ? 'Elementary, me dear watson' : 'Houston we have a problem'}
+                            </div>
+                            <div className="text-white/90 text-[10px] sm:text-xs mt-0.5">
+                              {lastResult.correctAnswer ? `"${lastResult.correctAnswer}"` : `"${selectedOption?.title ?? ''}"`}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </motion.div>
               ))}
@@ -261,12 +296,7 @@ export function MultipleChoiceInput({
               </div>
             )}
 
-            {/* Instructions - Mobile Optimized */}
-            <div className="text-center mt-1 sm:mt-2">
-              <p className="text-[10px] sm:text-xs text-slate-500">
-                Select the movie you think these actors are from
-              </p>
-            </div>
+            
           </div>
         </CardContent>
       </Card>

@@ -422,8 +422,9 @@ export default function SinglePlayerPage() {
                 options={gameState.currentOptions}
                 onSelect={handleGuess}
                 onHint={handleHint}
-                disabled={false}
+                disabled={!!gameState.lastResult}
                 hintUsed={gameState.hintUsed}
+                lastResult={gameState.lastResult}
               />
             )}
 
