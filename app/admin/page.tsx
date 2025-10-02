@@ -22,6 +22,8 @@ export default function AdminDashboard() {
   const [tmdbResults, setTmdbResults] = useState<any[]>([])
   const [tmdbLoading, setTmdbLoading] = useState(false)
   const [addingMovies, setAddingMovies] = useState<Set<number>>(new Set())
+  const [editingBeforeAdd, setEditingBeforeAdd] = useState<any | null>(null)
+  const [showEditModal, setShowEditModal] = useState(false)
   const [actorSearchQuery, setActorSearchQuery] = useState('')
   const [actorSearchResults, setActorSearchResults] = useState<GameMovie[]>([])
   const [actorTmdbResults, setActorTmdbResults] = useState<any[]>([])
@@ -462,6 +464,45 @@ export default function AdminDashboard() {
     )
   }
 
+  // Edit movie before adding from TMDB
+  const editBeforeAdd = async (tmdbMovie: any) => {
+    if (isMovieInDatabase(tmdbMovie)) {
+      alert('This movie is already in your database!')
+      return
+    }
+
+    // Add this movie ID to the loading set
+    setAddingMovies(prev => new Set(prev).add(tmdbMovie.id))
+    
+    try {
+      const response = await fetch(`/api/tmdb/movie/${tmdbMovie.id}`)
+      if (response.ok) {
+        const gameMovie = await response.json()
+        // Add tmdbId to the game movie
+        gameMovie.tmdbId = tmdbMovie.id.toString()
+        
+        // Set up for editing before adding
+        setEditingBeforeAdd(tmdbMovie)
+        setEditingMovie(gameMovie)
+        setOriginalMovieTitle(gameMovie.movie)
+        setShowEditModal(true) // Show the edit modal
+      } else {
+        console.error('Failed to get movie details:', response.statusText)
+        alert('Failed to get movie details. Please try again.')
+      }
+    } catch (error) {
+      console.error('Error getting movie details:', error)
+      alert('Error getting movie details. Please try again.')
+    } finally {
+      // Remove this movie ID from the loading set
+      setAddingMovies(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(tmdbMovie.id)
+        return newSet
+      })
+    }
+  }
+
   // Add movie from TMDB
   const addFromTMDB = async (tmdbMovie: any) => {
     if (isMovieInDatabase(tmdbMovie)) {
@@ -518,6 +559,7 @@ export default function AdminDashboard() {
     }
     setEditingMovie(movieWithDefaults)
     setOriginalMovieTitle(movie.movie || '')
+    setShowEditModal(true) // Show the modal instead of inline editing
     
     // Fetch actors if we have a TMDB ID and haven't fetched them yet
     if (movie.tmdbId && !movieActors[movie.tmdbId]) {
@@ -526,9 +568,36 @@ export default function AdminDashboard() {
   }
 
   const handleSave = async () => {
-    if (!editingMovie || !originalMovieTitle) return
+    if (!editingMovie) return
     setSaving(true)
     try {
+      // Check if this is an "edit before add" scenario
+      if (editingBeforeAdd) {
+        // This is a new movie being added after editing
+        // Update movie with reordered actors if available
+        let finalMovie = editingMovie
+        if (editingMovie.tmdbId && movieActors[editingMovie.tmdbId]) {
+          finalMovie = updateMovieWithActors(editingMovie, movieActors[editingMovie.tmdbId])
+        }
+
+        // Add the movie to the database
+        await handleAdd(finalMovie)
+        
+        // Clean up edit before add state
+        setEditingBeforeAdd(null)
+        setEditingMovie(null)
+        setOriginalMovieTitle(null)
+        setShowEditModal(false)
+        return
+      }
+
+      // This is editing an existing movie
+      if (!originalMovieTitle) {
+        console.error('Original movie title not found for editing')
+        setSaving(false)
+        return
+      }
+
       // Find the original movie by its original title
       const originalMovieIndex = movies.findIndex(m => m.movie === originalMovieTitle)
       if (originalMovieIndex === -1) {
@@ -697,13 +766,23 @@ export default function AdminDashboard() {
                   <h2 className="text-lg font-semibold text-gray-900">Movies List ({filteredMovies.length})</h2>
                   <div className="flex items-center space-x-2">
                     <Search className="w-4 h-4 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Search movies, actors, or year..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search movies, actors, or year..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="px-3 py-1 pr-8 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery('')}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
                   </div>
           </div>
           
@@ -890,8 +969,8 @@ export default function AdminDashboard() {
                           </td>
                         </tr>
                         
-                        {/* Inline Edit Form */}
-                        {editingMovie?.movie === movie.movie && (
+                        {/* Inline Edit Form - Disabled, using modal instead */}
+                        {false && editingMovie?.movie === movie.movie && (
                           <tr>
                             <td colSpan={5} className="px-6 py-4 bg-blue-50">
                               <div className="space-y-4">
@@ -1259,6 +1338,8 @@ export default function AdminDashboard() {
                                     onClick={() => {
                                       setEditingMovie(null)
                                       setOriginalMovieTitle(null)
+                                      setEditingBeforeAdd(null)
+                                      setShowEditModal(false)
                                     }} 
                                     disabled={saving}
                                   >
@@ -1461,21 +1542,39 @@ export default function AdminDashboard() {
                                       </Button>
                                     </div>
                                   ) : (
-                      <Button
-                                      onClick={() => addFromTMDB(movie)}
-                                      disabled={isAdding}
-                        size="sm"
-                                      className="mt-2 w-full bg-green-600 hover:bg-green-700 text-white"
-                                    >
-                                      {isAdding ? (
-                                        <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                      ) : (
-                                        <>
-                                          <Plus className="w-3 h-3 mr-1" />
-                                          Add to Database
-                                        </>
-                                      )}
-                      </Button>
+                                    <div className="mt-2 space-y-2">
+                                      <Button
+                                        onClick={() => addFromTMDB(movie)}
+                                        disabled={isAdding}
+                                        size="sm"
+                                        className="w-full bg-green-600 hover:bg-green-700 text-white"
+                                      >
+                                        {isAdding ? (
+                                          <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        ) : (
+                                          <>
+                                            <Plus className="w-3 h-3 mr-1" />
+                                            Add Directly
+                                          </>
+                                        )}
+                                      </Button>
+                                      <Button
+                                        onClick={() => editBeforeAdd(movie)}
+                                        disabled={isAdding}
+                                        size="sm"
+                                        variant="outline"
+                                        className="w-full border-green-600 text-green-600 hover:bg-green-50"
+                                      >
+                                        {isAdding ? (
+                                          <div className="w-3 h-3 border-2 border-green-600 border-t-transparent rounded-full animate-spin" />
+                                        ) : (
+                                          <>
+                                            <Edit2 className="w-3 h-3 mr-1" />
+                                            Edit & Add
+                                          </>
+                                        )}
+                                      </Button>
+                                    </div>
                                   )}
                                 </div>
                               </div>
@@ -1501,14 +1600,24 @@ export default function AdminDashboard() {
             <Card className="p-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">Search TMDB Database</h2>
               <div className="flex space-x-2 mb-4">
-                <input
-                  type="text"
-                  placeholder="Search for movies on TMDB..."
-                  value={tmdbSearchQuery}
-                  onChange={(e) => setTmdbSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && searchTMDB()}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    placeholder="Search for movies on TMDB..."
+                    value={tmdbSearchQuery}
+                    onChange={(e) => setTmdbSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && searchTMDB()}
+                    className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  {tmdbSearchQuery && (
+                    <button
+                      onClick={() => setTmdbSearchQuery('')}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
                 <Button 
                   onClick={searchTMDB} 
                   disabled={tmdbLoading || !tmdbSearchQuery.trim()}
@@ -1583,21 +1692,39 @@ export default function AdminDashboard() {
                                   </Button>
                                 </div>
                               ) : (
-                                <Button
-                                  onClick={() => addFromTMDB(movie)}
-                                  disabled={isAdding}
-                                  size="sm"
-                                  className="mt-2 w-full bg-green-600 hover:bg-green-700 text-white"
-                                >
-                                  {isAdding ? (
-                                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                  ) : (
-                                    <>
-                                      <Plus className="w-3 h-3 mr-1" />
-                                      Add to Database
-                                    </>
-                                  )}
-                                </Button>
+                                <div className="mt-2 space-y-2">
+                                  <Button
+                                    onClick={() => addFromTMDB(movie)}
+                                    disabled={isAdding}
+                                    size="sm"
+                                    className="w-full bg-green-600 hover:bg-green-700 text-white"
+                                  >
+                                    {isAdding ? (
+                                      <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                    ) : (
+                                      <>
+                                        <Plus className="w-3 h-3 mr-1" />
+                                        Add Directly
+                                      </>
+                                    )}
+                                  </Button>
+                                  <Button
+                                    onClick={() => editBeforeAdd(movie)}
+                                    disabled={isAdding}
+                                    size="sm"
+                                    variant="outline"
+                                    className="w-full border-green-600 text-green-600 hover:bg-green-50"
+                                  >
+                                    {isAdding ? (
+                                      <div className="w-3 h-3 border-2 border-green-600 border-t-transparent rounded-full animate-spin" />
+                                    ) : (
+                                      <>
+                                        <Edit2 className="w-3 h-3 mr-1" />
+                                        Edit & Add
+                                      </>
+                                    )}
+                                  </Button>
+                                </div>
                               )}
                             </div>
                           </div>
@@ -1611,6 +1738,354 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+
+      {/* Edit Before Add Modal */}
+      {showEditModal && editingMovie && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  {editingBeforeAdd ? `Edit Movie Before Adding: ${editingMovie.movie}` : `Edit Movie: ${editingMovie.movie}`}
+                </h2>
+                <button
+                  onClick={() => {
+                    setEditingMovie(null)
+                    setOriginalMovieTitle(null)
+                    setEditingBeforeAdd(null)
+                    setShowEditModal(false)
+                  }}
+                  className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {/* Basic Movie Info */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Movie Title</label>
+                    <input
+                      type="text"
+                      value={editingMovie.movie || ''}
+                      onChange={(e) => setEditingMovie({...editingMovie, movie: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Year</label>
+                    <input
+                      type="text"
+                      value={editingMovie.year || ''}
+                      onChange={(e) => setEditingMovie({...editingMovie, year: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Actor Reordering Section */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-700">Organize Actors:</h3>
+                      <p className="text-sm text-gray-500">Reorder positions and select which actor should be the hint</p>
+                    </div>
+                    {editingMovie.tmdbId && loadingActors[editingMovie.tmdbId] && (
+                      <div className="flex items-center space-x-2 text-sm text-gray-500">
+                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                        <span>Loading actors...</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Simplified Actor Display - Just 5 actors with hint selection */}
+                  <div className="space-y-3">
+                    {/* Actor 1 */}
+                    {editingMovie.actor1 && (
+                      <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <div className="flex items-center space-x-2 text-blue-600">
+                          <div className="w-6 h-6 bg-blue-200 rounded flex items-center justify-center text-xs font-medium">1</div>
+                        </div>
+                        {editingMovie.actor1Photo && (
+                          <Image 
+                            src={editingMovie.actor1Photo} 
+                            alt={editingMovie.actor1}
+                            width={40}
+                            height={40}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900">{editingMovie.actor1}</div>
+                          <div className="text-sm text-gray-500">Actor 1</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <select
+                            value="actor1"
+                            onChange={(e) => handleManualActorRoleChange('actor1', e.target.value)}
+                            className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="actor1">Position 1</option>
+                            <option value="actor2">Position 2</option>
+                            <option value="actor3">Position 3</option>
+                            <option value="actor4">Position 4</option>
+                            <option value="actor5">Position 5</option>
+                          </select>
+                          <label className="flex items-center space-x-2 text-sm">
+                            <input
+                              type="radio"
+                              name="hintActor"
+                              checked={editingMovie.hintActor === editingMovie.actor1}
+                              onChange={() => {
+                                setEditingMovie({
+                                  ...editingMovie,
+                                  hintActor: editingMovie.actor1,
+                                  hintActorPhoto: editingMovie.actor1Photo
+                                })
+                              }}
+                              className="text-purple-600 focus:ring-purple-500"
+                            />
+                            <span className="text-purple-600 font-medium">Hint Actor</span>
+                          </label>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Actor 2 */}
+                    {editingMovie.actor2 && (
+                      <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                        <div className="flex items-center space-x-2 text-green-600">
+                          <div className="w-6 h-6 bg-green-200 rounded flex items-center justify-center text-xs font-medium">2</div>
+                        </div>
+                        {editingMovie.actor2Photo && (
+                          <Image 
+                            src={editingMovie.actor2Photo} 
+                            alt={editingMovie.actor2}
+                            width={40}
+                            height={40}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900">{editingMovie.actor2}</div>
+                          <div className="text-sm text-gray-500">Actor 2</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <select
+                            value="actor2"
+                            onChange={(e) => handleManualActorRoleChange('actor2', e.target.value)}
+                            className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="actor1">Position 1</option>
+                            <option value="actor2">Position 2</option>
+                            <option value="actor3">Position 3</option>
+                            <option value="actor4">Position 4</option>
+                            <option value="actor5">Position 5</option>
+                          </select>
+                          <label className="flex items-center space-x-2 text-sm">
+                            <input
+                              type="radio"
+                              name="hintActor"
+                              checked={editingMovie.hintActor === editingMovie.actor2}
+                              onChange={() => {
+                                setEditingMovie({
+                                  ...editingMovie,
+                                  hintActor: editingMovie.actor2,
+                                  hintActorPhoto: editingMovie.actor2Photo
+                                })
+                              }}
+                              className="text-purple-600 focus:ring-purple-500"
+                            />
+                            <span className="text-purple-600 font-medium">Hint Actor</span>
+                          </label>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Actor 3 */}
+                    {editingMovie.actor3 && (
+                      <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                        <div className="flex items-center space-x-2 text-yellow-600">
+                          <div className="w-6 h-6 bg-yellow-200 rounded flex items-center justify-center text-xs font-medium">3</div>
+                        </div>
+                        {editingMovie.actor3Photo && (
+                          <Image 
+                            src={editingMovie.actor3Photo} 
+                            alt={editingMovie.actor3}
+                            width={40}
+                            height={40}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900">{editingMovie.actor3}</div>
+                          <div className="text-sm text-gray-500">Actor 3</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <select
+                            value="actor3"
+                            onChange={(e) => handleManualActorRoleChange('actor3', e.target.value)}
+                            className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="actor1">Position 1</option>
+                            <option value="actor2">Position 2</option>
+                            <option value="actor3">Position 3</option>
+                            <option value="actor4">Position 4</option>
+                            <option value="actor5">Position 5</option>
+                          </select>
+                          <label className="flex items-center space-x-2 text-sm">
+                            <input
+                              type="radio"
+                              name="hintActor"
+                              checked={editingMovie.hintActor === editingMovie.actor3}
+                              onChange={() => {
+                                setEditingMovie({
+                                  ...editingMovie,
+                                  hintActor: editingMovie.actor3,
+                                  hintActorPhoto: editingMovie.actor3Photo
+                                })
+                              }}
+                              className="text-purple-600 focus:ring-purple-500"
+                            />
+                            <span className="text-purple-600 font-medium">Hint Actor</span>
+                          </label>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Actor 4 */}
+                    {editingMovie.actor4 && (
+                      <div className="flex items-center space-x-3 p-3 bg-red-50 rounded-lg border border-red-200">
+                        <div className="flex items-center space-x-2 text-red-600">
+                          <div className="w-6 h-6 bg-red-200 rounded flex items-center justify-center text-xs font-medium">4</div>
+                        </div>
+                        {editingMovie.actor4Photo && (
+                          <Image 
+                            src={editingMovie.actor4Photo} 
+                            alt={editingMovie.actor4}
+                            width={40}
+                            height={40}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900">{editingMovie.actor4}</div>
+                          <div className="text-sm text-gray-500">Actor 4</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <select
+                            value="actor4"
+                            onChange={(e) => handleManualActorRoleChange('actor4', e.target.value)}
+                            className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="actor1">Position 1</option>
+                            <option value="actor2">Position 2</option>
+                            <option value="actor3">Position 3</option>
+                            <option value="actor4">Position 4</option>
+                            <option value="actor5">Position 5</option>
+                          </select>
+                          <label className="flex items-center space-x-2 text-sm">
+                            <input
+                              type="radio"
+                              name="hintActor"
+                              checked={editingMovie.hintActor === editingMovie.actor4}
+                              onChange={() => {
+                                setEditingMovie({
+                                  ...editingMovie,
+                                  hintActor: editingMovie.actor4,
+                                  hintActorPhoto: editingMovie.actor4Photo
+                                })
+                              }}
+                              className="text-purple-600 focus:ring-purple-500"
+                            />
+                            <span className="text-purple-600 font-medium">Hint Actor</span>
+                          </label>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Actor 5 */}
+                    {editingMovie.actor5 && (
+                      <div className="flex items-center space-x-3 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                        <div className="flex items-center space-x-2 text-indigo-600">
+                          <div className="w-6 h-6 bg-indigo-200 rounded flex items-center justify-center text-xs font-medium">5</div>
+                        </div>
+                        {editingMovie.actor5Photo && (
+                          <Image 
+                            src={editingMovie.actor5Photo} 
+                            alt={editingMovie.actor5}
+                            width={40}
+                            height={40}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900">{editingMovie.actor5}</div>
+                          <div className="text-sm text-gray-500">Actor 5</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <select
+                            value="actor5"
+                            onChange={(e) => handleManualActorRoleChange('actor5', e.target.value)}
+                            className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="actor1">Position 1</option>
+                            <option value="actor2">Position 2</option>
+                            <option value="actor3">Position 3</option>
+                            <option value="actor4">Position 4</option>
+                            <option value="actor5">Position 5</option>
+                          </select>
+                          <label className="flex items-center space-x-2 text-sm">
+                            <input
+                              type="radio"
+                              name="hintActor"
+                              checked={editingMovie.hintActor === editingMovie.actor5}
+                              onChange={() => {
+                                setEditingMovie({
+                                  ...editingMovie,
+                                  hintActor: editingMovie.actor5,
+                                  hintActorPhoto: editingMovie.actor5Photo
+                                })
+                              }}
+                              className="text-purple-600 focus:ring-purple-500"
+                            />
+                            <span className="text-purple-600 font-medium">Hint Actor</span>
+                          </label>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setEditingMovie(null)
+                      setOriginalMovieTitle(null)
+                      setEditingBeforeAdd(null)
+                      setShowEditModal(false)
+                    }}
+                    disabled={saving}
+                  >
+                    <X className="w-4 h-4 mr-2" /> Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSave}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                    disabled={saving}
+                  >
+                    <Save className="w-4 h-4 mr-2" /> {saving ? (editingBeforeAdd ? 'Adding...' : 'Saving...') : (editingBeforeAdd ? 'Add to Database' : 'Save Changes')}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

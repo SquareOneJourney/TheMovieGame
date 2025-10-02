@@ -180,9 +180,9 @@ export function Scoreboard({ players, highlightedPlayerId, resultFlash }: Scoreb
           <div className="relative rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#6b2d1a] via-[#4a1d10] to-[#5a2515] p-0.5 sm:p-1 shadow-[0_8px_20px_rgba(0,0,0,0.7),0_0_0_1px_rgba(34,211,238,0.4),inset_0_1px_3px_rgba(34,211,238,0.2)] sm:shadow-[0_15px_40px_rgba(0,0,0,0.7),0_0_0_2px_rgba(34,211,238,0.4),inset_0_1px_3px_rgba(34,211,238,0.2)]">
             <div className="relative overflow-hidden rounded-lg sm:rounded-xl bg-gradient-to-b from-[#5a2515] via-[#3d1810] to-[#4a1d10] px-3 py-2 sm:px-6 sm:py-4 shadow-[inset_0_2px_6px_rgba(0,0,0,0.8)]">
               
-              {/* Corner Scores with highlighting - Much Larger */}
+              {/* Corner Scores with highlighting - Moved inward */}
               <motion.div 
-                className="absolute top-1 left-1 sm:top-3 sm:left-3 z-10"
+                className="absolute top-1 left-3 sm:top-3 sm:left-6 z-10"
                 animate={highlightedPlayerId === players[0]?.id && !prefersReducedMotion ? {
                   scale: [1, 1.15, 1],
                   textShadow: [
@@ -204,7 +204,7 @@ export function Scoreboard({ players, highlightedPlayerId, resultFlash }: Scoreb
               </motion.div>
               
               <motion.div 
-                className="absolute top-1 right-1 sm:top-3 sm:right-3 z-10"
+                className="absolute top-1 right-3 sm:top-3 sm:right-6 z-10"
                 animate={highlightedPlayerId === players[1]?.id && !prefersReducedMotion ? {
                   scale: [1, 1.15, 1],
                   textShadow: [
