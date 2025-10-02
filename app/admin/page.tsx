@@ -1074,17 +1074,17 @@ export default function AdminDashboard() {
                                             1
                                           </div>
                                         </div>
-                                        {editingMovie.actor1Photo && (
+                                        {editingMovie?.actor1Photo && (
                                           <Image 
-                                            src={editingMovie.actor1Photo} 
-                                            alt={editingMovie.actor1}
+                                            src={editingMovie!.actor1Photo!} 
+                                            alt={editingMovie?.actor1 ?? ''}
                                             width={40}
                                             height={40}
                                             className="w-10 h-10 rounded-full object-cover"
                                           />
                                         )}
                                         <div className="flex-1">
-                                          <div className="font-medium text-gray-900">{editingMovie.actor1}</div>
+                                          <div className="font-medium text-gray-900">{editingMovie?.actor1}</div>
                                           <div className="text-sm text-gray-500">Actor 1</div>
                                         </div>
                                         <div className="flex items-center space-x-2">
@@ -1113,17 +1113,17 @@ export default function AdminDashboard() {
                                             2
                                           </div>
                                         </div>
-                                        {editingMovie.actor2Photo && (
+                                        {editingMovie?.actor2Photo && (
                                           <Image 
-                                            src={editingMovie.actor2Photo} 
-                                            alt={editingMovie.actor2}
+                                            src={editingMovie!.actor2Photo!} 
+                                            alt={editingMovie?.actor2 ?? ''}
                                             width={40}
                                             height={40}
                                             className="w-10 h-10 rounded-full object-cover"
                                           />
                                         )}
                                         <div className="flex-1">
-                                          <div className="font-medium text-gray-900">{editingMovie.actor2}</div>
+                                          <div className="font-medium text-gray-900">{editingMovie?.actor2}</div>
                                           <div className="text-sm text-gray-500">Actor 2</div>
                                         </div>
                                         <div className="flex items-center space-x-2">
@@ -1146,24 +1146,24 @@ export default function AdminDashboard() {
       </div>
 
                                       {/* Hint Actor */}
-                                      {editingMovie.hintActor && (
+                                      {editingMovie?.hintActor && (
                                         <div className="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
                                           <div className="flex items-center space-x-2 text-purple-600">
                                             <div className="w-6 h-6 bg-purple-200 rounded flex items-center justify-center text-xs font-medium">
                                               3
                                             </div>
                                           </div>
-                                          {editingMovie.hintActorPhoto && (
+                                          {editingMovie?.hintActorPhoto && (
                                             <Image 
-                                              src={editingMovie.hintActorPhoto} 
-                                              alt={editingMovie.hintActor}
+                                              src={editingMovie!.hintActorPhoto!} 
+                                              alt={editingMovie?.hintActor ?? ''}
                                               width={40}
                                               height={40}
                                               className="w-10 h-10 rounded-full object-cover"
                                             />
                                           )}
                                           <div className="flex-1">
-                                            <div className="font-medium text-gray-900">{editingMovie.hintActor}</div>
+                                            <div className="font-medium text-gray-900">{editingMovie?.hintActor}</div>
                                             <div className="text-sm text-gray-500">Hint Actor</div>
                                           </div>
                                           <div className="flex items-center space-x-2">
@@ -1187,24 +1187,24 @@ export default function AdminDashboard() {
                                       )}
 
                                       {/* Actor 3 */}
-                                      {(editingMovie.actor3 || editingMovie.actor3 === null) && (
+                                      {(editingMovie?.actor3 || editingMovie?.actor3 === null) && (
                                         <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-200">
                                           <div className="flex items-center space-x-2 text-orange-600">
                                             <div className="w-6 h-6 bg-orange-200 rounded flex items-center justify-center text-xs font-medium">
                                               4
                                             </div>
                                           </div>
-                                          {editingMovie.actor3Photo && (
+                                          {editingMovie?.actor3Photo && (
                                             <Image 
-                                              src={editingMovie.actor3Photo} 
-                                              alt={editingMovie.actor3}
+                                              src={editingMovie!.actor3Photo!} 
+                                              alt={editingMovie?.actor3 ?? ''}
                                               width={40}
                                               height={40}
                                               className="w-10 h-10 rounded-full object-cover"
                                             />
                                           )}
                                           <div className="flex-1">
-                                            <div className="font-medium text-gray-900">{editingMovie.actor3 || 'No actor'}</div>
+                                            <div className="font-medium text-gray-900">{editingMovie?.actor3 || 'No actor'}</div>
                                             <div className="text-sm text-gray-500">Actor 3</div>
                                           </div>
                                           <div className="flex items-center space-x-2">
@@ -1228,24 +1228,24 @@ export default function AdminDashboard() {
                                       )}
 
                                       {/* Actor 4 */}
-                                      {(editingMovie.actor4 || editingMovie.actor4 === null) && (
+                                      {(editingMovie?.actor4 || editingMovie?.actor4 === null) && (
                                         <div className="flex items-center space-x-3 p-3 bg-teal-50 rounded-lg border border-teal-200">
                                           <div className="flex items-center space-x-2 text-teal-600">
                                             <div className="w-6 h-6 bg-teal-200 rounded flex items-center justify-center text-xs font-medium">
                                               5
                                             </div>
                                           </div>
-                                          {editingMovie.actor4Photo && (
+                                          {editingMovie?.actor4Photo && (
                                             <Image 
-                                              src={editingMovie.actor4Photo} 
-                                              alt={editingMovie.actor4}
+                                              src={editingMovie!.actor4Photo!} 
+                                              alt={editingMovie?.actor4 ?? ''}
                                               width={40}
                                               height={40}
                                               className="w-10 h-10 rounded-full object-cover"
                                             />
                                           )}
                                           <div className="flex-1">
-                                            <div className="font-medium text-gray-900">{editingMovie.actor4 || 'No actor'}</div>
+                                            <div className="font-medium text-gray-900">{editingMovie?.actor4 || 'No actor'}</div>
                                             <div className="text-sm text-gray-500">Actor 4</div>
                                           </div>
                                           <div className="flex items-center space-x-2">
@@ -1269,24 +1269,24 @@ export default function AdminDashboard() {
                                       )}
 
                                       {/* Actor 5 */}
-                                      {(editingMovie.actor5 || editingMovie.actor5 === null) && (
+                                      {(editingMovie?.actor5 || editingMovie?.actor5 === null) && (
                                         <div className="flex items-center space-x-3 p-3 bg-pink-50 rounded-lg border border-pink-200">
                                           <div className="flex items-center space-x-2 text-pink-600">
                                             <div className="w-6 h-6 bg-pink-200 rounded flex items-center justify-center text-xs font-medium">
                                               6
                                             </div>
                                           </div>
-                                          {editingMovie.actor5Photo && (
+                                          {editingMovie?.actor5Photo && (
                                             <Image 
-                                              src={editingMovie.actor5Photo} 
-                                              alt={editingMovie.actor5}
+                                              src={editingMovie!.actor5Photo!} 
+                                              alt={editingMovie?.actor5 ?? ''}
                                               width={40}
                                               height={40}
                                               className="w-10 h-10 rounded-full object-cover"
                                             />
                                           )}
                                           <div className="flex-1">
-                                            <div className="font-medium text-gray-900">{editingMovie.actor5 || 'No actor'}</div>
+                                            <div className="font-medium text-gray-900">{editingMovie?.actor5 || 'No actor'}</div>
                                             <div className="text-sm text-gray-500">Actor 5</div>
                                           </div>
                                           <div className="flex items-center space-x-2">
@@ -1314,21 +1314,21 @@ export default function AdminDashboard() {
                                 
                                 {/* Traditional Form Fields */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                  <FormInput label="Movie Title" name="movie" value={editingMovie.movie} onChange={(e) => setEditingMovie(prev => prev ? {...prev, movie: e.target.value} : null)} required />
-                                  <FormInput label="Year" name="year" value={editingMovie.year || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, year: e.target.value} : null)} />
-                                  <FormInput label="Actor 1 Name" name="actor1" value={editingMovie.actor1 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor1: e.target.value} : null)} required />
-                                  <FormInput label="Actor 1 Photo URL" name="actor1Photo" value={editingMovie.actor1Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor1Photo: e.target.value} : null)} />
-                                  <FormInput label="Actor 2 Name" name="actor2" value={editingMovie.actor2 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor2: e.target.value} : null)} required />
-                                  <FormInput label="Actor 2 Photo URL" name="actor2Photo" value={editingMovie.actor2Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor2Photo: e.target.value} : null)} />
-                                  <FormInput label="Actor 3 Name" name="actor3" value={editingMovie.actor3 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor3: e.target.value} : null)} />
-                                  <FormInput label="Actor 3 Photo URL" name="actor3Photo" value={editingMovie.actor3Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor3Photo: e.target.value} : null)} />
-                                  <FormInput label="Actor 4 Name" name="actor4" value={editingMovie.actor4 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor4: e.target.value} : null)} />
-                                  <FormInput label="Actor 4 Photo URL" name="actor4Photo" value={editingMovie.actor4Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor4Photo: e.target.value} : null)} />
-                                  <FormInput label="Actor 5 Name" name="actor5" value={editingMovie.actor5 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor5: e.target.value} : null)} />
-                                  <FormInput label="Actor 5 Photo URL" name="actor5Photo" value={editingMovie.actor5Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor5Photo: e.target.value} : null)} />
-                                  <FormInput label="Hint Actor Name" name="hintActor" value={editingMovie.hintActor || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, hintActor: e.target.value} : null)} />
-                                  <FormInput label="Hint Actor Photo URL" name="hintActorPhoto" value={editingMovie.hintActorPhoto || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, hintActorPhoto: e.target.value} : null)} />
-                                  <FormInput label="Poster URL" name="poster" value={editingMovie.poster || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, poster: e.target.value} : null)} />
+                                  <FormInput label="Movie Title" name="movie" value={editingMovie?.movie || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, movie: e.target.value} : null)} required />
+                                  <FormInput label="Year" name="year" value={editingMovie?.year || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, year: e.target.value} : null)} />
+                                  <FormInput label="Actor 1 Name" name="actor1" value={editingMovie?.actor1 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor1: e.target.value} : null)} required />
+                                  <FormInput label="Actor 1 Photo URL" name="actor1Photo" value={editingMovie?.actor1Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor1Photo: e.target.value} : null)} />
+                                  <FormInput label="Actor 2 Name" name="actor2" value={editingMovie?.actor2 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor2: e.target.value} : null)} required />
+                                  <FormInput label="Actor 2 Photo URL" name="actor2Photo" value={editingMovie?.actor2Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor2Photo: e.target.value} : null)} />
+                                  <FormInput label="Actor 3 Name" name="actor3" value={editingMovie?.actor3 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor3: e.target.value} : null)} />
+                                  <FormInput label="Actor 3 Photo URL" name="actor3Photo" value={editingMovie?.actor3Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor3Photo: e.target.value} : null)} />
+                                  <FormInput label="Actor 4 Name" name="actor4" value={editingMovie?.actor4 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor4: e.target.value} : null)} />
+                                  <FormInput label="Actor 4 Photo URL" name="actor4Photo" value={editingMovie?.actor4Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor4Photo: e.target.value} : null)} />
+                                  <FormInput label="Actor 5 Name" name="actor5" value={editingMovie?.actor5 || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor5: e.target.value} : null)} />
+                                  <FormInput label="Actor 5 Photo URL" name="actor5Photo" value={editingMovie?.actor5Photo || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, actor5Photo: e.target.value} : null)} />
+                                  <FormInput label="Hint Actor Name" name="hintActor" value={editingMovie?.hintActor || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, hintActor: e.target.value} : null)} />
+                                  <FormInput label="Hint Actor Photo URL" name="hintActorPhoto" value={editingMovie?.hintActorPhoto || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, hintActorPhoto: e.target.value} : null)} />
+                                  <FormInput label="Poster URL" name="poster" value={editingMovie?.poster || ''} onChange={(e) => setEditingMovie(prev => prev ? {...prev, poster: e.target.value} : null)} />
                                 </div>
                                 
                                 <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200">
