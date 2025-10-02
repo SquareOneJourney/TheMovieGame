@@ -1006,9 +1006,9 @@ export default function AdminDashboard() {
                                   )}
 
                                   {/* Show TMDB actors if available */}
-                                  {movie.tmdbId && movieActors[movie.tmdbId] ? (
+                                  {movie.tmdbId && movieActors[movie.tmdbId!] ? (
                                     <div className="space-y-2">
-                                      {movieActors[movie.tmdbId].map((actor, index) => {
+                                      {movieActors[movie.tmdbId!]?.map((actor: any, index: number) => {
                                         return (
                                           <div
                                             key={actor.id}
