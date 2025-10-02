@@ -980,7 +980,7 @@ export default function AdminDashboard() {
                                 <div className="space-y-3">
                                   <div className="flex items-center justify-between">
                                     <h5 className="text-md font-medium text-gray-700">Assign actor roles:</h5>
-                                    {movie.tmdbId && loadingActors[parseInt(movie.tmdbId)] && (
+                                    {movie.tmdbId && loadingActors[parseInt(movie.tmdbId || '0', 10)] && (
                                       <div className="flex items-center space-x-2 text-sm text-gray-500">
                                         <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                                         <span>Loading actors...</span>
