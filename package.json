@@ -12,11 +12,13 @@
     "postinstall": "echo 'Post-install complete'",
     "build-db": "node scripts/build-movie-database.js",
     "build-admin-db": "node scripts/build-from-admin.js",
+    "migrate-movies": "node scripts/migrate-movies-to-db.js",
     "generate-icons": "node scripts/generate-icons.js",
     "generate-screenshots": "node scripts/generate-screenshots.js",
     "app-store-prep": "npm run generate-icons && npm run generate-screenshots"
   },
   "dependencies": {
+    "@prisma/client": "^6.16.3",
     "@radix-ui/react-slot": "^1.2.3",
     "@types/node": "^20.10.5",
     "@types/react": "^19.1.15",
@@ -39,6 +41,7 @@
   },
   "devDependencies": {
     "eslint": "^8.56.0",
-    "eslint-config-next": "14.0.4"
+    "eslint-config-next": "14.0.4",
+    "prisma": "^6.16.3"
   }
 }

@@ -54,12 +54,22 @@ model Round {
 }
 
 model Movie {
-  id        String   @id @default(cuid())
-  actor1    String
-  actor2    String
-  actor3    String?  // additional actor for flexibility
-  actor4    String?  // additional actor for flexibility
-  actor5    String?  // additional actor for flexibility
-  title     String
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  movie         String   // movie title
+  year          String?  // movie year
+  poster        String?  // movie poster URL
+  actor1        String
+  actor2        String
+  actor3        String?  // additional actor for flexibility
+  actor4        String?  // additional actor for flexibility
+  actor5        String?  // additional actor for flexibility
+  hintActor     String?  // hint actor for backward compatibility
+  actor1Photo   String?  // actor1 profile photo URL
+  actor2Photo   String?  // actor2 profile photo URL
+  actor3Photo   String?  // actor3 profile photo URL
+  actor4Photo   String?  // actor4 profile photo URL
+  actor5Photo   String?  // actor5 profile photo URL
+  hintActorPhoto String? // hint actor profile photo URL
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
