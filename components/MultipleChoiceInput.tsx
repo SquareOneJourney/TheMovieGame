@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -49,6 +49,11 @@ export function MultipleChoiceInput({
 }: MultipleChoiceInputProps) {
   const [selectedOption, setSelectedOption] = useState<MultipleChoiceOption | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Reset selectedOption when options change (new round starts)
+  useEffect(() => {
+    setSelectedOption(null)
+  }, [options])
 
   const handleOptionSelect = async (option: MultipleChoiceOption) => {
     if (disabled || isSubmitting) return
