@@ -9,7 +9,6 @@ import { enhancedFuzzyMatch } from '@/lib/fuzzyMatch'
 import { MultipleChoiceInput } from '@/components/MultipleChoiceInput'
 import { generateMultipleChoiceOptions, MultipleChoiceOption } from '@/lib/multipleChoiceGenerator'
 import { Scoreboard } from '@/components/Scoreboard'
-import Link from 'next/link'
 
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = 'force-dynamic'
