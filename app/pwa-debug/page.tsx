@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { CheckCircle, XCircle, AlertCircle, Info } from 'lucide-react'
 
 export default function PWADebugPage() {
@@ -233,24 +234,24 @@ export default function PWADebugPage() {
 
         {/* Quick Links */}
         <div className="flex justify-center space-x-4">
-          <a
+          <Link
             href="/"
             className="bg-white/20 hover:bg-white/30 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200"
           >
             🏠 Home
-          </a>
-          <a
+          </Link>
+          <Link
             href="/singleplayer"
             className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-3 px-6 rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all duration-200"
           >
             🎮 Play Game
-          </a>
-          <a
+          </Link>
+          <Link
             href="/pwa-test"
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200"
           >
             🧪 PWA Test
-          </a>
+          </Link>
         </div>
       </div>
     </div>

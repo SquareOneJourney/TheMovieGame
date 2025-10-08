@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
 import { Crown, Bot, User, Trophy, Home } from 'lucide-react'
 import { movieService, GameMovie } from '@/lib/movieService'
 import { enhancedFuzzyMatch } from '@/lib/fuzzyMatch'
@@ -494,12 +495,12 @@ export default function SinglePlayerPage() {
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6">
               <h3 className="text-xl font-bold text-white mb-2">Ready for another round?</h3>
               <p className="text-gray-300 mb-4">Test your movie knowledge against Mr. Robot again!</p>
-              <a 
+              <Link 
                 href="/"
                 className="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
               >
                 Back to Home
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}
