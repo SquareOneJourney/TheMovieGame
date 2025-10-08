@@ -91,11 +91,11 @@ export function MultipleChoiceInput({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="space-y-1 sm:space-y-2 pb-4 sm:pb-6"
+      className="space-y-2 sm:space-y-3 pb-6 sm:pb-8"
     >
       {/* Current Clue Display - Mobile Optimized */}
       <Card className="bg-gradient-to-b from-[#fffef8] via-[#fffcf0] to-[#fffef8]">
-        <CardContent className="p-3 sm:p-4">
+        <CardContent className="p-4 sm:p-6">
           
           <div className="relative text-center space-y-1 sm:space-y-2">
             <h3 className="text-slate-900 text-center flex items-center justify-center space-x-1 sm:space-x-2 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
@@ -103,10 +103,9 @@ export function MultipleChoiceInput({
               <span>Movie Clue</span>
               <Image src="/TheMovieGame Logo.png" alt="The Movie Game Logo" width={20} height={20} className="h-4 w-4 sm:h-5 sm:w-5" />
             </h3>
-            {/* Mobile Layout - Completely separate vertical layout */}
-            <div className="sm:hidden flex flex-col items-center space-y-2 w-full px-2">
-              {/* Actor 1: Photo on left, name on right */}
-              <div className="flex items-center justify-center space-x-2 w-full">
+            {/* Mobile Layout - Horizontal layout to use space better */}
+            <div className="sm:hidden flex items-center justify-center space-x-2 w-full px-4">
+              <div className="flex items-center space-x-2">
                 <ActorPhoto 
                   src={clue.actor1Photo} 
                   name={clue.actor1} 
@@ -115,11 +114,9 @@ export function MultipleChoiceInput({
                 <span className="font-bold text-slate-700 text-sm">{clue.actor1}</span>
               </div>
               
-              {/* "and" separator */}
-              <span className="text-slate-500 text-sm font-medium">and</span>
+              <span className="text-slate-500 text-sm font-medium">&</span>
               
-              {/* Actor 2: Name on left, photo on right */}
-              <div className="flex items-center justify-center space-x-2 w-full">
+              <div className="flex items-center space-x-2">
                 <span className="font-bold text-slate-700 text-sm">{clue.actor2}</span>
                 <ActorPhoto 
                   src={clue.actor2Photo} 
@@ -171,7 +168,7 @@ export function MultipleChoiceInput({
 
       {/* Multiple Choice Options - Mobile Optimized */}
       <Card className="bg-gradient-to-b from-[#fffef8] via-[#fffcf0] to-[#fffef8]">
-        <CardContent className="p-2 sm:p-3">
+        <CardContent className="p-3 sm:p-4">
           
           <div className="relative">
             <div className="flex items-center justify-between mb-2 sm:mb-3">
@@ -206,7 +203,7 @@ export function MultipleChoiceInput({
               </motion.div>
             </div>
             
-            <div className="grid grid-cols-1 gap-1.5 sm:gap-3 mb-1 sm:mb-2">
+            <div className="grid grid-cols-1 gap-2 sm:gap-4 mb-2 sm:mb-3">
               {options.map((option, index) => (
                 <motion.div
                   key={option.id}
@@ -215,7 +212,7 @@ export function MultipleChoiceInput({
                   className="relative"
                 >
                   {/* Film Strip Background - Mobile Optimized */}
-                  <div className={`relative w-full h-14 sm:h-18 bg-black rounded-md sm:rounded-lg overflow-hidden shadow-lg border-2 ${
+                  <div className={`relative w-full h-16 sm:h-20 bg-black rounded-md sm:rounded-lg overflow-hidden shadow-lg border-2 ${
                     selectedOption?.id === option.id 
                       ? 'border-amber-400 shadow-amber-400/50' 
                       : 'border-slate-600'
