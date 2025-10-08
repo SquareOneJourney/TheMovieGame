@@ -95,7 +95,7 @@ export function MultipleChoiceInput({
     >
       {/* Current Clue Display - Mobile Optimized */}
       <Card className="bg-gradient-to-b from-[#fffef8] via-[#fffcf0] to-[#fffef8]">
-        <CardContent className="p-2 sm:p-4">
+        <CardContent className="p-4 sm:p-6">
           
           <div className="relative text-center space-y-1 sm:space-y-2">
             <h3 className="text-slate-900 text-center flex items-center justify-center space-x-1 sm:space-x-2 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
@@ -103,7 +103,7 @@ export function MultipleChoiceInput({
               <span>Movie Clue</span>
               <Image src="/TheMovieGame Logo.png" alt="The Movie Game Logo" width={20} height={20} className="h-4 w-4 sm:h-5 sm:w-5" />
             </h3>
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6 text-sm sm:text-base md:text-lg">
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6 text-sm sm:text-base md:text-lg px-2">
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <ActorPhoto 
                   src={clue.actor1Photo} 
@@ -148,10 +148,37 @@ export function MultipleChoiceInput({
         <CardContent className="p-2 sm:p-4">
           
           <div className="relative">
-            <h3 className="text-slate-900 text-center flex items-center justify-center space-x-1 sm:space-x-2 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
-              <Image src="/TheMovieGame Logo.png" alt="The Movie Game Logo" width={40} height={40} className="h-8 w-8 sm:h-10 sm:w-10" />
-              <span>Choose Wisely</span>
-            </h3>
+            <div className="flex items-center justify-between mb-2 sm:mb-3">
+              <h3 className="text-slate-900 flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base md:text-lg font-bold">
+                <Image src="/TheMovieGame Logo.png" alt="The Movie Game Logo" width={40} height={40} className="h-8 w-8 sm:h-10 sm:w-10" />
+                <span>Choose Wisely</span>
+              </h3>
+              
+              {/* Hint Button - Moved here for better space utilization */}
+              <motion.div
+                whileHover={!disabled && !isSubmitting && !hintUsed ? { scale: 1.02 } : {}}
+                whileTap={!disabled && !isSubmitting && !hintUsed ? { scale: 0.98 } : {}}
+              >
+                <Button
+                  onClick={handleHint}
+                  disabled={disabled || isSubmitting || !onHint || hintUsed}
+                  className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold py-1 sm:py-1.5 px-2 sm:px-3 rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
+                  title={hintUsed ? "Hint already used" : "Get a hint (costs half a point if correct)"}
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 sm:w-3 sm:h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span className="text-xs sm:text-sm">...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-1">
+                      <span>💡</span>
+                      <span className="text-xs sm:text-sm">Hint</span>
+                    </div>
+                  )}
+                </Button>
+              </motion.div>
+            </div>
             
             <div className="grid grid-cols-1 gap-2 sm:gap-4 mb-2 sm:mb-3">
               {options.map((option, index) => (
@@ -267,31 +294,6 @@ export function MultipleChoiceInput({
             </div>
 
             {/* Action Buttons - Mobile Optimized */}
-            <div className="flex justify-center">
-              <motion.div
-                whileHover={!disabled && !isSubmitting && !hintUsed ? { scale: 1.02 } : {}}
-                whileTap={!disabled && !isSubmitting && !hintUsed ? { scale: 0.98 } : {}}
-              >
-                <Button
-                  onClick={handleHint}
-                  disabled={disabled || isSubmitting || !onHint || hintUsed}
-                  className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold py-1.5 sm:py-2 px-3 sm:px-4 rounded-md sm:rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
-                  title={hintUsed ? "Hint already used" : "Get a hint (costs half a point if correct)"}
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center space-x-1 sm:space-x-2">
-                      <div className="w-2 h-2 sm:w-3 sm:h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span className="text-xs sm:text-sm">Submitting...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center space-x-1">
-                      <span>💡</span>
-                      <span className="text-xs sm:text-sm">Hint</span>
-                    </div>
-                  )}
-                </Button>
-              </motion.div>
-            </div>
 
             {/* Hint Warning - Mobile Optimized */}
             {hintUsed && (
