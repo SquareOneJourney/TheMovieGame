@@ -103,25 +103,25 @@ export function MultipleChoiceInput({
               <span>Movie Clue</span>
               <Image src="/TheMovieGame Logo.png" alt="The Movie Game Logo" width={20} height={20} className="h-4 w-4 sm:h-5 sm:w-5" />
             </h3>
-            <div className="relative flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 text-sm sm:text-base md:text-lg px-2">
-              {/* Mobile Layout - Overlapping names with centered "and" */}
-              <div className="sm:hidden flex items-center justify-center w-full relative">
-                {/* Actor 1: Photo on left, name extending toward center */}
-                <div className="flex items-center space-x-2">
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-4 md:space-x-6 text-sm sm:text-base md:text-lg px-4">
+              {/* Mobile Layout - Clean vertical stacking */}
+              <div className="sm:hidden flex flex-col items-center space-y-3 w-full">
+                {/* Actor 1: Photo on left, name on right */}
+                <div className="flex items-center space-x-3">
                   <ActorPhoto 
                     src={clue.actor1Photo} 
                     name={clue.actor1} 
                     size="md"
                   />
-                  <span className="font-bold text-slate-700 text-xs sm:text-sm md:text-base pr-8">{clue.actor1}</span>
+                  <span className="font-bold text-slate-700 text-sm">{clue.actor1}</span>
                 </div>
                 
-                {/* Centered "and" separator */}
-                <span className="absolute left-1/2 transform -translate-x-1/2 text-slate-500 text-sm font-medium bg-gradient-to-b from-[#fffef8] via-[#fffcf0] to-[#fffef8] px-2">and</span>
+                {/* "and" separator */}
+                <span className="text-slate-500 text-sm font-medium">and</span>
                 
-                {/* Actor 2: Name starting under "and", photo on right */}
-                <div className="flex items-center space-x-2">
-                  <span className="font-bold text-slate-700 text-xs sm:text-sm md:text-base pl-8">{clue.actor2}</span>
+                {/* Actor 2: Name on left, photo on right */}
+                <div className="flex items-center space-x-3">
+                  <span className="font-bold text-slate-700 text-sm">{clue.actor2}</span>
                   <ActorPhoto 
                     src={clue.actor2Photo} 
                     name={clue.actor2} 
