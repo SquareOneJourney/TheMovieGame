@@ -48,9 +48,10 @@ function findMoviesWithBothActors(actor1: string, actor2: string, allMovies: Gam
 }
 
 /**
- * Generates 4 multiple choice options for a given movie with strategic difficulty
+ * Generates 4 multiple choice options for a given movie with sophisticated logic
+ * Based on actor relationships and filmography analysis
  * @param correctMovie - The correct movie to include
- * @param allMovies - Array of all available movies to choose wrong answers from
+ * @param allMovies - Array of ALL available movies to choose wrong answers from
  * @returns Array of 4 options with one correct answer
  */
 export function generateMultipleChoiceOptions(
@@ -76,192 +77,108 @@ export function generateMultipleChoiceOptions(
     allMovies
   )
   
-  // Filter out the correct movie
-  const otherMoviesWithBothActors = moviesWithBothActors.filter(
-    movie => movie.movie !== correctMovie.movie
-  )
+  console.log(`🎯 Multiple Choice Logic for: ${correctMovie.movie}`);
+  console.log(`🎯 Actor 1: ${correctMovie.actor1}, Actor 2: ${correctMovie.actor2}`);
+  console.log(`🎯 Movies with both actors: ${moviesWithBothActors.length}`);
 
   let wrongOptions: MultipleChoiceOption[] = []
 
-  // Rule 1: If both actors have only starred in one movie together (the correct one)
-  if (moviesWithBothActors.length === 1) {
-    // 2 choices must start with Actor 1, 2 with Actor 2
-    const actor1Movies = actorMovieMap.get(correctMovie.actor1) || []
-    const actor2Movies = actorMovieMap.get(correctMovie.actor2) || []
-    
-    // Filter out the correct movie and get other movies for each actor
-    const otherActor1Movies = actor1Movies.filter(movie => 
-      movie.movie !== correctMovie.movie && 
-      movie.movie && 
-      movie.movie.trim() !== ''
-    )
-    const otherActor2Movies = actor2Movies.filter(movie => 
-      movie.movie !== correctMovie.movie && 
-      movie.movie && 
-      movie.movie.trim() !== ''
-    )
-    
-    // Select 2 movies from Actor 1's filmography
-    const selectedActor1Movies = otherActor1Movies.slice(0, 2)
-    
-    // Select 2 movies from Actor 2's filmography
-    const selectedActor2Movies = otherActor2Movies.slice(0, 2)
-    
-    // If we don't have enough movies from each actor, fill with random movies
-    const allOtherMovies = allMovies.filter(movie => 
-      movie.movie !== correctMovie.movie && 
-      movie.movie && 
-      movie.movie.trim() !== ''
-    )
-    
-    // Fill remaining slots if needed
-    while (selectedActor1Movies.length < 2 && allOtherMovies.length > 0) {
-      const randomMovie = allOtherMovies[Math.floor(Math.random() * allOtherMovies.length)]
-      if (!selectedActor1Movies.some(m => m.movie === randomMovie.movie)) {
-        selectedActor1Movies.push(randomMovie)
-      }
-    }
-    
-    while (selectedActor2Movies.length < 2 && allOtherMovies.length > 0) {
-      const randomMovie = allOtherMovies[Math.floor(Math.random() * allOtherMovies.length)]
-      if (!selectedActor1Movies.some(m => m.movie === randomMovie.movie) && 
-          !selectedActor2Movies.some(m => m.movie === randomMovie.movie)) {
-        selectedActor2Movies.push(randomMovie)
-      }
-    }
-    
-    // Create wrong options from selected movies
-    wrongOptions = [
-      ...selectedActor1Movies.slice(0, 2),
-      ...selectedActor2Movies.slice(0, 2)
-    ].map((movie, index) => ({
-      id: `wrong-${index}`,
-      title: movie.movie,
-      year: movie.year || 'Unknown',
-      poster: movie.poster,
-      isCorrect: false
-    }))
+  // IMPLEMENT YOUR SOPHISTICATED LOGIC:
+  // Option 1: Correct Answer (always included)
+  // Option 2: IF(Number of films they both star in<2,"One film Actor 1 stars in","Another movie the 2 actors star in but is not the correct answer")
+  // Option 3: IF(Number of films they both star in<2,"One film Actor 2 stars in",IF(Number of films they both star in<3,"One film Actor 1 stars in","Another movie the 2 actors star in but is not the correct answer"))
+  // Option 4: IF(Number of films they both star in<3,"One film Actor 2 stars in",IF(Number of films they both star in<4,"One film Actor 1 stars in","Another movie the 2 actors star in but is not the correct answer"))
+
+  const bothActorsCount = moviesWithBothActors.length;
+  const otherMoviesWithBothActors = moviesWithBothActors.filter(movie => movie.movie !== correctMovie.movie);
+  
+  // Get individual actor filmographies
+  const actor1Movies = (actorMovieMap.get(correctMovie.actor1) || []).filter(movie => 
+    movie.movie !== correctMovie.movie && 
+    movie.movie && 
+    movie.movie.trim() !== ''
+  );
+  const actor2Movies = (actorMovieMap.get(correctMovie.actor2) || []).filter(movie => 
+    movie.movie !== correctMovie.movie && 
+    movie.movie && 
+    movie.movie.trim() !== ''
+  );
+
+  // Option 2 Logic
+  let option2Movie: GameMovie | null = null;
+  if (bothActorsCount < 2) {
+    // "One film Actor 1 stars in"
+    option2Movie = actor1Movies[0] || null;
+  } else {
+    // "Another movie the 2 actors star in but is not the correct answer"
+    option2Movie = otherMoviesWithBothActors[0] || null;
   }
-  // Rule 2: If both actors star in multiple movies together
-  else if (moviesWithBothActors.length > 1) {
-    // 2 choices should be those 2 movies, plus 1 more movie Actor 1 has starred in, and 1 movie actor 2 has starred in
-    const actor1Movies = actorMovieMap.get(correctMovie.actor1) || []
-    const actor2Movies = actorMovieMap.get(correctMovie.actor2) || []
-    
-    // Get other movies with both actors (excluding the correct one)
-    const otherMoviesWithBothActors = moviesWithBothActors.filter(
-      movie => movie.movie !== correctMovie.movie
-    )
-    
-    // Get other movies for each actor (excluding movies with both actors)
-    const otherActor1Movies = actor1Movies.filter(movie => 
-      movie.movie !== correctMovie.movie && 
-      !moviesWithBothActors.some(m => m.movie === movie.movie) &&
-      movie.movie && 
-      movie.movie.trim() !== ''
-    )
-    const otherActor2Movies = actor2Movies.filter(movie => 
-      movie.movie !== correctMovie.movie && 
-      !moviesWithBothActors.some(m => m.movie === movie.movie) &&
-      movie.movie && 
-      movie.movie.trim() !== ''
-    )
-    
-    // Select 2 movies where both actors appear together
-    const selectedBothActorsMovies = otherMoviesWithBothActors.slice(0, 2)
-    
-    // Select 1 movie from Actor 1's other filmography
-    const selectedActor1Movie = otherActor1Movies.length > 0 ? [otherActor1Movies[0]] : []
-    
-    // Select 1 movie from Actor 2's other filmography
-    const selectedActor2Movie = otherActor2Movies.length > 0 ? [otherActor2Movies[0]] : []
-    
-    // If we don't have enough movies, fill with random movies
-    const allOtherMovies = allMovies.filter(movie => 
-      movie.movie !== correctMovie.movie && 
-      movie.movie && 
-      movie.movie.trim() !== ''
-    )
-    
-    // Fill remaining slots if needed
-    while (selectedBothActorsMovies.length < 2 && allOtherMovies.length > 0) {
-      const randomMovie = allOtherMovies[Math.floor(Math.random() * allOtherMovies.length)]
-      if (!selectedBothActorsMovies.some(m => m.movie === randomMovie.movie)) {
-        selectedBothActorsMovies.push(randomMovie)
-      }
-    }
-    
-    while (selectedActor1Movie.length < 1 && allOtherMovies.length > 0) {
-      const randomMovie = allOtherMovies[Math.floor(Math.random() * allOtherMovies.length)]
-      if (!selectedBothActorsMovies.some(m => m.movie === randomMovie.movie) && 
-          !selectedActor1Movie.some(m => m.movie === randomMovie.movie)) {
-        selectedActor1Movie.push(randomMovie)
-      }
-    }
-    
-    while (selectedActor2Movie.length < 1 && allOtherMovies.length > 0) {
-      const randomMovie = allOtherMovies[Math.floor(Math.random() * allOtherMovies.length)]
-      if (!selectedBothActorsMovies.some(m => m.movie === randomMovie.movie) && 
-          !selectedActor1Movie.some(m => m.movie === randomMovie.movie) &&
-          !selectedActor2Movie.some(m => m.movie === randomMovie.movie)) {
-        selectedActor2Movie.push(randomMovie)
-      }
-    }
-    
-    // Create wrong options from selected movies
-    wrongOptions = [
-      ...selectedBothActorsMovies.slice(0, 2),
-      ...selectedActor1Movie.slice(0, 1),
-      ...selectedActor2Movie.slice(0, 1)
-    ].map((movie, index) => ({
-      id: `wrong-${index}`,
-      title: movie.movie,
-      year: movie.year || 'Unknown',
-      poster: movie.poster,
-      isCorrect: false
-    }))
+
+  // Option 3 Logic
+  let option3Movie: GameMovie | null = null;
+  if (bothActorsCount < 2) {
+    // "One film Actor 2 stars in"
+    option3Movie = actor2Movies[0] || null;
+  } else if (bothActorsCount < 3) {
+    // "One film Actor 1 stars in"
+    option3Movie = actor1Movies[0] || null;
+  } else {
+    // "Another movie the 2 actors star in but is not the correct answer"
+    option3Movie = otherMoviesWithBothActors[1] || otherMoviesWithBothActors[0] || null;
   }
-  // Fallback: If we can't determine the relationship, use the old logic
-  else {
-    const wrongMovies = allMovies.filter(movie => 
-      movie.movie !== correctMovie.movie &&
-      movie.movie && 
-      movie.movie.trim() !== ''
-    )
-    
-    // Try to find movies from similar years for more realistic wrong answers
-    const correctYear = parseInt(correctMovie.year || '2000')
-    const yearRange = 5 // Within 5 years
-    
-    const similarYearMovies = wrongMovies.filter(movie => {
-      const movieYear = parseInt(movie.year || '2000')
-      return Math.abs(movieYear - correctYear) <= yearRange
-    })
-    
-    // Select wrong options - prefer similar years, fallback to random
-    let selectedWrongMovies: GameMovie[]
-    if (similarYearMovies.length >= 3) {
-      selectedWrongMovies = similarYearMovies.slice(0, 3)
-    } else {
-      // Mix similar year movies with random ones
-      const randomMovies = wrongMovies.filter(movie => 
-        !similarYearMovies.includes(movie)
-      )
-      const needed = 3 - similarYearMovies.length
-      selectedWrongMovies = [
-        ...similarYearMovies,
-        ...randomMovies.slice(0, needed)
-      ]
-    }
-    
-    wrongOptions = selectedWrongMovies.map((movie, index) => ({
-      id: `wrong-${index}`,
-      title: movie.movie,
-      year: movie.year || 'Unknown',
-      poster: movie.poster,
-      isCorrect: false
-    }))
+
+  // Option 4 Logic
+  let option4Movie: GameMovie | null = null;
+  if (bothActorsCount < 3) {
+    // "One film Actor 2 stars in"
+    option4Movie = actor2Movies[0] || null;
+  } else if (bothActorsCount < 4) {
+    // "One film Actor 1 stars in"
+    option4Movie = actor1Movies[1] || actor1Movies[0] || null;
+  } else {
+    // "Another movie the 2 actors star in but is not the correct answer"
+    option4Movie = otherMoviesWithBothActors[2] || otherMoviesWithBothActors[1] || otherMoviesWithBothActors[0] || null;
   }
+
+  // Collect all selected movies and ensure no duplicates
+  const selectedMovies: GameMovie[] = [];
+  const usedMovieTitles = new Set<string>();
+  
+  // Add movies one by one, ensuring no duplicates
+  const candidates = [option2Movie, option3Movie, option4Movie].filter(Boolean);
+  
+  for (const movie of candidates) {
+    if (movie && !usedMovieTitles.has(movie.movie)) {
+      selectedMovies.push(movie);
+      usedMovieTitles.add(movie.movie);
+    }
+  }
+  
+  // If we don't have enough movies, fill with random movies from the full database
+  const allOtherMovies = allMovies.filter(movie => 
+    movie.movie !== correctMovie.movie && 
+    movie.movie && 
+    movie.movie.trim() !== '' &&
+    !usedMovieTitles.has(movie.movie)
+  );
+
+  // Fill remaining slots with random movies if needed
+  while (selectedMovies.length < 3 && allOtherMovies.length > 0) {
+    const randomMovie = allOtherMovies[Math.floor(Math.random() * allOtherMovies.length)];
+    if (!usedMovieTitles.has(randomMovie.movie)) {
+      selectedMovies.push(randomMovie);
+      usedMovieTitles.add(randomMovie.movie);
+    }
+  }
+
+  // Create wrong options from selected movies
+  wrongOptions = selectedMovies.slice(0, 3).map((movie, index) => ({
+    id: `wrong-${index}`,
+    title: movie.movie,
+    year: movie.year || 'Unknown',
+    poster: movie.poster,
+    isCorrect: false
+  }));
 
   // Ensure we have exactly 3 wrong options
   while (wrongOptions.length < 3) {
@@ -295,9 +212,44 @@ export function generateMultipleChoiceOptions(
   // Take only the first 3 wrong options
   wrongOptions = wrongOptions.slice(0, 3)
 
+  // Final check: Ensure no duplicate movie titles in the final options
+  const finalOptions = [correctOption, ...wrongOptions];
+  const uniqueOptions = [];
+  const usedTitles = new Set<string>();
+  
+  for (const option of finalOptions) {
+    if (!usedTitles.has(option.title)) {
+      uniqueOptions.push(option);
+      usedTitles.add(option.title);
+    }
+  }
+  
+  // If we lost an option due to duplicates, add a random one
+  while (uniqueOptions.length < 4) {
+    const allOtherMovies = allMovies.filter(movie => 
+      movie.movie !== correctMovie.movie && 
+      movie.movie && 
+      movie.movie.trim() !== '' &&
+      !usedTitles.has(movie.movie)
+    );
+    
+    if (allOtherMovies.length > 0) {
+      const randomMovie = allOtherMovies[Math.floor(Math.random() * allOtherMovies.length)];
+      uniqueOptions.push({
+        id: `random-${uniqueOptions.length}`,
+        title: randomMovie.movie,
+        year: randomMovie.year || 'Unknown',
+        poster: randomMovie.poster,
+        isCorrect: false
+      });
+      usedTitles.add(randomMovie.movie);
+    } else {
+      break; // Prevent infinite loop
+    }
+  }
+  
   // Combine correct and wrong options, then shuffle
-  const allOptions = [correctOption, ...wrongOptions]
-  return shuffleArray(allOptions)
+  return shuffleArray(uniqueOptions)
 }
 
 /**

@@ -99,6 +99,7 @@ export function ActorPhoto({ src, name, size = 'md', className = '' }: ActorPhot
         onError={handleImageError}
         width={size === 'sm' ? 32 : size === 'md' ? 48 : 64}
         height={size === 'sm' ? 32 : size === 'md' ? 48 : 64}
+        style={{ width: 'auto', height: 'auto' }}
         className={`
           ${sizeClasses}
           rounded-full

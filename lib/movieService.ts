@@ -44,6 +44,15 @@ class MovieService {
     return this.shuffleArray(moviesDatabase).slice(0, count);
   }
 
+  // New method to get ALL movies for sophisticated multiple choice logic
+  async getAllMovies(): Promise<GameMovie[]> {
+    console.log('📦 Loading ALL movies from database for advanced multiple choice logic');
+    console.log('📦 Total movies available:', moviesDatabase.length);
+    
+    // Return all movies from the database for comprehensive multiple choice generation
+    return moviesDatabase;
+  }
+
   async getSingleRandomMovie(): Promise<GameMovie> {
     const movies = await this.getRandomMovies(1);
     return movies[0];

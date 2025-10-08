@@ -219,7 +219,12 @@ export default function AdminDashboard() {
         const tmdbMovies = data.movies || []
         setActorTmdbResults(tmdbMovies)
       } else {
-        console.error('Failed to search TMDB for actor:', response.statusText)
+        const errorData = await response.json().catch(() => ({}))
+        console.error('Failed to search TMDB for actor:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData
+        })
         setActorTmdbResults([])
       }
     } catch (error) {

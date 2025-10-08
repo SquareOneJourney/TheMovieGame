@@ -10,13 +10,21 @@ export async function GET(request: NextRequest) {
     const page = searchParams.get('page') || '1'
     const type = searchParams.get('type') || 'movie' // 'movie' or 'person'
 
+    console.log('TMDB Search Request:', { query, page, type })
+
     if (!query) {
       return NextResponse.json({ error: 'Query parameter is required' }, { status: 400 })
     }
 
     if (!TMDB_BEARER_TOKEN) {
-      return NextResponse.json({ error: 'TMDB API key not configured' }, { status: 500 })
+      console.error('TMDB_BEARER_TOKEN is not configured')
+      return NextResponse.json({ 
+        error: 'TMDB API key not configured. Please set TMDB_BEARER_TOKEN in your environment variables.',
+        details: 'Add TMDB_BEARER_TOKEN to your .env.local file'
+      }, { status: 500 })
     }
+
+    console.log('TMDB_BEARER_TOKEN configured:', TMDB_BEARER_TOKEN ? 'Yes' : 'No')
 
     if (type === 'person') {
       // Search for person first
@@ -31,7 +39,13 @@ export async function GET(request: NextRequest) {
       )
 
       if (!personSearchResponse.ok) {
-        throw new Error(`TMDB API error: ${personSearchResponse.status}`)
+        const errorText = await personSearchResponse.text()
+        console.error('TMDB person search error:', {
+          status: personSearchResponse.status,
+          statusText: personSearchResponse.statusText,
+          body: errorText
+        })
+        throw new Error(`TMDB API error: ${personSearchResponse.status} ${personSearchResponse.statusText} - ${errorText}`)
       }
 
       const personSearchData = await personSearchResponse.json()
@@ -60,7 +74,13 @@ export async function GET(request: NextRequest) {
       )
 
       if (!creditsResponse.ok) {
-        throw new Error(`TMDB API error: ${creditsResponse.status}`)
+        const errorText = await creditsResponse.text()
+        console.error('TMDB credits error:', {
+          status: creditsResponse.status,
+          statusText: creditsResponse.statusText,
+          body: errorText
+        })
+        throw new Error(`TMDB API error: ${creditsResponse.status} ${creditsResponse.statusText} - ${errorText}`)
       }
 
       const creditsData = await creditsResponse.json()
@@ -104,7 +124,13 @@ export async function GET(request: NextRequest) {
       )
 
       if (!searchResponse.ok) {
-        throw new Error(`TMDB API error: ${searchResponse.status}`)
+        const errorText = await searchResponse.text()
+        console.error('TMDB movie search error:', {
+          status: searchResponse.status,
+          statusText: searchResponse.statusText,
+          body: errorText
+        })
+        throw new Error(`TMDB API error: ${searchResponse.status} ${searchResponse.statusText} - ${errorText}`)
       }
 
       const searchData = await searchResponse.json()

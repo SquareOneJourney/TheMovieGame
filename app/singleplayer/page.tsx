@@ -79,40 +79,39 @@ export default function SinglePlayerPage() {
     }
   }
 
-  // Load movies from pre-built static database
+  // Load ALL movies from database for sophisticated multiple choice logic
   useEffect(() => {
     const loadMovies = async () => {
       try {
-        console.log('🎬 Loading movies from static database...')
+        console.log('🎬 Loading ALL movies from database for advanced randomization...')
         
-        // Load fewer movies for faster loading
-        const data = await movieService.getRandomMovies(50) // Reduced from 200 to 50
-        console.log('🎬 Loaded movies:', data.length, 'movies')
-        console.log('🎬 Sample movie:', data[0])
-        console.log('🎬 Sample movie actor1Photo:', data[0]?.actor1Photo)
-        console.log('🎬 Sample movie actor2Photo:', data[0]?.actor2Photo)
+        // Load ALL movies for comprehensive multiple choice logic
+        const allMovies = await movieService.getAllMovies()
+        console.log('🎬 Loaded ALL movies:', allMovies.length, 'movies')
+        console.log('🎬 Sample movie:', allMovies[0])
+        console.log('🎬 Sample movie actor1Photo:', allMovies[0]?.actor1Photo)
+        console.log('🎬 Sample movie actor2Photo:', allMovies[0]?.actor2Photo)
         
-        if (data && data.length > 0) {
-          setMovies(data)
+        if (allMovies && allMovies.length > 0) {
+          setMovies(allMovies)
           setIsLoading(false)
-          // Start with a random movie and generate options
-          const randomIndex = Math.floor(Math.random() * data.length)
-          const randomMovie = data[randomIndex]
-          const options = generateMultipleChoiceOptions(randomMovie, data)
+          // Start with a random movie and generate options using ALL movies
+          const randomIndex = Math.floor(Math.random() * allMovies.length)
+          const randomMovie = allMovies[randomIndex]
+          const options = generateMultipleChoiceOptions(randomMovie, allMovies)
           setGameState(prev => ({ 
             ...prev, 
             currentMovie: randomMovie,
             currentOptions: options
           }))
           setUsedMovies(new Set([randomIndex]))
-          console.log('✅ Movies loaded successfully, game started')
+          console.log('✅ ALL movies loaded successfully, game started with advanced logic')
         } else {
-          console.error('❌ No movies returned from API')
+          console.error('❌ No movies returned from database')
           setIsLoading(false)
         }
       } catch (error) {
         console.error('❌ Error loading movies:', error)
-        // The movieService now has fallback to static data, so this shouldn't happen
         console.log('Using fallback movies data...')
         setIsLoading(false)
       }
@@ -206,7 +205,7 @@ export default function SinglePlayerPage() {
   }
 
 
-  // Helper function to get next movie without updating state
+  // Helper function to get next movie with advanced randomization
   const getNextMovieDirect = (): GameMovie | null => {
     console.log('🎬 getNextMovieDirect called - movies.length:', movies.length, 'usedMovies.size:', usedMovies.size)
     
@@ -220,18 +219,32 @@ export default function SinglePlayerPage() {
     
     if (availableMovies.length === 0) {
       // Reset used movies if all have been used
-      console.log('🔄 Resetting used movies - all movies used')
+      console.log('🔄 Resetting used movies - all movies used, using advanced randomization')
       setUsedMovies(new Set())
-      const randomIndex = Math.floor(Math.random() * movies.length)
-      const selectedMovie = movies[randomIndex]
-      console.log('🎬 Selected movie (reset):', selectedMovie?.movie)
-      setUsedMovies(new Set([randomIndex]))
+      
+      // Use Fisher-Yates shuffle for better randomization
+      const shuffledMovies = [...movies]
+      for (let i = shuffledMovies.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[shuffledMovies[i], shuffledMovies[j]] = [shuffledMovies[j], shuffledMovies[i]]
+      }
+      
+      const selectedMovie = shuffledMovies[0]
+      const selectedIndex = movies.findIndex(m => m === selectedMovie)
+      console.log('🎬 Selected movie (reset with shuffle):', selectedMovie?.movie)
+      setUsedMovies(new Set([selectedIndex]))
       return selectedMovie
     } else {
-      const randomIndex = Math.floor(Math.random() * availableMovies.length)
-      const selectedMovie = availableMovies[randomIndex]
+      // Use Fisher-Yates shuffle for better randomization of available movies
+      const shuffledMovies = [...availableMovies]
+      for (let i = shuffledMovies.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[shuffledMovies[i], shuffledMovies[j]] = [shuffledMovies[j], shuffledMovies[i]]
+      }
+      
+      const selectedMovie = shuffledMovies[0]
       const originalIndex = movies.findIndex(m => m === selectedMovie)
-      console.log('🎬 Selected movie:', selectedMovie?.movie, 'originalIndex:', originalIndex)
+      console.log('🎬 Selected movie with advanced randomization:', selectedMovie?.movie, 'originalIndex:', originalIndex)
       
       setUsedMovies(prev => new Set([...prev, originalIndex]))
       return selectedMovie
