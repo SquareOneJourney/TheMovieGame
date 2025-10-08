@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ActorPhoto } from '@/components/ActorPhoto'
@@ -98,9 +99,9 @@ export function MultipleChoiceInput({
           
           <div className="relative text-center space-y-1 sm:space-y-2">
             <h3 className="text-slate-900 text-center flex items-center justify-center space-x-1 sm:space-x-2 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
-              <img src="/TheMovieGame Logo.png" alt="The Movie Game Logo" className="h-4 w-4 sm:h-5 sm:w-5" />
+              <Image src="/TheMovieGame Logo.png" alt="The Movie Game Logo" width={20} height={20} className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>Movie Clue</span>
-              <img src="/TheMovieGame Logo.png" alt="The Movie Game Logo" className="h-4 w-4 sm:h-5 sm:w-5" />
+              <Image src="/TheMovieGame Logo.png" alt="The Movie Game Logo" width={20} height={20} className="h-4 w-4 sm:h-5 sm:w-5" />
             </h3>
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6 text-sm sm:text-base md:text-lg">
               <div className="flex items-center space-x-2 sm:space-x-3">
@@ -148,7 +149,7 @@ export function MultipleChoiceInput({
           
           <div className="relative">
             <h3 className="text-slate-900 text-center flex items-center justify-center space-x-1 sm:space-x-2 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
-              <img src="/TheMovieGame Logo.png" alt="The Movie Game Logo" className="h-8 w-8 sm:h-10 sm:w-10" />
+              <Image src="/TheMovieGame Logo.png" alt="The Movie Game Logo" width={40} height={40} className="h-8 w-8 sm:h-10 sm:w-10" />
               <span>Choose Wisely</span>
             </h3>
             
