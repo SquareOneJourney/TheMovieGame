@@ -91,7 +91,7 @@ export function MultipleChoiceInput({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="space-y-1 sm:space-y-2 md:space-y-3"
+      className="space-y-1 sm:space-y-2 md:space-y-3 pb-8 sm:pb-12"
     >
       {/* Current Clue Display - Mobile Optimized */}
       <Card className="bg-gradient-to-b from-[#fffef8] via-[#fffcf0] to-[#fffef8]">
