@@ -105,12 +105,12 @@ export function GuessInput({ clue, onGuess, onHint, disabled = false, hintUsed =
               <span className="text-gray-400 hidden sm:inline">&</span>
               <span className="text-gray-400 sm:hidden">and</span>
               <div className="flex items-center space-x-3">
+                <span className="font-bold text-blue-300 text-sm sm:text-base">{clue.actor2}</span>
                 <ActorPhoto 
                   src={clue.actor2Photo} 
                   name={clue.actor2} 
                   size="lg"
                 />
-                <span className="font-bold text-blue-300 text-sm sm:text-base">{clue.actor2}</span>
               </div>
             </div>
             

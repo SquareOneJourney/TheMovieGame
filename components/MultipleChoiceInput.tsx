@@ -114,12 +114,12 @@ export function MultipleChoiceInput({
               <span className="text-slate-500 hidden sm:inline">&</span>
               <span className="text-slate-500 sm:hidden">and</span>
               <div className="flex items-center space-x-2 sm:space-x-3">
+                <span className="font-bold text-slate-700 text-xs sm:text-sm md:text-base">{clue.actor2}</span>
                 <ActorPhoto 
                   src={clue.actor2Photo} 
                   name={clue.actor2} 
                   size="md"
                 />
-                <span className="font-bold text-slate-700 text-xs sm:text-sm md:text-base">{clue.actor2}</span>
               </div>
             </div>
             
