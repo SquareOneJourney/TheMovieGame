@@ -107,7 +107,7 @@ export function MultipleChoiceInput({
               {/* Mobile Layout - Clean vertical stacking */}
               <div className="sm:hidden flex flex-col items-center space-y-3 w-full">
                 {/* Actor 1: Photo on left, name on right */}
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-start space-x-3">
                   <ActorPhoto 
                     src={clue.actor1Photo} 
                     name={clue.actor1} 
@@ -120,7 +120,7 @@ export function MultipleChoiceInput({
                 <span className="text-slate-500 text-sm font-medium">and</span>
                 
                 {/* Actor 2: Name on left, photo on right */}
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-end space-x-3">
                   <span className="font-bold text-slate-700 text-sm">{clue.actor2}</span>
                   <ActorPhoto 
                     src={clue.actor2Photo} 
