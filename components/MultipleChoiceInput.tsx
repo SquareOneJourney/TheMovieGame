@@ -212,7 +212,7 @@ export function MultipleChoiceInput({
                   className="relative"
                 >
                   {/* Film Strip Background - Mobile Optimized */}
-                  <div className={`relative w-full h-16 sm:h-20 bg-black overflow-hidden shadow-lg border-2 ${
+                  <div className={`relative w-full h-20 sm:h-24 bg-black overflow-hidden shadow-lg border-2 ${
                     selectedOption?.id === option.id 
                       ? 'border-amber-400 shadow-amber-400/50' 
                       : 'border-slate-600'
