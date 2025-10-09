@@ -212,27 +212,25 @@ export function MultipleChoiceInput({
                   className="relative"
                 >
                   {/* Film Strip Background - Mobile Optimized */}
-                  <div className={`relative w-full h-16 sm:h-20 bg-black rounded-md sm:rounded-lg overflow-hidden shadow-lg border-2 ${
+                  <div className={`relative w-full h-16 sm:h-20 bg-black overflow-hidden shadow-lg border-2 ${
                     selectedOption?.id === option.id 
                       ? 'border-amber-400 shadow-amber-400/50' 
                       : 'border-slate-600'
                   }`}>
                     {/* Film strip sprocket holes - top */}
-                    <div className="absolute top-0 left-0 right-0 h-2 sm:h-3 bg-black flex justify-between items-center px-1 sm:px-2">
-                      {[...Array(12)].map((_, i) => (
-                        <div key={i} className="w-0.5 sm:w-1 h-1 sm:h-2 bg-white rounded-sm"></div>
+                    <div className="absolute top-0 left-0 right-0 h-5 sm:h-5 bg-black flex justify-between items-center px-1 sm:px-1">
+                      {[...Array(32)].map((_, i) => (
+                        <div key={i} className="w-2 sm:w-2 h-1.5 sm:h-2 bg-white"></div>
                       ))}
                     </div>
                     
                     {/* Film strip sprocket holes - bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 h-2 sm:h-3 bg-black flex justify-between items-center px-1 sm:px-2">
-                      {[...Array(12)].map((_, i) => (
-                        <div key={i} className="w-0.5 sm:w-1 h-1 sm:h-2 bg-white rounded-sm"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-5 sm:h-5 bg-black flex justify-between items-center px-1 sm:px-1">
+                      {[...Array(32)].map((_, i) => (
+                        <div key={i} className="w-2 sm:w-2 h-1.5 sm:h-2 bg-white"></div>
                       ))}
                     </div>
 
-                    {/* Film frame outline */}
-                    <div className="absolute inset-2 sm:inset-3 border border-white rounded-sm sm:rounded-md"></div>
                     
                     {/* Grunge texture overlay */}
                     <div className="absolute inset-0 opacity-30">
@@ -245,18 +243,12 @@ export function MultipleChoiceInput({
                       <div className="absolute top-1/3 left-0 right-0 h-px bg-white/20"></div>
                       <div className="absolute top-2/3 left-0 right-0 h-px bg-white/15"></div>
                       
-                      {/* Dust particles */}
-                      <div className="absolute top-4 left-8 w-0.5 h-0.5 bg-white/40 rounded-full"></div>
-                      <div className="absolute top-8 left-16 w-0.5 h-0.5 bg-white/30 rounded-full"></div>
-                      <div className="absolute top-12 left-24 w-0.5 h-0.5 bg-white/50 rounded-full"></div>
-                      <div className="absolute top-6 left-32 w-0.5 h-0.5 bg-white/35 rounded-full"></div>
-                      <div className="absolute top-10 left-40 w-0.5 h-0.5 bg-white/45 rounded-full"></div>
                     </div>
 
                     <Button
                       onClick={() => handleOptionSelect(option)}
                       disabled={disabled || isSubmitting || Boolean(lastResult)}
-                      className={`film-strip-button absolute inset-2 sm:inset-3 w-auto h-auto p-2 sm:p-3 text-left justify-start space-x-2 sm:space-x-3 bg-transparent hover:bg-white/10 border-0 text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-sm sm:rounded-md ${
+                      className={`film-strip-button absolute inset-2 sm:inset-3 w-auto h-auto p-2 sm:p-3 text-left justify-start space-x-2 sm:space-x-3 bg-transparent border-0 text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
                         selectedOption?.id === option.id 
                           ? 'ring-2 ring-amber-400 bg-amber-400/20' 
                           : ''
