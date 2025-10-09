@@ -95,7 +95,7 @@ export function MultipleChoiceInput({
     >
       {/* Current Clue Display - Mobile Optimized */}
       <Card className="bg-gradient-to-b from-[#fffef8] via-[#fffcf0] to-[#fffef8]">
-        <CardContent className="p-4 sm:p-6">
+        <CardContent className="p-6 sm:p-6">
           
           <div className="relative text-center space-y-1 sm:space-y-2">
             <h3 className="text-slate-900 text-center flex items-center justify-center space-x-1 sm:space-x-2 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3">
@@ -218,16 +218,16 @@ export function MultipleChoiceInput({
                       : 'border-slate-600'
                   }`}>
                     {/* Film strip sprocket holes - top */}
-                    <div className="absolute top-0 left-0 right-0 h-5 sm:h-5 bg-black flex justify-between items-center px-1 sm:px-1">
+                    <div className="absolute top-0 left-0 right-0 h-3 sm:h-5 bg-black flex justify-between items-center px-1 sm:px-1">
                       {[...Array(32)].map((_, i) => (
-                        <div key={i} className="w-2 sm:w-2 h-1.5 sm:h-2 bg-white"></div>
+                        <div key={i} className="w-2 sm:w-2 h-1 sm:h-2 bg-white"></div>
                       ))}
                     </div>
                     
                     {/* Film strip sprocket holes - bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 h-5 sm:h-5 bg-black flex justify-between items-center px-1 sm:px-1">
+                    <div className="absolute bottom-0 left-0 right-0 h-3 sm:h-5 bg-black flex justify-between items-center px-1 sm:px-1">
                       {[...Array(32)].map((_, i) => (
-                        <div key={i} className="w-2 sm:w-2 h-1.5 sm:h-2 bg-white"></div>
+                        <div key={i} className="w-2 sm:w-2 h-1 sm:h-2 bg-white"></div>
                       ))}
                     </div>
 
