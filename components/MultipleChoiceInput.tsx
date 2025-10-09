@@ -106,11 +106,13 @@ export function MultipleChoiceInput({
             {/* Mobile Layout - Horizontal layout to use space better */}
             <div className="sm:hidden flex items-center justify-center space-x-2 w-full px-4">
               <div className="flex items-center space-x-2">
-                <ActorPhoto 
-                  src={clue.actor1Photo} 
-                  name={clue.actor1} 
-                  size="md"
-                />
+                <div className="flex-shrink-0">
+                  <ActorPhoto 
+                    src={clue.actor1Photo} 
+                    name={clue.actor1} 
+                    size="md"
+                  />
+                </div>
                 <span className="font-bold text-slate-700 text-sm">{clue.actor1}</span>
               </div>
               
@@ -118,32 +120,38 @@ export function MultipleChoiceInput({
               
               <div className="flex items-center space-x-2">
                 <span className="font-bold text-slate-700 text-sm">{clue.actor2}</span>
-                <ActorPhoto 
-                  src={clue.actor2Photo} 
-                  name={clue.actor2} 
-                  size="md"
-                />
+                <div className="flex-shrink-0">
+                  <ActorPhoto 
+                    src={clue.actor2Photo} 
+                    name={clue.actor2} 
+                    size="md"
+                  />
+                </div>
               </div>
             </div>
             
             {/* Desktop Layout - Completely separate horizontal layout */}
             <div className="hidden sm:flex items-center justify-center space-x-4 md:space-x-6 text-sm sm:text-base md:text-lg px-4">
               <div className="flex items-center space-x-2 sm:space-x-3">
-                <ActorPhoto 
-                  src={clue.actor1Photo} 
-                  name={clue.actor1} 
-                  size="md"
-                />
+                <div className="flex-shrink-0">
+                  <ActorPhoto 
+                    src={clue.actor1Photo} 
+                    name={clue.actor1} 
+                    size="md"
+                  />
+                </div>
                 <span className="font-bold text-slate-700 text-xs sm:text-sm md:text-base">{clue.actor1}</span>
               </div>
               <span className="text-slate-500">&</span>
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <span className="font-bold text-slate-700 text-xs sm:text-sm md:text-base">{clue.actor2}</span>
-                <ActorPhoto 
-                  src={clue.actor2Photo} 
-                  name={clue.actor2} 
-                  size="md"
-                />
+                <div className="flex-shrink-0">
+                  <ActorPhoto 
+                    src={clue.actor2Photo} 
+                    name={clue.actor2} 
+                    size="md"
+                  />
+                </div>
               </div>
             </div>
             
@@ -152,11 +160,13 @@ export function MultipleChoiceInput({
               <div className="flex items-center justify-center space-x-2 sm:space-x-3 mt-2 sm:mt-3">
                 <span className="text-xs sm:text-sm text-slate-500">Hint:</span>
                 <div className="flex items-center space-x-1 sm:space-x-2">
-                  <ActorPhoto 
-                    src={clue.hintActorPhoto} 
-                    name={clue.hintActor} 
-                    size="sm"
-                  />
+                  <div className="flex-shrink-0">
+                    <ActorPhoto 
+                      src={clue.hintActorPhoto} 
+                      name={clue.hintActor} 
+                      size="sm"
+                    />
+                  </div>
                   <span className="font-bold text-orange-600 text-xs sm:text-sm">{clue.hintActor}</span>
                 </div>
               </div>
@@ -248,7 +258,7 @@ export function MultipleChoiceInput({
                     <Button
                       onClick={() => handleOptionSelect(option)}
                       disabled={disabled || isSubmitting || Boolean(lastResult)}
-                      className={`film-strip-button absolute inset-2 sm:inset-3 w-auto h-auto p-2 sm:p-3 text-left justify-start space-x-2 sm:space-x-3 bg-transparent border-0 text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+                      className={`film-strip-button absolute inset-2 sm:inset-3 w-full h-auto p-2 sm:p-3 text-left justify-start space-x-2 sm:space-x-3 bg-transparent border-0 text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
                         selectedOption?.id === option.id 
                           ? 'ring-2 ring-amber-400 bg-amber-400/20' 
                           : ''
@@ -265,11 +275,11 @@ export function MultipleChoiceInput({
                         </div>
                         
                         {/* Movie Info - Mobile Optimized */}
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 overflow-hidden">
                           <div className="font-bold text-xs sm:text-sm truncate text-white drop-shadow-lg">
                             {option.title}
                           </div>
-                          <div className="text-[10px] sm:text-xs text-white/80 font-medium drop-shadow-md">
+                          <div className="text-[10px] sm:text-xs text-white/80 font-medium drop-shadow-md truncate">
                             {option.year}
                           </div>
                         </div>
