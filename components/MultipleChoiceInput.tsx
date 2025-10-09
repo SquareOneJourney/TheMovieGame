@@ -218,16 +218,16 @@ export function MultipleChoiceInput({
                       : 'border-slate-600'
                   }`}>
                     {/* Film strip sprocket holes - top */}
-                    <div className="absolute top-0 left-0 right-0 h-3 sm:h-5 bg-black flex justify-between items-center px-1 sm:px-1">
+                    <div className="absolute top-0 left-0 right-0 h-6 sm:h-7 bg-black flex justify-between items-start px-0 sm:px-0 pt-1 sm:pt-1">
                       {[...Array(32)].map((_, i) => (
-                        <div key={i} className="w-2 sm:w-2 h-1 sm:h-2 bg-white"></div>
+                        <div key={i} className="w-2 sm:w-3 h-2 sm:h-3 bg-white"></div>
                       ))}
                     </div>
                     
                     {/* Film strip sprocket holes - bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 h-3 sm:h-5 bg-black flex justify-between items-center px-1 sm:px-1">
+                    <div className="absolute bottom-0 left-0 right-0 h-6 sm:h-7 bg-black flex justify-between items-end px-0 sm:px-0 pb-1 sm:pb-1">
                       {[...Array(32)].map((_, i) => (
-                        <div key={i} className="w-2 sm:w-2 h-1 sm:h-2 bg-white"></div>
+                        <div key={i} className="w-2 sm:w-3 h-2 sm:h-3 bg-white"></div>
                       ))}
                     </div>
 
