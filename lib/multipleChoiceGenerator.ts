@@ -8,6 +8,8 @@ export interface MultipleChoiceOption {
   isCorrect: boolean
 }
 
+const uniqueIdSuffix = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+
 /**
  * Maps actors to their movies for efficient lookup
  */
@@ -173,7 +175,7 @@ export function generateMultipleChoiceOptions(
 
   // Create wrong options from selected movies
   wrongOptions = selectedMovies.slice(0, 3).map((movie, index) => ({
-    id: `wrong-${index}`,
+    id: `wrong-${movie.movie.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${index}-${uniqueIdSuffix()}`,
     title: movie.movie,
     year: movie.year || 'Unknown',
     poster: movie.poster,
@@ -192,7 +194,7 @@ export function generateMultipleChoiceOptions(
     if (allOtherMovies.length > 0) {
       const randomMovie = allOtherMovies[Math.floor(Math.random() * allOtherMovies.length)]
       wrongOptions.push({
-        id: `wrong-${wrongOptions.length}`,
+        id: `wrong-${randomMovie.movie.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${wrongOptions.length}-${uniqueIdSuffix()}`,
         title: randomMovie.movie,
         year: randomMovie.year || 'Unknown',
         poster: randomMovie.poster,
@@ -205,7 +207,11 @@ export function generateMultipleChoiceOptions(
         { id: 'generic-2', title: 'Inception', year: '2010', poster: undefined, isCorrect: false },
         { id: 'generic-3', title: 'Avatar', year: '2009', poster: undefined, isCorrect: false }
       ]
-      wrongOptions.push(genericOptions[wrongOptions.length])
+      const generic = genericOptions[wrongOptions.length]
+      wrongOptions.push({
+        ...generic,
+        id: `${generic.id}-${uniqueIdSuffix()}`
+      })
     }
   }
 
@@ -236,7 +242,7 @@ export function generateMultipleChoiceOptions(
     if (allOtherMovies.length > 0) {
       const randomMovie = allOtherMovies[Math.floor(Math.random() * allOtherMovies.length)];
       uniqueOptions.push({
-        id: `random-${uniqueOptions.length}`,
+        id: `random-${randomMovie.movie.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${uniqueOptions.length}-${uniqueIdSuffix()}`,
         title: randomMovie.movie,
         year: randomMovie.year || 'Unknown',
         poster: randomMovie.poster,

@@ -18,9 +18,9 @@ export function ActorPhoto({ src, name, size = 'md', className = '' }: ActorPhot
 
   // Size configurations - Mobile Optimized
   const sizeConfig = {
-    sm: 'w-8 h-8 sm:w-12 sm:h-12 text-xs sm:text-sm',
-    md: 'w-12 h-12 sm:w-16 sm:h-16 text-sm sm:text-base',
-    lg: 'w-16 h-16 sm:w-20 sm:h-20 text-base sm:text-lg'
+    sm: 'w-10 h-10 sm:w-14 sm:h-14 text-xs sm:text-sm',
+    md: 'w-14 h-14 sm:w-18 sm:h-18 text-sm sm:text-base',
+    lg: 'w-18 h-18 sm:w-24 sm:h-24 text-base sm:text-lg'
   }
 
   const sizeClasses = sizeConfig[size]
@@ -56,6 +56,7 @@ export function ActorPhoto({ src, name, size = 'md', className = '' }: ActorPhot
         className={`
           ${sizeClasses}
           ${className}
+          flex-shrink-0
           bg-gradient-to-br from-gray-600 to-gray-700
           rounded-full
           flex items-center justify-center
@@ -75,7 +76,7 @@ export function ActorPhoto({ src, name, size = 'md', className = '' }: ActorPhot
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className={`${sizeClasses} ${className} relative`}
+      className={`${sizeClasses} ${className} relative flex-shrink-0`}
     >
       {/* Loading skeleton */}
       {imageLoading && (
