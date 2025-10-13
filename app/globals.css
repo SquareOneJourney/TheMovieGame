@@ -1025,13 +1025,92 @@ body {
 }
 
 @media (max-width: 640px) {
+  /* Make the entire header more compact on mobile */
+  .movie-backdrop header {
+    margin-bottom: 1rem !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Make title much smaller on mobile */
+  .movie-backdrop header a {
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Make the main content area more compact */
+  .movie-backdrop .movie-backdrop__inner {
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  /* Reduce spacing in the game area */
+  .movie-backdrop .flex-1 {
+    gap: 0.5rem !important;
+  }
+
+  /* Make scoreboard much smaller on mobile */
+  .scoreboard-marquee {
+    padding: 0.2rem !important;
+  }
+
+  .scoreboard-marquee__shell {
+    padding: 0.2rem !important;
+  }
+
+  .scoreboard-marquee__inner {
+    padding: 0.15rem !important;
+  }
+
+  .scoreboard-marquee__letterboard {
+    padding: 0.3rem 0.4rem !important;
+  }
+
+  .scoreboard-marquee__stat {
+    padding: 0.25rem 0.3rem !important;
+    gap: 0.1rem !important;
+  }
+
+  .scoreboard-marquee__stat--primary {
+    padding: 0.3rem 0.35rem !important;
+  }
+
+  .scoreboard-marquee__label {
+    font-size: 0.35rem !important;
+  }
+
+  .scoreboard-marquee__value {
+    font-size: 0.9rem !important;
+  }
+
+  .scoreboard-marquee__value--secondary {
+    font-size: 0.7rem !important;
+  }
+
+  /* Make theater ticket more compact */
   .theater-ticket {
-    padding: clamp(1.3rem, 4vw, 1.6rem);
+    padding: 0.8rem !important;
+    margin: 0.5rem 0 !important;
+  }
+
+  .theater-ticket__header {
+    margin-bottom: 0.5rem !important;
+  }
+
+  .theater-ticket__badge {
+    font-size: 0.4rem !important;
+    padding: 0.2rem 0.4rem !important;
+    margin-bottom: 0.3rem !important;
+  }
+
+  .theater-ticket__title {
+    font-size: 0.8rem !important;
+    margin-bottom: 0.4rem !important;
   }
 
   .theater-ticket__cast {
     grid-template-columns: 1fr;
-    gap: clamp(0.6rem, 2vw, 0.9rem);
+    gap: 0.3rem !important;
+    margin-bottom: 0.4rem !important;
   }
 
   .theater-ticket__cast-member,
@@ -1040,18 +1119,87 @@ body {
     text-align: center;
     max-width: none;
     flex-wrap: wrap;
+    gap: 0.3rem !important;
   }
 
-  .theater-ticket__choices {
-    grid-template-columns: 1fr;
+  .theater-ticket__cast-member span,
+  .theater-ticket__cast-member--mirror span {
+    font-size: 0.6rem !important;
   }
 
   .theater-ticket__ampersand {
     display: none;
   }
 
+  .theater-ticket__divider {
+    margin: 0.3rem 0 !important;
+    padding: 0.2rem 0 !important;
+  }
+
+  .theater-ticket__divider span {
+    font-size: 0.5rem !important;
+  }
+
+  .theater-ticket__choices {
+    grid-template-columns: 1fr;
+    gap: 0.3rem !important;
+  }
+
+  .theater-ticket__choice {
+    padding: 0.4rem 0.5rem !important;
+    font-size: 0.6rem !important;
+  }
+
+  .theater-ticket__choice-letter {
+    width: 1.2rem !important;
+    height: 1.2rem !important;
+    font-size: 0.5rem !important;
+  }
+
+  .theater-ticket__choice-title {
+    font-size: 0.6rem !important;
+  }
+
+  .theater-ticket__choice-meta {
+    font-size: 0.45rem !important;
+  }
+
+  .theater-ticket__footer {
+    margin-top: 0.4rem !important;
+  }
+
   .theater-ticket__hint {
     align-items: stretch;
+    gap: 0.3rem !important;
+  }
+
+  .theater-ticket__hint-button {
+    padding: 0.3rem 0.5rem !important;
+    font-size: 0.5rem !important;
+  }
+
+  .theater-ticket__hint-copy {
+    font-size: 0.4rem !important;
+  }
+
+  .theater-ticket__bonus-cast {
+    margin-top: 0.3rem !important;
+  }
+
+  .theater-ticket__bonus-label {
+    font-size: 0.4rem !important;
+  }
+
+  .theater-ticket__bonus-cast-details {
+    gap: 0.2rem !important;
+  }
+
+  .theater-ticket__bonus-cast-details span {
+    font-size: 0.45rem !important;
+  }
+
+  .theater-ticket__bonus-year {
+    font-size: 0.4rem !important;
   }
 }
 
