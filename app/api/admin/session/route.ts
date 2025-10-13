@@ -22,7 +22,8 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  cookies().set({
+  const cookieStore = await cookies()
+  cookieStore.set({
     name: SESSION_COOKIE,
     value: token.trim(),
     httpOnly: true,
@@ -36,6 +37,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE() {
-  cookies().delete(SESSION_COOKIE)
+  const cookieStore = await cookies()
+  cookieStore.delete(SESSION_COOKIE)
   return NextResponse.json({ success: true })
 }
