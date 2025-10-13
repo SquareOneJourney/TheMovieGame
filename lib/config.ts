@@ -38,6 +38,10 @@ export function getTmdbToken(options: { publicFallback?: boolean } = {}) {
   throw new Error('TMDB bearer token is not configured')
 }
 
+export function getAdminToken() {
+  return assertEnv(config.adminDashboardToken, 'adminDashboardToken')
+}
+
 export function isDevelopment() {
   return config.nodeEnv === 'development'
 }

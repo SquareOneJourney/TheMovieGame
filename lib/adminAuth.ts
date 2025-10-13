@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
-import * as config from './config'
+import { getAdminToken as getAdminTokenFromConfig } from './config'
 
 export async function extractAdminToken(request: NextRequest) {
   const headerAuth = request.headers.get('authorization')
@@ -25,10 +25,10 @@ export async function extractAdminToken(request: NextRequest) {
 
 export async function isAdminRequest(request: NextRequest) {
   const token = await extractAdminToken(request)
-  const adminToken = config.getAdminDashboardToken()
+  const adminToken = getAdminTokenFromConfig()
   return Boolean(token && token === adminToken)
 }
 
 export function getAdminToken() {
-  return config.getAdminDashboardToken()
+  return getAdminTokenFromConfig()
 }
