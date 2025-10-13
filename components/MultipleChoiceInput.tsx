@@ -290,6 +290,20 @@ export function MultipleChoiceInput({
           </div>
 
           {/* Action Buttons - Mobile Optimized */}
+          {onHint && (
+            <div className="mt-4 sm:mt-6 text-center">
+              <Button
+                onClick={handleHint}
+                disabled={hintUsed || disabled || Boolean(lastResult) || isSubmitting}
+                className="bg-amber-600 hover:bg-amber-700 text-white font-medium px-6 py-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {hintUsed ? 'Hint Used' : 'Show Hint'}
+              </Button>
+              <p className="text-xs text-slate-500 mt-2">
+                {hintCopy}
+              </p>
+            </div>
+          )}
 
           {/* Hint Warning - Mobile Optimized */}
           {hintUsed && (
