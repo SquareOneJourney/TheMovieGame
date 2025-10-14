@@ -41,7 +41,7 @@ const ruleHighlights = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-black to-zinc-950 text-amber-50">
-      <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden py-12 max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
+      <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-visible pt-12 pb-20 max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
         <motion.section
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}

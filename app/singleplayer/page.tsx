@@ -178,7 +178,7 @@ export default function SinglePlayerPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-black to-zinc-950 text-amber-50">
-      <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden py-8 max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
+      <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-visible pt-8 pb-24 max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
         <header className="flex flex-col items-center gap-4 text-center">
           <Link
             href="/"

@@ -128,34 +128,6 @@ body {
   z-index: 1;
 }
 
-.theater-ticket__cast-member,
-.theater-ticket__cast-member--mirror {
-  display: flex;
-  align-items: center;
-  gap: clamp(0.8rem, 1.8vw, 1.2rem);
-  flex: 1 1 auto;
-  justify-content: center;
-  flex-wrap: wrap;
-  text-align: center;
-  max-width: clamp(14rem, 34vw, 20rem);
-  font-family: 'DM Sans', 'Trebuchet MS', sans-serif;
-  font-weight: 700;
-  font-size: clamp(0.82rem, 1.7vw, 1.1rem);
-  color: #2c140d;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-}
-
-.theater-ticket__cast-member span,
-.theater-ticket__cast-member--mirror span {
-  display: inline-block;
-  line-height: 1.18;
-  flex: 1 1 clamp(8rem, 18vw, 11rem);
-  min-width: clamp(7rem, 16vw, 10rem);
-  white-space: normal;
-  word-break: break-word;
-}
-
 .theater-ticket__ampersand {
   position: relative;
   display: grid;
@@ -661,18 +633,13 @@ body {
     flex-direction: column;
     gap: clamp(0.4rem, 2vw, 0.6rem);
     text-align: center;
-  }
-
-  .theater-ticket__cast-member,
-  .theater-ticket__cast-member--mirror {
+    align-items: center;
     justify-content: center;
-    text-align: center;
-    max-width: none;
-    flex-wrap: wrap;
   }
 
   .theater-ticket__ampersand {
-    display: none;
+    order: -1;
+    margin-bottom: 0.4rem;
   }
 
   .theater-ticket__divider {
@@ -696,8 +663,7 @@ body {
     margin-top: clamp(0.4rem, 1.4vw, 0.6rem);
   }
 
-  .theater-ticket__cast-member > :first-child,
-  .theater-ticket__cast-member--mirror > :last-child {
+  .cast-card .cast-photo {
     transform: none;
   }
 }
@@ -711,12 +677,51 @@ body {
 }
 
 /* ===== DESKTOP ADJUSTMENTS ===== */
-.theater-ticket__cast-member > :first-child,
-.theater-ticket__cast-member--mirror > :last-child {
-  transform: scale(1.12);
-  transform-origin: center;
-}
-
 main section.space-y-6 > :not([hidden]) ~ :not([hidden]) {
   margin-top: clamp(1rem, 1.8vw, 1.35rem);
+}
+
+/* ===== FIXED CAST LAYOUT ===== */
+.cast-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  text-align: center;
+}
+
+.cast-card .cast-photo {
+  width: clamp(3.2rem, 7vw, 4.5rem) !important;
+  height: clamp(3.2rem, 7vw, 4.5rem) !important;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cast-name {
+  font-family: 'DM Sans', 'Trebuchet MS', sans-serif;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
+  text-transform: uppercase;
+  color: #2c140d;
+  max-width: clamp(7.5rem, 20vw, 10rem);
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+@media (max-width: 640px) {
+  .cast-card {
+    width: 100%;
+  }
+
+  .cast-name {
+    max-width: clamp(10rem, 70%, 16rem);
+  }
+
+  .cast-card .cast-photo {
+    width: clamp(3.5rem, 18vw, 4.8rem) !important;
+    height: clamp(3.5rem, 18vw, 4.8rem) !important;
+  }
 }

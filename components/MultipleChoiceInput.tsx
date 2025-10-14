@@ -126,9 +126,9 @@ export function MultipleChoiceInput({
         </header>
 
         <div className="theater-ticket__cast">
-          <div className="theater-ticket__cast-member">
-            <ActorPhoto src={clue.actor1Photo} name={clue.actor1} />
-            <span>{clue.actor1}</span>
+          <div className="cast-card">
+            <ActorPhoto src={clue.actor1Photo} name={clue.actor1} className="cast-photo" />
+            <span className="cast-name">{clue.actor1}</span>
           </div>
 
           <div className="theater-ticket__ampersand" aria-hidden="true">
@@ -136,9 +136,9 @@ export function MultipleChoiceInput({
             <span>STARS</span>
           </div>
 
-          <div className="theater-ticket__cast-member theater-ticket__cast-member--mirror">
-            <span>{clue.actor2}</span>
-            <ActorPhoto src={clue.actor2Photo} name={clue.actor2} />
+          <div className="cast-card">
+            <ActorPhoto src={clue.actor2Photo} name={clue.actor2} className="cast-photo" />
+            <span className="cast-name">{clue.actor2}</span>
           </div>
         </div>
 
