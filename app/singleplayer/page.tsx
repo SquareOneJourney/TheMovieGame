@@ -182,14 +182,14 @@ export default function SinglePlayerPage() {
         <header className="flex flex-col items-center gap-4 text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full border border-amber-200/40 bg-amber-200/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.35em] text-amber-100 transition hover:bg-amber-200/20"
+            className="inline-flex items-center gap-2 rounded-full border border-amber-200/50 bg-amber-200/15 px-6 py-3 text-sm font-bold uppercase tracking-[0.4em] text-amber-100 transition hover:bg-amber-200/25"
           >
             THE MOVIE GAME
           </Link>
           <Scoreboard
             streak={gameState.streak}
             bestStreak={gameState.bestStreak}
-            className="mt-2"
+            className="-mt-6 sm:-mt-8"
           />
         </header>
 

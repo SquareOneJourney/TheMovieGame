@@ -6,34 +6,22 @@ interface ScoreboardProps {
   className?: string
 }
 
-export function Scoreboard({
-  streak,
-  bestStreak,
-  className
-}: ScoreboardProps) {
-  const marqueeClassName = className ? `scoreboard-marquee ${className}` : 'scoreboard-marquee'
+export function Scoreboard({ streak, bestStreak, className }: ScoreboardProps) {
+  const scoreboardClass = className ? `scoreboard-bar ${className}` : 'scoreboard-bar'
 
   return (
-    <section className={marqueeClassName} aria-live="polite">
-      <div className="scoreboard-marquee__shell">
-        <div className="scoreboard-marquee__inner">
-          <div className="scoreboard-marquee__letterboard">
-            <div className="scoreboard-marquee__letterboard-grid" aria-hidden="true" />
-
-            <dl className="scoreboard-marquee__stats">
-              <div className="scoreboard-marquee__stat scoreboard-marquee__stat--primary">
-                <dt className="scoreboard-marquee__label">Current Streak</dt>
-                <dd className="scoreboard-marquee__value">{streak}</dd>
-              </div>
-
-              <div className="scoreboard-marquee__stat scoreboard-marquee__stat--secondary">
-                <dt className="scoreboard-marquee__label">Best Run</dt>
-                <dd className="scoreboard-marquee__value scoreboard-marquee__value--secondary">{bestStreak}</dd>
-              </div>
-            </dl>
-          </div>
-        </div>
+    <header className={scoreboardClass} aria-live="polite">
+      <div className="scoreboard-pane scoreboard-pane--left">
+        <span className="scoreboard-label">Current Streak</span>
+        <span className="scoreboard-value">{streak}</span>
       </div>
-    </section>
+
+      <div className="scoreboard-spacer" aria-hidden="true" />
+
+      <div className="scoreboard-pane scoreboard-pane--right">
+        <span className="scoreboard-label">Best Run</span>
+        <span className="scoreboard-value">{bestStreak}</span>
+      </div>
+    </header>
   )
 }

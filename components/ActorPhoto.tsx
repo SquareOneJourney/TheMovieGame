@@ -18,12 +18,18 @@ export function ActorPhoto({ src, name, size = 'md', className = '' }: ActorPhot
 
   // Size configurations - Mobile Optimized
   const sizeConfig = {
-    sm: 'w-10 h-10 sm:w-14 sm:h-14 text-xs sm:text-sm',
-    md: 'w-14 h-14 sm:w-18 sm:h-18 text-sm sm:text-base',
-    lg: 'w-18 h-18 sm:w-24 sm:h-24 text-base sm:text-lg'
+    sm: 'w-14 h-14 sm:w-16 sm:h-16 text-xs sm:text-sm',
+    md: 'w-16 h-16 sm:w-20 sm:h-20 text-sm sm:text-base',
+    lg: 'w-20 h-20 sm:w-24 sm:h-24 text-base sm:text-lg'
   }
 
   const sizeClasses = sizeConfig[size]
+  const pixelSizeMap = {
+    sm: 96,
+    md: 128,
+    lg: 160
+  } as const
+  const pixelSize = pixelSizeMap[size]
 
   // Generate initials from name
   const getInitials = (name: string) => {
@@ -98,9 +104,11 @@ export function ActorPhoto({ src, name, size = 'md', className = '' }: ActorPhot
         alt={name}
         onLoad={handleImageLoad}
         onError={handleImageError}
-        width={size === 'sm' ? 32 : size === 'md' ? 48 : 64}
-        height={size === 'sm' ? 32 : size === 'md' ? 48 : 64}
-        style={{ width: 'auto', height: 'auto' }}
+        width={pixelSize}
+        height={pixelSize}
+        sizes="(max-width: 640px) 76px, 120px"
+        quality={90}
+        style={{ width: '100%', height: '100%' }}
         className={`
           ${sizeClasses}
           rounded-full
