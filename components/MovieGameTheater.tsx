@@ -13,18 +13,18 @@ export function MovieGameTheater({ className }: MovieGameTheaterProps) {
   const prefersReducedMotion = useReducedMotion()
 
   return (
-    <div className={clsx("flex justify-center items-center w-full", className)}>
+    <div className={clsx("mx-auto flex w-full max-w-md sm:max-w-lg lg:max-w-3xl items-center justify-center px-4 sm:px-6 overflow-hidden", className)}>
       {/* Movie Theater Marquee Sign */}
       <motion.div
-        className="relative"
+        className="relative w-full"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         {/* Main Marquee Frame */}
-        <div className="relative bg-gradient-to-br from-zinc-800 via-zinc-900 to-black rounded-2xl p-1 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="relative rounded-2xl bg-gradient-to-br from-zinc-800 via-zinc-900 to-black p-1 shadow-xl shadow-black/40">
           {/* Chrome Frame Effect */}
-          <div className="relative bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-900 rounded-xl p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-8px_20px_rgba(0,0,0,0.7)]">
+          <div className="relative rounded-xl bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-900 p-2 shadow-inner">
 
             {/* Neon Glow Background */}
             <motion.div
@@ -41,7 +41,7 @@ export function MovieGameTheater({ className }: MovieGameTheaterProps) {
             />
 
             {/* Marquee Content */}
-            <div className="relative bg-gradient-to-b from-slate-100 via-white to-slate-50 rounded-lg px-8 py-6 shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-8px_16px_rgba(0,0,0,0.15)]">
+            <div className="relative rounded-lg bg-gradient-to-b from-slate-100 via-white to-slate-50 px-8 py-6 shadow-inner">
 
               {/* Decorative Border Elements */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
@@ -78,20 +78,10 @@ export function MovieGameTheater({ className }: MovieGameTheaterProps) {
               >
                 Theater
               </motion.p>
-
-              {/* Decorative Film Strip Pattern */}
-              <div className="absolute top-2 left-2 right-2 bottom-2 pointer-events-none">
-                <div className="w-full h-full bg-[radial-gradient(circle_at_25%_25%,rgba(0,0,0,0.05)_1px,transparent_1px),radial-gradient(circle_at_75%_75%,rgba(0,0,0,0.05)_1px,transparent_1px)] bg-[length:8px_8px]" />
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Corner Decorative Elements */}
-        <div className="absolute -top-2 -left-2 w-4 h-4 bg-amber-400 rounded-full shadow-[0_0_12px_rgba(253,224,71,0.8)]" />
-        <div className="absolute -top-2 -right-2 w-4 h-4 bg-amber-400 rounded-full shadow-[0_0_12px_rgba(253,224,71,0.8)]" />
-        <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-amber-400 rounded-full shadow-[0_0_12px_rgba(253,224,71,0.8)]" />
-        <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-amber-400 rounded-full shadow-[0_0_12px_rgba(253,224,71,0.8)]" />
       </motion.div>
     </div>
   )

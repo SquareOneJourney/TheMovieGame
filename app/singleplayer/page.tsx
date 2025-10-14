@@ -177,58 +177,53 @@ export default function SinglePlayerPage() {
   }, [])
 
   return (
-    <div className="movie-backdrop min-h-screen text-white">
-      <div className="movie-backdrop__texture" aria-hidden="true" />
-      <div className="movie-backdrop__inner relative mx-auto flex min-h-screen max-w-5xl flex-col px-4 py-8 sm:px-6 lg:px-8">
-        <div className="spotlight-overlay" aria-hidden="true" />
-
-        <header className="mb-8 flex flex-col items-start gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-black to-zinc-950 text-amber-50">
+      <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden py-8 max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
+        <header className="flex flex-col items-center gap-4 text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-lg font-bold uppercase tracking-[0.35em] text-amber-100 transition hover:bg-white/15"
+            className="inline-flex items-center gap-2 rounded-full border border-amber-200/40 bg-amber-200/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.35em] text-amber-100 transition hover:bg-amber-200/20"
           >
             THE MOVIE GAME
           </Link>
           <Scoreboard
             streak={gameState.streak}
             bestStreak={gameState.bestStreak}
-            className="sm:self-start sm:ml-auto"
+            className="mt-2"
           />
         </header>
 
-        <div className="flex flex-1 flex-col gap-4 pb-10">
-          <div className="flex-1">
-            {gameState.status === 'loading' || !gameState.currentMovie ? (
-              <div className="flex h-full flex-col items-center justify-center gap-4 rounded-3xl border border-white/10 bg-black/30 p-10 text-sm text-amber-100/70">
-                <Sparkles className="h-10 w-10 animate-pulse text-amber-300" />
-                Loading the next trivia card...
-              </div>
-            ) : (
-              <MultipleChoiceInput
-                clue={{
-                  actor1: gameState.currentMovie.actor1,
-                  actor2: gameState.currentMovie.actor2,
-                  actor1Photo: gameState.currentMovie.actor1Photo,
-                  actor2Photo: gameState.currentMovie.actor2Photo,
-                  year: gameState.hintUsed ? gameState.currentMovie.year : undefined,
-                  hintActor: gameState.hintUsed
-                    ? gameState.currentMovie.actor3 ?? gameState.currentMovie.hintActor
-                    : undefined,
-                  hintActorPhoto: gameState.hintUsed
-                    ? gameState.currentMovie.actor3Photo ?? gameState.currentMovie.hintActorPhoto
-                    : undefined
-                }}
-                options={gameState.options}
-                onSelect={handleGuess}
-                onHint={handleHint}
-                disabled={Boolean(gameState.lastResult)}
-                hintUsed={gameState.hintUsed}
-                lastResult={gameState.lastResult}
-              />
-            )}
-          </div>
-        </div>
-      </div>
+        <section className="mt-8 space-y-6 pb-10">
+          {gameState.status === 'loading' || !gameState.currentMovie ? (
+            <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-10 text-sm text-amber-100/80">
+              <Sparkles className="h-10 w-10 animate-pulse text-amber-300" />
+              Loading the next trivia card...
+            </div>
+          ) : (
+            <MultipleChoiceInput
+              clue={{
+                actor1: gameState.currentMovie.actor1,
+                actor2: gameState.currentMovie.actor2,
+                actor1Photo: gameState.currentMovie.actor1Photo,
+                actor2Photo: gameState.currentMovie.actor2Photo,
+                year: gameState.hintUsed ? gameState.currentMovie.year : undefined,
+                hintActor: gameState.hintUsed
+                  ? gameState.currentMovie.actor3 ?? gameState.currentMovie.hintActor
+                  : undefined,
+                hintActorPhoto: gameState.hintUsed
+                  ? gameState.currentMovie.actor3Photo ?? gameState.currentMovie.hintActorPhoto
+                  : undefined
+              }}
+              options={gameState.options}
+              onSelect={handleGuess}
+              onHint={handleHint}
+              disabled={Boolean(gameState.lastResult)}
+              hintUsed={gameState.hintUsed}
+              lastResult={gameState.lastResult}
+            />
+          )}
+        </section>
+      </main>
     </div>
   )
 }

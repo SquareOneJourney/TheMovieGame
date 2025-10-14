@@ -40,109 +40,101 @@ const ruleHighlights = [
 
 export default function Home() {
   return (
-    <div className="movie-backdrop min-h-screen text-white">
-      <div className="movie-backdrop__texture" aria-hidden="true" />
-      <div className="movie-backdrop__inner relative">
-        <div className="spotlight-overlay" aria-hidden="true" />
+    <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-black to-zinc-950 text-amber-50">
+      <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden py-12 max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
+        <motion.section
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="flex flex-col items-center gap-8 text-center"
+        >
+          <div className="flex flex-col items-center gap-4">
+            <Image
+              src="/TheMovieGame Logo.png"
+              alt="The Movie Game logo"
+              width={220}
+              height={106}
+              className="h-24 w-auto drop-shadow-lg"
+              priority
+            />
+            <span className="rounded-full border border-amber-300/50 bg-amber-200/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-amber-200/90">
+              Lights, Camera, Streaks
+            </span>
+          </div>
 
-        <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-16 px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
-          <motion.section
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="flex flex-col items-center text-center"
-          >
-            <div className="mb-8 inline-flex flex-col items-center gap-4">
-              <Image
-                src="/TheMovieGame Logo.png"
-                alt="The Movie Game logo"
-                width={220}
-                height={106}
-                className="h-24 w-auto drop-shadow-[0_10px_25px_rgba(0,0,0,0.45)]"
-                priority
-              />
-              <span className="rounded-full border border-amber-300/40 bg-amber-200/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-amber-200/90">
-                Lights, Camera, Streaks
-              </span>
-            </div>
+          <h1 className="text-balance text-4xl font-semibold leading-tight sm:text-5xl">
+            The Movie Game
+          </h1>
 
-            <h1 className="text-balance text-4xl font-semibold leading-tight text-amber-50 sm:text-5xl md:text-6xl">
-              The Movie Game
-            </h1>
+          <p className="text-base text-amber-100/80 sm:text-lg">
+            Two actors, one feature. Make the right call and prove your cinema instincts.
+          </p>
 
-            <p className="mt-6 max-w-2xl text-lg text-amber-100/80 sm:text-xl">
-              The game is simple: two actors, one movie. Guess the movie to prove your cinema knowledge!
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
+            <a
+              href="/singleplayer"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-amber-300/60 bg-amber-200 px-6 py-3 text-base font-bold uppercase tracking-[0.24em] text-black transition hover:bg-amber-200/90 hover:shadow-lg hover:shadow-amber-200/30 sm:w-auto"
+            >
+              <Play className="h-5 w-5" />
+              Play Now
+            </a>
+            <a
+              href="#rules"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-amber-200/30 px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-amber-100/80 transition hover:border-amber-200/60 hover:bg-white/5 sm:w-auto"
+            >
+              Tour the new rules
+            </a>
+          </div>
+
+          <div className="flex flex-col items-center gap-3">
+            <span className="text-xs font-semibold uppercase tracking-[0.4em] text-amber-200/70">
+              Marquee Scoreboard
+            </span>
+            <Scoreboard streak={4} bestStreak={11} className="mt-2 scale-95 sm:scale-100" />
+            <p className="text-sm text-amber-100/70 sm:text-base">
+              Track your current streak and all-time highlight reel every round.
             </p>
+          </div>
+        </motion.section>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href="/singleplayer"
-                className="inline-flex items-center gap-2 rounded-full border border-amber-300/60 bg-amber-200 px-8 py-3 text-lg font-bold uppercase tracking-[0.24em] text-black transition hover:bg-amber-200/90 hover:shadow-[0_18px_50px_rgba(255,200,120,0.35)]"
-              >
-                <Play className="h-5 w-5" />
-                Play Now
-              </a>
-              <a
-                href="#rules"
-                className="inline-flex items-center gap-2 rounded-full border border-amber-200/30 px-7 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-amber-100/80 transition hover:border-amber-200/60 hover:bg-white/5"
-              >
-                Tour the new rules
-              </a>
-            </div>
+        <section id="rules" className="mt-12 space-y-8">
+          <header className="space-y-4 text-center">
+            <span className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-200/70">
+              Feature Presentation
+            </span>
+            <h2 className="text-3xl font-bold text-amber-50">Game Rules</h2>
+            <p className="text-amber-100/80">
+              Every round is a quick-fire challenge. Protect your streak, call for hints when you need
+              them, and chase your personal best.
+            </p>
+          </header>
 
-            <div className="mt-14 flex flex-col items-center gap-4">
-              <span className="text-xs font-semibold uppercase tracking-[0.4em] text-amber-200/70">
-                Marquee Scoreboard
-              </span>
-              <Scoreboard streak={4} bestStreak={11} className="scale-95 sm:scale-100" />
-              <p className="max-w-xl text-sm text-amber-100/70 sm:text-base">
-                Track your current streak and all-time highlight reel each round.
-              </p>
-            </div>
-          </motion.section>
+          <div className="grid gap-6">
+            {ruleHighlights.map(rule => {
+              const Icon = rule.icon
 
-          <section id="rules" className="relative">
-            <div className="absolute inset-0 rounded-3xl bg-white/5 blur-3xl" aria-hidden="true" />
-            <div className="relative rounded-3xl border border-white/10 bg-black/30 p-8 sm:p-10 lg:p-12">
-              <header className="mb-10 text-center">
-                <span className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-200/70">
-                  Feature Presentation
-                </span>
-                <h2 className="mt-3 text-3xl font-bold text-amber-50 sm:text-4xl">Game Rules</h2>
-                <p className="mt-4 text-amber-100/80">
-                  Every round is a rapid-fire trivia scene. Keep your streak alive, use hints like a
-                  director, and keep chasing the red-carpet record.
-                </p>
-              </header>
-
-              <div className="grid gap-6 sm:grid-cols-2">
-                {ruleHighlights.map(rule => {
-                  const Icon = rule.icon
-
-                  return (
-                    <motion.div
-                      key={rule.title}
-                      initial={{ opacity: 0, y: 12 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-20%' }}
-                      transition={{ duration: 0.45, ease: 'easeOut' }}
-                      className="flex flex-col gap-4 rounded-2xl border border-amber-200/20 bg-white/5 p-6 text-left shadow-[0_24px_45px_rgba(0,0,0,0.35)]"
-                    >
-                      <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-amber-200/40 bg-black/40 text-amber-200">
-                        <Icon className="h-6 w-6" />
-                      </span>
-                      <div>
-                        <h3 className="text-xl font-semibold text-amber-50">{rule.title}</h3>
-                        <p className="mt-2 text-sm text-amber-100/80">{rule.description}</p>
-                      </div>
-                    </motion.div>
-                  )
-                })}
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
+              return (
+                <motion.div
+                  key={rule.title}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-20%' }}
+                  transition={{ duration: 0.45, ease: 'easeOut' }}
+                  className="flex items-start gap-4 rounded-2xl border border-amber-200/15 bg-white/5 p-5 text-left shadow-lg shadow-black/30"
+                >
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-amber-200/40 bg-black/40 text-amber-200">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-semibold text-amber-50">{rule.title}</h3>
+                    <p className="text-sm text-amber-100/80">{rule.description}</p>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
+        </section>
+      </main>
     </div>
   )
 }

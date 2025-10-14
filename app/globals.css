@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== BASE ===== */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -12,6 +13,19 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
 body {
@@ -26,525 +40,14 @@ body {
   }
 }
 
-/* Custom animations for the movie game */
-@keyframes crown-bounce {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-10px) rotate(-5deg); }
-  75% { transform: translateY(-5px) rotate(5deg); }
-}
-
-@keyframes score-pop {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.crown-bounce {
-  animation: crown-bounce 2s ease-in-out infinite;
-}
-
-.score-pop {
-  animation: score-pop 0.6s ease-out;
-}
-
-/* Marquee light animations */
-@keyframes marquee-glow {
-  0%, 100% { 
-    opacity: 0.4;
-    transform: scale(1);
-  }
-  50% { 
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
-}
-
-@keyframes marquee-chase {
-  0% { 
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  50% { 
-    opacity: 1;
-  }
-  100% { 
-    transform: translateX(100%);
-    opacity: 0;
-  }
-}
-
-.marquee-glow {
-  animation: marquee-glow 2s ease-in-out infinite;
-}
-
-.marquee-chase {
-  animation: marquee-chase 3s linear infinite;
-}
-
-/* Mobile-specific optimizations */
-@media (max-width: 640px) {
-  .mobile-compact {
-    padding: 0.25rem;
-    margin: 0.125rem;
-  }
-  
-  .mobile-text-sm {
-    font-size: 0.75rem;
-    line-height: 1rem;
-  }
-  
-  .mobile-space-y-1 > * + * {
-    margin-top: 0.25rem;
-  }
-  
-  .mobile-h-12 {
-    height: 3rem;
-  }
-  
-  .mobile-min-h-screen {
-    min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height for mobile */
-  }
-  
-  /* Touch target optimization - minimum 44px */
-  .mobile-touch-target {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  /* Ensure buttons are touch-friendly */
-  button, [role="button"], a {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  /* Film strip buttons need special handling */
-  .film-strip-button {
-    min-height: 44px;
-    min-width: 100%;
-  }
-}
-
-
-/* Cinema card styling */
-.cinema-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 32px;
-  border: 1px solid rgba(251, 191, 36, 0.28);
-  background:
-    radial-gradient(circle at top, rgba(251, 191, 36, 0.12), transparent 60%),
-    linear-gradient(140deg, #1b090d 0%, #090206 55%, #1c0b10 100%);
-  box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.45),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-}
-
-.cinema-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-  background-size: 3px 3px;
-  mix-blend-mode: screen;
-  opacity: 0.35;
-  pointer-events: none;
-}
-
-.cinema-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, transparent 55%, rgba(0, 0, 0, 0.55));
-  pointer-events: none;
-}
-
-.cinema-card__inner {
-  position: relative;
-  z-index: 1;
-  border-radius: inherit;
-  overflow: hidden;
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 65%);
-}
-
-.cinema-card__header {
-  position: relative;
-  overflow: hidden;
-}
-
-.cinema-card__header-glow {
-  position: absolute;
-  inset: -40% -20%;
-  background: radial-gradient(circle at top center, rgba(251, 191, 36, 0.46), transparent 70%);
-  filter: blur(22px);
-  animation: headerGlow 6s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-.cinema-card__cast {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(4px);
-}
-
-.cinema-card__hint {
-  backdrop-filter: blur(4px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-}
-
-.filmstrip-edge {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 22px;
-  background: rgba(7, 7, 7, 0.92);
-  pointer-events: none;
-  z-index: 2;
-}
-
-.filmstrip-edge::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0 5px, transparent 5px);
-  background-size: 28px 14px;
-  background-position: 8px center;
-  opacity: 0.8;
-}
-
-.filmstrip-edge--top {
-  top: 0;
-  transform: translateY(-50%);
-  border-radius: 16px 16px 0 0;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.35);
-}
-
-.filmstrip-edge--bottom {
-  bottom: 0;
-  transform: translateY(50%);
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 -6px 10px rgba(0, 0, 0, 0.35);
-}
-
-.choice-button {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition:
-    transform 0.25s ease,
-    border-color 0.3s ease,
-    background-color 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.choice-button__sheen,
-.choice-button__pulse {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.choice-button__sheen {
-  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.18) 45%, transparent 70%);
-  transform: translateX(-120%);
-  transition: transform 0.8s ease;
-}
-
-.choice-button__pulse {
-  background: radial-gradient(circle at 30% 0%, rgba(255, 214, 137, 0.22), transparent 55%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.choice-button--hovered {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 30px rgba(255, 214, 137, 0.18);
-  border-color: rgba(255, 214, 137, 0.4);
-}
-
-.choice-button--hovered .choice-button__sheen {
-  transform: translateX(120%);
-}
-
-.choice-button--hovered .choice-button__pulse {
-  opacity: 0.6;
-}
-
-.choice-button--correct {
-  border-color: rgba(34, 197, 94, 0.65);
-  background: linear-gradient(130deg, rgba(34, 197, 94, 0.18), rgba(34, 197, 94, 0.05));
-  animation: choiceCorrectShimmer 1.4s ease-out 1;
-  box-shadow:
-    0 0 0 1px rgba(34, 197, 94, 0.25),
-    0 18px 32px rgba(34, 197, 94, 0.25);
-}
-
-.choice-button--correct .choice-button__sheen {
-  transform: translateX(120%);
-  transition-duration: 0.6s;
-}
-
-.choice-button--correct .choice-button__pulse {
-  opacity: 0.75;
-}
-
-.choice-button--wrong {
-  border-color: rgba(248, 113, 113, 0.5);
-  background: linear-gradient(130deg, rgba(248, 113, 113, 0.15), rgba(185, 28, 28, 0.05));
-  animation: choiceWrongShake 0.55s ease-out;
-}
-
-.choice-button--inactive {
-  opacity: 0.7;
-}
-
-/* Backdrop */
-.movie-backdrop {
-  position: relative;
-  background:
-    radial-gradient(circle at top, rgba(90, 29, 24, 0.55), transparent 60%),
-    radial-gradient(circle at bottom, rgba(31, 11, 18, 0.55), transparent 65%),
-    linear-gradient(135deg, #090207 0%, #12030c 45%, #050208 100%);
-}
-
-.movie-backdrop__texture {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(120deg, rgba(255, 215, 128, 0.05), transparent 65%);
-  background-size: 4px 4px, 100% 100%;
-  mix-blend-mode: screen;
-  opacity: 0.35;
-  pointer-events: none;
-}
-
-.movie-backdrop__inner {
-  position: relative;
-  z-index: 1;
-}
-
-.spotlight-overlay {
-  position: absolute;
-  top: 8%;
-  left: 50%;
-  width: 72%;
-  height: 70%;
-  background: radial-gradient(circle, rgba(255, 214, 137, 0.32), rgba(255, 214, 137, 0) 70%);
-  filter: blur(80px);
-  transform: translateX(-50%);
-  mix-blend-mode: screen;
-  pointer-events: none;
-  animation: spotlightSweep 12s ease-in-out infinite alternate;
-}
-@keyframes spotlightSweep {
-  0% { transform: translateX(-52%) rotate(-2deg); opacity: 0.45; }
-  50% { transform: translateX(-48%) rotate(2deg); opacity: 0.65; }
-  100% { transform: translateX(-50%) rotate(2deg); opacity: 0.5; }
-}
-
-@keyframes bulbPulse {
-  0%, 100% { opacity: 0.55; transform: scale(0.9); }
-  40% { opacity: 1; transform: scale(1.05); }
-  70% { opacity: 0.75; transform: scale(0.95); }
-}
-
-@keyframes choiceCorrectShimmer {
-  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.0); }
-  30% { box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.2); }
-  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.0); }
-}
-
-@keyframes choiceWrongShake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-4px); }
-  100% { transform: translateX(0); }
-}
-@keyframes headerGlow {
-  0% { opacity: 0.55; transform: scale(1); }
-  50% { opacity: 0.85; transform: scale(1.05); }
-  100% { opacity: 0.65; transform: scale(1.02); }
-}
-
-.scoreboard-marquee {
-  position: relative;
-  display: inline-flex;
-  justify-content: center;
-  align-items: stretch;
-  padding: clamp(0.2rem, 0.8vw, 0.4rem);
-}
-
-.scoreboard-marquee__shell {
-  position: relative;
-  border-radius: clamp(0.6rem, 1.2vw, 0.9rem);
-  padding: clamp(0.3rem, 0.9vw, 0.5rem);
-  background: linear-gradient(180deg, rgba(46, 20, 14, 0.92) 0%, rgba(18, 8, 6, 0.92) 100%);
-  box-shadow:
-    0 clamp(0.4rem, 1vw, 0.8rem) clamp(0.9rem, 2vw, 1.3rem) rgba(0, 0, 0, 0.42),
-    inset 0 0 0 1px rgba(175, 69, 42, 0.24);
-  min-width: clamp(220px, 24vw, 260px);
-}
-
-.scoreboard-marquee__shell::before {
-  content: "";
-  position: absolute;
-  inset: clamp(0.16rem, 0.5vw, 0.28rem);
-  border-radius: clamp(0.48rem, 1.1vw, 0.76rem);
-  border: 2px solid rgba(255, 214, 137, 0.4);
-  background: linear-gradient(135deg, rgba(255, 214, 137, 0.2), transparent 75%);
-  box-shadow:
-    inset 0 0 14px rgba(255, 204, 128, 0.28),
-    0 0 12px rgba(255, 195, 87, 0.22);
-  pointer-events: none;
-}
-
-.scoreboard-marquee__inner {
-  position: relative;
-  border-radius: clamp(0.45rem, 0.9vw, 0.7rem);
-  padding: clamp(0.24rem, 0.6vw, 0.38rem);
-  background: rgba(15, 10, 11, 0.45);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 214, 137, 0.12),
-    inset 0 10px 20px rgba(0, 0, 0, 0.35);
-  overflow: hidden;
-}
-
-.scoreboard-marquee__inner::before,
-.scoreboard-marquee__inner::after {
-  content: "";
-  position: absolute;
-  inset: clamp(0.45rem, 1.2vw, 0.7rem) clamp(0.55rem, 1.4vw, 0.8rem);
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.07) 1px, transparent 1px),
-    linear-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 1px);
-  background-size: clamp(0.95rem, 2.2vw, 1.4rem) clamp(0.95rem, 2.2vw, 1.4rem);
-  opacity: 0.16;
-  pointer-events: none;
-}
-
-.scoreboard-marquee__inner::after {
-  inset: clamp(0.38rem, 1vw, 0.55rem) clamp(0.45rem, 1.2vw, 0.65rem);
-  background: linear-gradient(120deg, rgba(255, 214, 137, 0.18), transparent 70%);
-  opacity: 0.35;
-}
-
-.scoreboard-marquee__header {
-  text-align: center;
-  margin-bottom: clamp(0.32rem, 0.9vw, 0.5rem);
-}
-
-.scoreboard-marquee__title {
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  font-size: clamp(0.95rem, 2.4vw, 1.35rem);
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: #2c0d07;
-}
-
-.scoreboard-marquee__subtitle {
-  margin-top: 0.3rem;
-  font-family: 'DM Sans', 'Trebuchet MS', sans-serif;
-  font-size: clamp(0.56rem, 1.3vw, 0.75rem);
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: rgba(44, 13, 7, 0.52);
-}
-
-.scoreboard-marquee__letterboard {
-  position: relative;
-  border-radius: clamp(0.5rem, 1.4vw, 0.85rem);
-  padding: clamp(0.5rem, 1.6vw, 0.75rem) clamp(0.7rem, 1.6vw, 1rem);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 214, 137, 0.22),
-    inset 0 -6px 12px rgba(0, 0, 0, 0.25);
-}
-
-.scoreboard-marquee__letterboard-grid {
-  display: none;
-}
-
-.scoreboard-marquee__stats {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.55rem, 1.4vw, 0.8rem);
-  z-index: 1;
-  color: #f0e3c7;
-  font-family: 'DM Sans', 'Trebuchet MS', sans-serif;
-}
-
-.scoreboard-marquee__stat {
-  display: flex;
-  flex-direction: column;
-  gap: 0.18rem;
-  padding: clamp(0.45rem, 1.2vw, 0.65rem) clamp(0.5rem, 1.2vw, 0.7rem);
-  border-radius: clamp(0.35rem, 1vw, 0.6rem);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 214, 137, 0.12),
-    0 0 0 1px rgba(0, 0, 0, 0.45);
-  align-items: flex-start;
-}
-
-.scoreboard-marquee__stat--primary {
-  padding: clamp(0.5rem, 1.3vw, 0.72rem) clamp(0.55rem, 1.3vw, 0.8rem);
-  background: linear-gradient(180deg, rgba(255, 214, 137, 0.24) 0%, rgba(255, 214, 137, 0.08) 100%);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 214, 137, 0.46),
-    0 12px 20px rgba(0, 0, 0, 0.32);
-}
-
-.scoreboard-marquee__stat--secondary {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 214, 137, 0.1),
-    0 0 0 1px rgba(0, 0, 0, 0.38);
-  align-items: flex-end;
-  text-align: right;
-}
-
-.scoreboard-marquee__label {
-  font-size: clamp(0.48rem, 1.1vw, 0.62rem);
-  text-transform: uppercase;
-  letter-spacing: 0.36em;
-  color: rgba(240, 227, 199, 0.6);
-}
-
-.scoreboard-marquee__value {
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  font-size: clamp(1.4rem, 3.2vw, 1.95rem);
-  letter-spacing: 0.1em;
-  color: #fce9be;
-  text-shadow:
-    0 0 14px rgba(255, 197, 111, 0.55),
-    0 0 28px rgba(255, 90, 0, 0.28);
-}
-
-.scoreboard-marquee__value--secondary {
-  font-size: clamp(1.05rem, 2.4vw, 1.45rem);
-  color: rgba(252, 233, 190, 0.88);
-  text-shadow:
-    0 0 10px rgba(255, 182, 94, 0.34),
-    0 0 20px rgba(255, 124, 0, 0.2);
-}
-
-@media (max-width: 900px) {
-  .scoreboard-marquee__stats {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Theater ticket styling */
+/* ===== THEATER TICKET ===== */
 .theater-ticket {
   position: relative;
   background: linear-gradient(180deg, rgba(255, 248, 227, 0.96) 0%, rgba(249, 232, 191, 0.97) 48%, rgba(244, 215, 168, 0.94) 100%);
   border-radius: clamp(1rem, 2.4vw, 1.7rem);
-  padding: clamp(1.2rem, 3.6vw, 1.8rem) clamp(1rem, 3.2vw, 1.6rem);
+  padding: clamp(1rem, 3vw, 1.6rem) clamp(0.9rem, 3vw, 1.4rem);
   box-shadow:
-    0 clamp(1rem, 2.8vw, 1.9rem) clamp(2.4rem, 5.5vw, 3.8rem) rgba(0, 0, 0, 0.38),
+    0 clamp(0.8rem, 2.4vw, 1.6rem) clamp(1.6rem, 4vw, 2.8rem) rgba(0, 0, 0, 0.3),
     inset 0 0 0 1px rgba(56, 24, 14, 0.08);
   overflow: hidden;
 }
@@ -587,11 +90,12 @@ body {
   text-align: center;
   position: relative;
   z-index: 1;
+  margin-bottom: clamp(0.6rem, 1.5vw, 0.95rem);
 }
 
 .theater-ticket__badge {
   display: inline-block;
-  padding: 0.2rem 1.1rem;
+  padding: 0.25rem 1.1rem;
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(37, 18, 12, 0.82), rgba(72, 32, 21, 0.82));
   color: rgba(255, 214, 137, 0.95);
@@ -601,11 +105,11 @@ body {
   text-transform: uppercase;
   box-shadow:
     inset 0 0 0 1px rgba(255, 214, 137, 0.4),
-    0 12px 20px rgba(0, 0, 0, 0.25);
+    0 10px 18px rgba(0, 0, 0, 0.25);
 }
 
 .theater-ticket__title {
-  margin-top: clamp(0.75rem, 1.8vw, 1.1rem);
+  margin-top: clamp(0.6rem, 1.6vw, 0.9rem);
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
   font-size: clamp(1.3rem, 3.4vw, 2rem);
   letter-spacing: 0.32em;
@@ -613,57 +117,45 @@ body {
   color: #2d150d;
 }
 
-.theater-ticket__subtitle {
-  margin-top: 0.35rem;
-  font-family: 'DM Sans', 'Trebuchet MS', sans-serif;
-  font-size: clamp(0.68rem, 1.6vw, 0.9rem);
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(45, 21, 13, 0.45);
-}
-
 .theater-ticket__cast {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: clamp(0.6rem, 1.6vw, 0.95rem);
+  gap: clamp(0.9rem, 2.4vw, 1.5rem);
   margin: clamp(1.1rem, 2.6vw, 1.6rem) auto;
-  max-width: 30rem;
+  max-width: clamp(40rem, 78vw, 52rem);
   position: relative;
   z-index: 1;
 }
 
-.theater-ticket__cast-member {
+.theater-ticket__cast-member,
+.theater-ticket__cast-member--mirror {
   display: flex;
   align-items: center;
-  gap: clamp(0.75rem, 2vw, 1.4rem);
+  gap: clamp(0.8rem, 1.8vw, 1.2rem);
   flex: 1 1 auto;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-  text-align: left;
-  max-width: clamp(13rem, 30vw, 18rem);
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+  max-width: clamp(14rem, 34vw, 20rem);
   font-family: 'DM Sans', 'Trebuchet MS', sans-serif;
   font-weight: 700;
-  font-size: clamp(0.82rem, 1.9vw, 1.05rem);
+  font-size: clamp(0.82rem, 1.7vw, 1.1rem);
   color: #2c140d;
   text-transform: uppercase;
   letter-spacing: 0.18em;
 }
 
-.theater-ticket__cast-member span {
+.theater-ticket__cast-member span,
+.theater-ticket__cast-member--mirror span {
   display: inline-block;
-  white-space: normal;
   line-height: 1.18;
+  flex: 1 1 clamp(8rem, 18vw, 11rem);
+  min-width: clamp(7rem, 16vw, 10rem);
+  white-space: normal;
+  word-break: break-word;
 }
 
-.theater-ticket__cast-member--mirror {
-  justify-content: flex-end;
-  text-align: right;
-}
-
-    .theater-ticket__choices {
-      grid-template-columns: 1fr;
-    }
 .theater-ticket__ampersand {
   position: relative;
   display: grid;
@@ -686,7 +178,7 @@ body {
 
 .theater-ticket__divider {
   position: relative;
-  margin: clamp(1.1rem, 2.8vw, 1.6rem) auto;
+  margin: clamp(1rem, 2.8vw, 1.5rem) auto;
   width: min(400px, 95%);
   height: 2px;
   background: linear-gradient(90deg, transparent, rgba(71, 34, 21, 0.5), transparent);
@@ -710,7 +202,7 @@ body {
 
 .theater-ticket__choices {
   display: grid;
-  gap: clamp(0.6rem, 1.4vw, 0.85rem);
+  gap: clamp(0.75rem, 1.6vw, 1.1rem);
   grid-template-columns: repeat(2, minmax(0, 1fr));
   position: relative;
   z-index: 1;
@@ -734,7 +226,7 @@ body {
     box-shadow 0.25s ease,
     border-color 0.25s ease,
     background 0.25s ease;
-  box-shadow: 0 18px 30px rgba(24, 8, 5, 0.32);
+  box-shadow: 0 14px 24px rgba(24, 8, 5, 0.28);
 }
 
 .theater-ticket__choice::before {
@@ -754,7 +246,7 @@ body {
   transform: translateY(-2px);
   border-color: rgba(255, 214, 137, 0.45);
   box-shadow:
-    0 22px 32px rgba(24, 8, 5, 0.46),
+    0 18px 28px rgba(24, 8, 5, 0.38),
     0 0 0 1px rgba(255, 214, 137, 0.16);
 }
 
@@ -802,7 +294,6 @@ body {
   text-transform: uppercase;
   color: #fbeccd;
   text-shadow: 0 0 10px rgba(255, 214, 137, 0.38);
-  white-space: normal;
   word-break: break-word;
   line-height: 1.08;
 }
@@ -819,30 +310,27 @@ body {
 }
 
 .theater-ticket__choice--correct {
+  border-color: rgba(67, 201, 131, 0.6);
   background: linear-gradient(180deg, rgba(26, 57, 34, 0.9) 0%, rgba(18, 41, 24, 0.93) 100%);
-  border-color: rgba(67, 201, 131, 0.65);
   box-shadow:
-    0 22px 36px rgba(12, 48, 24, 0.42),
-    0 0 18px rgba(67, 201, 131, 0.45);
+    0 20px 30px rgba(12, 48, 24, 0.4),
+    0 0 18px rgba(67, 201, 131, 0.4);
+  animation: choiceCorrectShimmer 1.2s ease-out 1;
 }
 
 .theater-ticket__choice--correct::before {
   border-color: rgba(111, 243, 174, 0.6);
   opacity: 1;
-  box-shadow: 0 0 24px rgba(67, 201, 131, 0.35);
+  box-shadow: 0 0 24px rgba(67, 201, 131, 0.3);
 }
 
 .theater-ticket__choice--incorrect {
-  background: linear-gradient(180deg, rgba(108, 20, 28, 0.88) 0%, rgba(62, 13, 18, 0.9) 100%);
   border-color: rgba(248, 113, 113, 0.5);
+  background: linear-gradient(180deg, rgba(108, 20, 28, 0.88) 0%, rgba(62, 13, 18, 0.9) 100%);
   box-shadow:
-    0 22px 34px rgba(62, 13, 18, 0.42),
-    0 0 14px rgba(248, 113, 113, 0.3);
-}
-
-.theater-ticket__choice--incorrect::before {
-  border-color: rgba(248, 180, 180, 0.48);
-  opacity: 1;
+    0 20px 28px rgba(62, 13, 18, 0.4),
+    0 0 14px rgba(248, 113, 113, 0.28);
+  animation: choiceWrongShake 0.55s ease-out;
 }
 
 .theater-ticket__choice-status {
@@ -869,7 +357,7 @@ body {
 .theater-ticket__choice-status--error {
   background: rgba(239, 68, 68, 0.85);
   border-color: rgba(254, 202, 202, 0.55);
-  box-shadow: 0 0 18px rgba(239, 68, 68, 0.35);
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.3);
 }
 
 .theater-ticket__choice-status-headline {
@@ -888,47 +376,11 @@ body {
   color: #160806;
 }
 
-.theater-ticket__result {
-  margin: clamp(1rem, 2.6vw, 1.5rem) auto;
-  padding: clamp(0.7rem, 1.8vw, 1rem) clamp(0.85rem, 2vw, 1.2rem);
-  border-radius: clamp(0.8rem, 2vw, 1.1rem);
-  font-family: 'DM Sans', 'Trebuchet MS', sans-serif;
-  max-width: 32rem;
-  text-align: center;
-  box-shadow: 0 16px 28px rgba(26, 12, 8, 0.35);
-}
-
-.theater-ticket__result--success {
-  background: linear-gradient(180deg, rgba(48, 113, 72, 0.9) 0%, rgba(30, 83, 52, 0.9) 100%);
-  border: 1px solid rgba(111, 243, 174, 0.45);
-  color: #e6fbee;
-}
-
-.theater-ticket__result--error {
-  background: linear-gradient(180deg, rgba(140, 34, 42, 0.9) 0%, rgba(89, 21, 27, 0.9) 100%);
-  border: 1px solid rgba(255, 169, 169, 0.4);
-  color: #ffefef;
-}
-
-.theater-ticket__result-headline {
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  font-size: clamp(0.82rem, 1.8vw, 1rem);
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-}
-
-.theater-ticket__result-detail {
-  margin-top: 0.35rem;
-  font-size: clamp(0.6rem, 1.3vw, 0.76rem);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
 .theater-ticket__footer {
-  margin-top: clamp(1.2rem, 2.8vw, 1.6rem);
+  margin-top: clamp(0.85rem, 2.2vw, 1.2rem);
   display: flex;
   flex-direction: column;
-  gap: clamp(1rem, 2.4vw, 1.5rem);
+  gap: clamp(1rem, 2.4vw, 1.6rem);
   position: relative;
   z-index: 1;
 }
@@ -936,7 +388,7 @@ body {
 .theater-ticket__hint {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.25rem, 0.6vw, 0.4rem);
+  gap: clamp(0.3rem, 0.8vw, 0.45rem);
   align-items: flex-start;
 }
 
@@ -953,7 +405,7 @@ body {
     transform 0.2s ease,
     box-shadow 0.2s ease,
     border-color 0.2s ease;
-  box-shadow: 0 12px 18px rgba(22, 9, 6, 0.35);
+  box-shadow: 0 12px 18px rgba(22, 9, 6, 0.32);
 }
 
 .theater-ticket__hint-button:hover:not(:disabled),
@@ -961,7 +413,7 @@ body {
   transform: translateY(-1px);
   border-color: rgba(255, 214, 137, 0.5);
   box-shadow:
-    0 16px 24px rgba(22, 9, 6, 0.45),
+    0 16px 24px rgba(22, 9, 6, 0.42),
     0 0 0 1px rgba(255, 214, 137, 0.28);
 }
 
@@ -972,10 +424,11 @@ body {
 
 .theater-ticket__hint-copy {
   font-family: 'DM Sans', 'Trebuchet MS', sans-serif;
-  font-size: clamp(0.54rem, 1.2vw, 0.7rem);
-  letter-spacing: 0.26em;
+  font-size: clamp(0.5rem, 1vw, 0.65rem);
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(60, 28, 18, 0.66);
+  color: rgba(60, 28, 18, 0.45);
+  line-height: 1.4;
 }
 
 .theater-ticket__bonus-cast {
@@ -999,7 +452,7 @@ body {
 .theater-ticket__bonus-cast-details {
   display: flex;
   align-items: center;
-  gap: clamp(0.45rem, 1.2vw, 0.6rem);
+  gap: clamp(0.5rem, 1.3vw, 0.7rem);
   font-family: 'DM Sans', 'Trebuchet MS', sans-serif;
   font-size: clamp(0.75rem, 1.8vw, 0.9rem);
   letter-spacing: 0.22em;
@@ -1024,95 +477,190 @@ body {
   color: rgba(44, 21, 13, 0.58);
 }
 
+@keyframes choiceCorrectShimmer {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  30% { box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.2); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+@keyframes choiceWrongShake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+/* ===== SCOREBOARD ===== */
+.scoreboard-marquee {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  justify-content: center;
+  align-items: stretch;
+  padding: clamp(0.2rem, 0.6vw, 0.35rem);
+}
+
+.scoreboard-marquee__shell {
+  position: relative;
+  border-radius: clamp(0.55rem, 1.1vw, 0.85rem);
+  padding: clamp(0.28rem, 0.85vw, 0.5rem);
+  background: linear-gradient(180deg, rgba(46, 20, 14, 0.92) 0%, rgba(18, 8, 6, 0.92) 100%);
+  box-shadow:
+    0 clamp(0.4rem, 1vw, 0.8rem) clamp(0.8rem, 2vw, 1.3rem) rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px rgba(175, 69, 42, 0.24);
+  min-width: clamp(340px, 44vw, 420px);
+  max-width: clamp(440px, 50vw, 640px);
+}
+
+.scoreboard-marquee__shell::before {
+  content: "";
+  position: absolute;
+  inset: clamp(0.16rem, 0.5vw, 0.28rem);
+  border-radius: clamp(0.48rem, 1.1vw, 0.76rem);
+  border: 2px solid rgba(255, 214, 137, 0.4);
+  background: linear-gradient(135deg, rgba(255, 214, 137, 0.2), transparent 75%);
+  box-shadow:
+    inset 0 0 14px rgba(255, 204, 128, 0.28),
+    0 0 12px rgba(255, 195, 87, 0.2);
+  pointer-events: none;
+}
+
+.scoreboard-marquee__inner {
+  position: relative;
+  border-radius: clamp(0.45rem, 0.9vw, 0.7rem);
+  padding: clamp(0.2rem, 0.5vw, 0.32rem);
+  background: rgba(15, 10, 11, 0.45);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 214, 137, 0.12),
+    inset 0 10px 20px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.scoreboard-marquee__inner::before,
+.scoreboard-marquee__inner::after {
+  content: "";
+  position: absolute;
+  inset: clamp(0.45rem, 1.2vw, 0.7rem) clamp(0.55rem, 1.4vw, 0.8rem);
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 1px);
+  background-size: clamp(0.95rem, 2.2vw, 1.4rem) clamp(0.95rem, 2.2vw, 1.4rem);
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.scoreboard-marquee__inner::after {
+  inset: clamp(0.38rem, 1vw, 0.55rem) clamp(0.45rem, 1.2vw, 0.65rem);
+  background: linear-gradient(120deg, rgba(255, 214, 137, 0.18), transparent 70%);
+  opacity: 0.35;
+}
+
+.scoreboard-marquee__letterboard {
+  position: relative;
+  border-radius: clamp(0.5rem, 1.4vw, 0.85rem);
+  padding: clamp(0.45rem, 1.4vw, 0.65rem) clamp(0.6rem, 1.4vw, 0.9rem);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 214, 137, 0.22),
+    inset 0 -6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.scoreboard-marquee__letterboard-grid {
+  display: none;
+}
+
+.scoreboard-marquee__stats {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.5rem, 1.2vw, 0.75rem);
+  z-index: 1;
+  color: #f0e3c7;
+  font-family: 'DM Sans', 'Trebuchet MS', sans-serif;
+}
+
+.scoreboard-marquee__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  padding: clamp(0.4rem, 1vw, 0.58rem) clamp(0.45rem, 1vw, 0.65rem);
+  border-radius: clamp(0.35rem, 1vw, 0.6rem);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 214, 137, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.38);
+  align-items: flex-start;
+}
+
+.scoreboard-marquee__stat--primary {
+  background: linear-gradient(180deg, rgba(255, 214, 137, 0.24) 0%, rgba(255, 214, 137, 0.08) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 214, 137, 0.46),
+    0 12px 20px rgba(0, 0, 0, 0.32);
+}
+
+.scoreboard-marquee__stat--secondary {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 214, 137, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.38);
+  align-items: flex-end;
+  text-align: right;
+}
+
+.scoreboard-marquee__label {
+  font-size: clamp(0.56rem, 1.3vw, 0.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  color: rgba(240, 227, 199, 0.72);
+}
+
+.scoreboard-marquee__value {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: clamp(1.6rem, 3.6vw, 2.2rem);
+  letter-spacing: 0.1em;
+  color: #fce9be;
+  text-shadow:
+    0 0 14px rgba(255, 197, 111, 0.55),
+    0 0 28px rgba(255, 90, 0, 0.28);
+}
+
+.scoreboard-marquee__value--secondary {
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  color: rgba(252, 233, 190, 0.88);
+  text-shadow:
+    0 0 10px rgba(255, 182, 94, 0.34),
+    0 0 20px rgba(255, 124, 0, 0.2);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+  .scoreboard-marquee__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .scoreboard-marquee__stat,
+  .scoreboard-marquee__stat--secondary {
+    align-items: center;
+    text-align: center;
+  }
+}
+
 @media (max-width: 640px) {
-  /* Make the entire header more compact on mobile and force horizontal layout */
-  .movie-backdrop header {
-    margin-bottom: 1rem !important;
-    gap: 0.5rem !important;
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-  }
-
-  /* Keep title original size on mobile */
-  .movie-backdrop header a {
-    padding: 0.5rem 0.75rem !important;
-    gap: 0.5rem !important;
-  }
-
-  /* Make the main content area more compact */
-  .movie-backdrop .movie-backdrop__inner {
-    padding: 0.5rem 0.75rem !important;
-  }
-
-  /* Reduce spacing in the game area */
-  .movie-backdrop .flex-1 {
-    gap: 0.5rem !important;
-  }
-
-  /* Make scoreboard half width on mobile */
-  .scoreboard-marquee {
-    max-width: 50% !important;
-    padding: 0.2rem !important;
-  }
-
-  .scoreboard-marquee__shell {
-    padding: 0.2rem !important;
-  }
-
-  .scoreboard-marquee__inner {
-    padding: 0.15rem !important;
-  }
-
-  .scoreboard-marquee__letterboard {
-    padding: 0.3rem 0.4rem !important;
-  }
-
-  .scoreboard-marquee__stat {
-    padding: 0.25rem 0.3rem !important;
-    gap: 0.1rem !important;
-  }
-
-  .scoreboard-marquee__stat--primary {
-    padding: 0.3rem 0.35rem !important;
-  }
-
-  .scoreboard-marquee__label {
-    font-size: 0.35rem !important;
-  }
-
-  .scoreboard-marquee__value {
-    font-size: 0.9rem !important;
-  }
-
-  .scoreboard-marquee__value--secondary {
-    font-size: 0.7rem !important;
-  }
-
-  /* Make theater ticket more compact */
   .theater-ticket {
-    padding: 0.6rem !important;
-    margin: 0.3rem 0 !important;
+    padding: clamp(0.8rem, 3vw, 1.1rem);
   }
 
   .theater-ticket__header {
-    margin-bottom: 0.3rem !important;
-  }
-
-  .theater-ticket__badge {
-    padding: 0.15rem 0.3rem !important;
-    margin-bottom: 0.2rem !important;
-  }
-
-  .theater-ticket__title {
-    margin-bottom: 0.3rem !important;
+    margin-bottom: clamp(0.4rem, 1.4vw, 0.6rem);
   }
 
   .theater-ticket__cast {
-    grid-template-columns: 1fr auto 1fr !important;
-    gap: 0.3rem !important;
-    margin-bottom: 0.4rem !important;
-    align-items: center !important;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.4rem, 2vw, 0.6rem);
+    text-align: center;
   }
 
   .theater-ticket__cast-member,
@@ -1120,15 +668,7 @@ body {
     justify-content: center;
     text-align: center;
     max-width: none;
-    flex-wrap: nowrap !important;
-    gap: 0.1rem !important;
-    flex-direction: column !important;
-    padding: 0.1rem !important;
-  }
-
-  .theater-ticket__cast-member span,
-  .theater-ticket__cast-member--mirror span {
-    /* Keep original font size */
+    flex-wrap: wrap;
   }
 
   .theater-ticket__ampersand {
@@ -1136,64 +676,47 @@ body {
   }
 
   .theater-ticket__divider {
-    margin: 0.3rem 0 !important;
-    padding: 0.2rem 0 !important;
-  }
-
-  .theater-ticket__divider span {
-    /* Keep original font size */
+    margin: clamp(0.6rem, 2vw, 0.8rem) auto;
   }
 
   .theater-ticket__choices {
     grid-template-columns: 1fr;
-    gap: 0.3rem !important;
-  }
-
-  .theater-ticket__choice {
-    padding: 0.4rem 0.5rem !important;
-  }
-
-  .theater-ticket__choice-letter {
-    /* Keep original size */
-  }
-
-  .theater-ticket__choice-title {
-    /* Keep original font size */
-  }
-
-  .theater-ticket__choice-meta {
-    /* Keep original font size */
-  }
-
-  .theater-ticket__footer {
-    margin-top: 0.4rem !important;
   }
 
   .theater-ticket__hint {
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  .theater-ticket__hint-button {
-    /* Keep original size */
+    align-items: center;
+    text-align: center;
   }
 
   .theater-ticket__hint-copy {
-    display: none !important;
+    text-align: center;
   }
 
   .theater-ticket__bonus-cast {
-    margin-top: 0.3rem !important;
+    margin-top: clamp(0.4rem, 1.4vw, 0.6rem);
   }
 
-  .theater-ticket__bonus-cast-details {
-    gap: 0.2rem !important;
+  .theater-ticket__cast-member > :first-child,
+  .theater-ticket__cast-member--mirror > :last-child {
+    transform: none;
   }
 }
 
+/* ===== ACCESSIBILITY ===== */
 @media (prefers-reduced-motion: reduce) {
   .theater-ticket__choice,
   .theater-ticket__hint-button {
     transition: none;
   }
+}
+
+/* ===== DESKTOP ADJUSTMENTS ===== */
+.theater-ticket__cast-member > :first-child,
+.theater-ticket__cast-member--mirror > :last-child {
+  transform: scale(1.12);
+  transform-origin: center;
+}
+
+main section.space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: clamp(1rem, 1.8vw, 1.35rem);
 }

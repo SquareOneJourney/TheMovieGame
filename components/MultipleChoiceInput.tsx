@@ -115,7 +115,8 @@ export function MultipleChoiceInput({
       transition={{ duration: 0.5 }}
       className="pb-6 sm:pb-8"
     >
-      <section className="theater-ticket" aria-live="polite">
+      <div className="w-full max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto px-4 sm:px-6">
+        <section className="theater-ticket" aria-live="polite">
         <div className="theater-ticket__perforation theater-ticket__perforation--top" aria-hidden="true" />
         <div className="theater-ticket__perforation theater-ticket__perforation--bottom" aria-hidden="true" />
 
@@ -217,7 +218,7 @@ export function MultipleChoiceInput({
               disabled={hintUsed || !onHint || disabled || Boolean(lastResult) || isSubmitting}
               className="theater-ticket__hint-button"
             >
-              Show Hint
+              Hint
             </button>
             <p className="theater-ticket__hint-copy">{hintCopy}</p>
           </div>
@@ -237,7 +238,8 @@ export function MultipleChoiceInput({
             </div>
           )}
         </footer>
-      </section>
+        </section>
+      </div>
     </motion.div>
   )
 }
