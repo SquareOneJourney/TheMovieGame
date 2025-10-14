@@ -12,7 +12,6 @@
     "postinstall": "echo 'Post-install complete'",
     "build-db": "node scripts/build-movie-database.js",
     "build-admin-db": "node scripts/build-from-admin.js",
-    "migrate-movies": "node scripts/migrate-movies-to-db.js",
     "generate-icons": "node scripts/generate-icons.js",
     "generate-screenshots": "node scripts/generate-screenshots.js",
     "app-store-prep": "npm run generate-icons && npm run generate-screenshots"
@@ -31,7 +30,6 @@
     "framer-motion": "^12.23.22",
     "lucide-react": "^0.544.0",
     "next": "^15.5.4",
-    "next-pwa": "^5.6.0",
     "postcss": "^8.4.32",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

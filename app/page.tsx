@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Scoreboard } from '@/components/Scoreboard'
 import {
   Play,
   Clapperboard,
@@ -41,6 +40,15 @@ const ruleHighlights = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-black to-zinc-950 text-amber-50">
+      {/* Top Navigation Bar */}
+      <nav className="w-full px-4 sm:px-6 lg:px-8 py-4 border-b border-amber-200/10">
+        <div className="max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto flex items-center justify-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/50 bg-amber-200/15 px-4 py-2 text-sm font-bold uppercase tracking-[0.4em] text-amber-100">
+            THE MOVIE GAME
+          </span>
+        </div>
+      </nav>
+
       <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-visible pt-12 pb-20 max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
         <motion.section
           initial={{ opacity: 0, y: 24 }}
@@ -90,7 +98,6 @@ export default function Home() {
             <span className="text-xs font-semibold uppercase tracking-[0.4em] text-amber-200/70">
               Marquee Scoreboard
             </span>
-            <Scoreboard streak={4} bestStreak={11} className="mt-2 scale-95 sm:scale-100" />
             <p className="text-sm text-amber-100/70 sm:text-base">
               Track your current streak and all-time highlight reel every round.
             </p>

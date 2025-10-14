@@ -9,7 +9,6 @@ import {
   generateMultipleChoiceOptions,
   type MultipleChoiceOption
 } from '@/lib/multipleChoiceGenerator'
-import { Scoreboard } from '@/components/Scoreboard'
 
 interface LastResult {
   correct: boolean
@@ -178,20 +177,40 @@ export default function SinglePlayerPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-black to-zinc-950 text-amber-50">
-      <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-visible pt-8 pb-24 max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
-        <header className="flex flex-col items-center gap-4 text-center">
+      {/* Top Navigation Bar */}
+      <nav className="w-full px-4 sm:px-6 lg:px-8 py-4 border-b border-amber-200/10">
+        <div className="max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto flex items-center justify-between">
+          {/* Left: Current Streak */}
+          <div className="flex flex-col items-start">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/70">
+              Current Streak
+            </span>
+            <span className="text-2xl font-bold text-amber-100">
+              {gameState.streak}
+            </span>
+          </div>
+
+          {/* Center: Title/Home Button */}
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full border border-amber-200/50 bg-amber-200/15 px-6 py-3 text-sm font-bold uppercase tracking-[0.4em] text-amber-100 transition hover:bg-amber-200/25"
+            className="inline-flex items-center gap-2 rounded-full border border-amber-200/50 bg-amber-200/15 px-4 py-2 text-sm font-bold uppercase tracking-[0.4em] text-amber-100 transition hover:bg-amber-200/25"
           >
             THE MOVIE GAME
           </Link>
-          <Scoreboard
-            streak={gameState.streak}
-            bestStreak={gameState.bestStreak}
-            className="-mt-6 sm:-mt-8"
-          />
-        </header>
+
+          {/* Right: Best Run */}
+          <div className="flex flex-col items-end">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/70">
+              Best Run
+            </span>
+            <span className="text-2xl font-bold text-amber-100">
+              {gameState.bestStreak}
+            </span>
+          </div>
+        </div>
+      </nav>
+
+      <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-visible pt-8 pb-24 max-w-md sm:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
 
         <section className="mt-8 space-y-6 pb-10">
           {gameState.status === 'loading' || !gameState.currentMovie ? (

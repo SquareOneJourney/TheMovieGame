@@ -7,15 +7,9 @@ const debugLog = (...args: unknown[]) => {
   }
 }
 
-// Try to load the built database, fallback to static data
-let moviesDatabase: GameMovie[] = []
-try {
-  moviesDatabase = require('../data/movies-database.json')
-  debugLog('Loaded static database', { totalMovies: moviesDatabase.length })
-} catch (error) {
-  debugLog('Falling back to bundled movies.json')
-  moviesDatabase = moviesData
-}
+// Use the bundled movies data as fallback
+let moviesDatabase: GameMovie[] = moviesData
+debugLog('Using bundled movies.json', { totalMovies: moviesDatabase.length })
 
 export type { GameMovie }
 
@@ -29,14 +23,33 @@ class MovieService {
   private cache: CachedMovies | null = null
   private readonly CACHE_DURATION = 2 * 60 * 60 * 1000 // 2 hours for more variety
 
+  private async fetchMoviesFromAPI(): Promise<GameMovie[]> {
+    try {
+      const response = await fetch('/api/admin/movies')
+      if (response.ok) {
+        const data = await response.json()
+        const movies = Array.isArray(data) ? data : data.movies || []
+        debugLog('Fetched movies from admin API', { totalMovies: movies.length })
+        return movies
+      } else {
+        throw new Error(`API error: ${response.status}`)
+      }
+    } catch (error) {
+      debugLog('Failed to fetch from admin API, using fallback', error)
+      return moviesDatabase
+    }
+  }
+
   async getRandomMovies(count: number = 50): Promise<GameMovie[]> {
-    debugLog('Serving random selection', { totalAvailable: moviesDatabase.length, requested: count })
-    return this.shuffleArray(moviesDatabase).slice(0, count)
+    const movies = await this.fetchMoviesFromAPI()
+    debugLog('Serving random selection', { totalAvailable: movies.length, requested: count })
+    return this.shuffleArray(movies).slice(0, count)
   }
 
   async getAllMovies(): Promise<GameMovie[]> {
-    debugLog('Providing full movie list', { totalAvailable: moviesDatabase.length })
-    return moviesDatabase
+    const movies = await this.fetchMoviesFromAPI()
+    debugLog('Providing full movie list', { totalAvailable: movies.length })
+    return movies
   }
 
   async getSingleRandomMovie(): Promise<GameMovie> {
